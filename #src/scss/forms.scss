@@ -1,54 +1,25 @@
-//<FORM ()>====================================================================================================
-.form {
-	&__row {
-	}
-	&__column {
-	}
-	&__line {
-	}
-	&__input {
-	}
-	&__button {
-	}
-	&__error {
-	}
-}
-
-//</FORM>====================================================================================================
-
-//<BUTTONS (a.btn+tab)>====================================================================================================
 .button {
 	display: inline-flex;
 	padding: 0px 0px;
-	@media (any-hover: hover) {
-		&:hover {
-		}
-	}
 	&._fw {
 		width: 100%;
 	}
 }
-//</BUTTONS>====================================================================================================
-
-//<SELECT (sel+tab)>====================================================================================================
 .select {
 	position: relative;
-	// .select__item
 	&__item {
 		position: relative;
 	}
-	// .select__title
 	&__title {
 		color: #000;
 		border: 1px solid #d9d9d9;
 		background-color: #fff;
 		cursor: pointer;
 		border-radius: 4px;
-		@media (max-width: $md2+px) {
+		@media (max-width: $md2) {
 			font-size: 18px;
 		}
 	}
-	// .select__value
 	&__value {
 		display: flex;
 		font-size: 14px;
@@ -61,7 +32,6 @@
 			height: 1em;
 			overflow: hidden;
 			display: -webkit-box;
-			-webkit-line-clamp: 1;
 			-webkit-box-orient: vertical;
 		}
 		&:before {
@@ -78,7 +48,6 @@
 		background-color: transparent;
 		height: 100%;
 	}
-	// .select__options
 	&__options {
 		color: #000;
 		position: absolute;
@@ -92,11 +61,10 @@
 		border-top: 0;
 		font-size: 14px;
 		padding: 10px 0px 5px 0px;
-		@media (max-width: $md2+px) {
+		@media (max-width: $md2) {
 			font-size: 18px;
 		}
 	}
-	// .select__option
 	&__option {
 		cursor: pointer;
 		padding: 5px 15px;
@@ -119,9 +87,6 @@
 		}
 	}
 }
-//</SELECT>====================================================================================================
-
-//<INPUT (inp+tab)>====================================================================================================
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -138,21 +103,13 @@ textarea {
 	width: 100%;
 	display: block;
 	padding: 0px 20px;
-	&._focus {
-	}
-	&._error {
-	}
 }
 textarea.input {
 	resize: none;
 	padding: 0px 0px;
 }
-//</INPUT>====================================================================================================
-
-//<CHECK (chk+tab)>====================================================================================================
 .checkbox {
 	position: relative;
-	// .checkbox__input
 	&__input {
 		position: absolute;
 		width: 0;
@@ -163,7 +120,6 @@ textarea.input {
 			background: #fff url("../img/icons/check.svg") center no-repeat;
 		}
 	}
-	// .checkbox__text
 	&__text {
 		display: inline-flex;
 		align-items: center;
@@ -203,21 +159,14 @@ textarea.input {
 		}
 	}
 }
-//</CHECK>====================================================================================================
-
-//<OPTIONS (opt+tab)>====================================================================================================
 .options {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	// .options__item
 	&__item {
 		position: relative;
 		cursor: pointer;
-		&._error {
-		}
 	}
-	// .options__input
 	&__input {
 		position: absolute;
 		width: 0;
@@ -226,13 +175,10 @@ textarea.input {
 		left: 0;
 		top: 0;
 		visibility: hidden;
-		&:checked + .options__text:before {
-		}
 		&:checked + .options__text:after {
 			transform: scale(1);
 		}
 	}
-	// .options__text
 	&__text {
 		display: inline-flex;
 		align-items: center;
@@ -268,9 +214,6 @@ textarea.input {
 		}
 	}
 }
-//</OPTIONS>====================================================================================================
-
-//<RATING>====================================================================================================
 .rating {
 	display: flex;
 	align-items: flex-end;
@@ -329,15 +272,11 @@ textarea.input {
 	line-height: 1;
 	padding: 0px 0px 0px 10px;
 }
-//</RATING>====================================================================================================
-
-//<QUANTITY>====================================================================================================
 .quantity {
 	width: 88px;
 	height: 40px;
 	display: flex;
 	border: 1px solid rgba(166, 166, 166, 0.45);
-	// .quantity__button
 	&__button {
 		flex: 0 0 30px;
 		position: relative;
@@ -354,7 +293,7 @@ textarea.input {
 			width: 9px;
 			height: 1px;
 		}
-		@media (min-width: $md2+px) {
+		@media (min-width: $md2) {
 			&:hover {
 				&::before,
 				&::after {
@@ -362,17 +301,12 @@ textarea.input {
 				}
 			}
 		}
-		// .quantity__button_plus
 		&_plus {
 			&::before {
 				transform: rotate(-90deg);
 			}
 		}
-		// .quantity__button_minus
-		&_minus {
-		}
 	}
-	// .quantity__input
 	&__input {
 		flex: 1 1 auto;
 		input {
@@ -384,8 +318,4 @@ textarea.input {
 		}
 	}
 }
-//</QUANTITY>====================================================================================================
 
-//<RANGE>====================================================================================================
-
-//</RANGE>====================================================================================================
