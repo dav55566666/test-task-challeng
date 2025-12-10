@@ -760,6 +760,11 @@ body.ie ._ibg img {
 .input-text input:focus {
   box-shadow: 0px 0 10px rgba(154, 156, 165, 0.08), 0px 30px 24px -10px rgba(154, 156, 165, 0.35), 0px 12px 10px -6px rgba(154, 156, 165, 0.34), 0px 4px 4px -4px rgba(30, 33, 44, 0.33);
 }
+@media (max-width: 1024px) {
+  .input-text input {
+    font-size: 16px;
+  }
+}
 
 body {
   color: var(--black);
