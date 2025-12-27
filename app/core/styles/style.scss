@@ -1,8 +1,8 @@
 @use "sass:math";
-@import "colors";
-@import "variables";
-@import "fonts";
-@import "null";
+@import "./colors.scss";
+@import "./fonts.scss";
+@import "./variables.scss";
+@import "./null.scss";
 
 
 @mixin flex-sb-center {
