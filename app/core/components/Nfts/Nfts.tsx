@@ -13,6 +13,8 @@ const Nfts = async () => {
         <NftsSwiper nftsData={nftsData} />
       </div>
     </section>
+
+    
   )
 }
 
