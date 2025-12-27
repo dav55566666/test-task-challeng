@@ -1,0 +1,1 @@
+export { default as DiscoverCreateHero } from './DiscoverCreateHero';

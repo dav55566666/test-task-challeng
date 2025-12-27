@@ -1,0 +1,38 @@
+.title {
+    font-family: 'Poppins';
+    font-style: normal;
+
+    &.weight-thin {font-weight: 200;}
+    &.weight-light {font-weight: 300;}
+    &.weight-regular {font-weight: 400;}
+    &.weight-medium {font-weight: 500;}
+    &.weight-bold {font-weight: 600;}
+    &.weight-semi-bold {font-weight: 700;}
+    &.weight-extra-bold {font-weight: 800;}
+    &.weight-black {font-weight: 900;}
+
+    &.h1.size-large.color-dark-gray {
+        color: var(--gray-950);
+        font-weight: 600;
+        font-size: 76px;
+        line-height: 84px;
+        text-transform: capitalize;
+    }
+
+    &.h2 {
+        &.size-medium {
+            font-size: 46px;
+            line-height: 48px;
+        }
+
+        &.color-white {color: var(--white);}
+        &.color-light-gray {color: var(--gray-200);}
+    }
+
+    &.h3.size-large.color-dark-gray {
+        color: var(--gray-950);
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 24px;
+    }
+}

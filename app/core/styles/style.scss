@@ -1,0 +1,52 @@
+@use "sass:math";
+@import "colors";
+@import "variables";
+@import "fonts";
+@import "null";
+
+
+@mixin flex-sb-center {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+@mixin flex-sb-start {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+}
+
+body {
+    background: #d9d9d9;
+}
+
+.container {
+	max-width: 1000px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.wrapper {
+	width: 100%;
+	min-height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+p , a , span , h2 , h1 {
+	font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+@import "ui";
+
+@import '../uikit/Button/styles/style.scss';
+@import '../uikit/CustomLink/styles/style.scss';
+@import '../uikit/Description/styles/style.scss';
+@import '../uikit/Logo/styles/style.scss';
+@import '../uikit/Title/styles/style.scss';
+
+.page {
+	flex: 1 1 auto;
+}
+
+

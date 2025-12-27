@@ -1,5 +1,0 @@
-{
-  "buildCommand": "gulp build",
-  "outputDirectory": "test-task-challeng",
-  "framework": "vite"
-}

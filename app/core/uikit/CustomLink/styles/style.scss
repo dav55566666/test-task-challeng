@@ -1,0 +1,44 @@
+.link {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    text-transform: uppercase;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 0;
+        height: 2px;
+        transition: all 0.5s;
+    }
+
+    &.dark {
+        color: var(--gray-600);
+        &::before {
+            background-color: var(--gray-900);
+        }
+        &:hover {
+            color: var(--gray-900);
+            &::before {
+                width: 100%;
+            }
+        }
+    }
+
+    &.light {
+        color: var(--gray-300);
+        &::before {
+            background-color: var(--white);
+        }
+        &:hover {
+            color: var(--white);
+            &::before {
+                width: 100%;
+            }
+        }
+    }
+}

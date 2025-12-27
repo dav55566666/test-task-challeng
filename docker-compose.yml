@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  test-task-challeng:
+    image: test-task-challeng
+    build: ./
+    container_name: test-task-challeng
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

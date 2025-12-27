@@ -1,56 +1,36 @@
-# Test Task — Card Catalog
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**Деплой:** [Ссылка на Vercel](https://test-task-challeng.vercel.app/)  
-**Репозиторий:** [GitHub](https://github.com/dav55566666/test-task-challeng)
+## Getting Started
 
----
+First, run the development server:
 
-## Описание проекта
-Это тестовое задание от команды 10X. Проект представляет собой карточный каталог с поиском и фильтрацией, полностью соответствующий макету из Figma:  
-[Figma макет](https://www.figma.com/design/iuXLXifXgv4ZCzad0KeYKr/Test-Task?node-id=0-1&p=f&t=KsNXMs8WQDm1CVOJ-0)
-
-Проект реализован **Pixel-perfect**, с плавной адаптивной версткой от 1920px до 320px.  
-
----
-
-## Функциональность
-- Поиск карточек по названию (живой, без перезагрузки страницы)
-- Фильтрация карточек по категориям
-- Адаптивный дизайн, плавно масштабируется на разных разрешениях
-- Чистая структура кода по методологии **BEM**
-- Верстка и логика выполнены на **HTML + SCSS + Vanilla JS**
-- Без использования библиотек и фреймворков
-
----
-
-## Стек
-- HTML5  
-- SCSS (BEM методология)  
-- JavaScript (Vanilla JS)  
-
----
-
-## Особенности реализации
-- Адаптивная «резиновая» верстка без жестких брейкпоинтов  
-- Живой поиск карточек без перезагрузки страницы  
-- Фильтрация по категориям с подсчетом количества элементов  
-- Чистый, читаемый код и аккуратная структура проекта
-
----
-
-## CI/CD
-Проект развернут на Vercel с автоматическим деплоем при пуше в основной branch.  
-
----
-
-## Возможные улучшения
-- Добавить анимацию появления карточек при фильтрации  
-- Добавить debounce для поиска, чтобы оптимизировать работу на больших данных  
-- Расширить мобильную верстку для более сложных сценариев  
-
----
-
-## Запуск проекта локально
-1. Клонировать репозиторий:
 ```bash
-git clone https://github.com/dav55566666/test-task-challeng.git
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
