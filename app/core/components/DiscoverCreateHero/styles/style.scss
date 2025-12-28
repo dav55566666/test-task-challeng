@@ -5,6 +5,9 @@
 
     .discover-create-hero__container {
         position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
 
         .discover-create-hero__content {
             width: 100%;
@@ -63,14 +66,48 @@
         .discover-create-hero__images {
             position: relative;
             right: -150px;
-            display: none;
-            .dot-img {}
+            width: 100%;
+            max-width: 780px;
+            height: 544px;
 
-            .arrow-img {}
+            img {
+                // transition: all 0.5s;
+            }
 
-            .nft-left-img {}
+            .dot-img {
+                position: absolute;
+                right: -30px;
+                top: 0;
+            }
 
-            .nft-right-img {}
+            .arrow-img {
+                position: absolute;
+                top: 40px;
+                right: 170px;
+                opacity: 0;
+            }
+
+            .nft-left-img {
+                width: 100%;
+                max-width: 392px;
+                height: 396px;
+                object-fit: cover;
+                border-radius: 24px;
+                position: absolute;
+                left: 1000px;
+                top: 0;
+            }
+
+            .nft-right-img {
+                width: 100%;
+                max-width: 320px;
+                height: 320px;
+                object-fit: cover;
+                border-radius: 24px;
+                position: absolute;
+                right: -500px;
+                bottom: 0;
+            }
         }
     }
 }

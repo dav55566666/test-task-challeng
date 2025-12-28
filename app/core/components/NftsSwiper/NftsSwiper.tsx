@@ -10,7 +10,7 @@ const NftsSwiper = ({ nftsData }: INftsSwiperProps) => {
     const nftsSwiperRef = useRef<TNullable<SwiperRef>>(null)
     return (
         <div className="nfts-swiper">
-            <Swiper ref={nftsSwiperRef} slidesPerView={'auto'}>
+            <Swiper ref={nftsSwiperRef} slidesPerView={'auto'} loop>
                 {
                     nftsData.map(nft => (
                         <SwiperSlide key={nft.id}>
