@@ -4,5 +4,6 @@ export const getNftPrice = (): number => {
   return faker.number.float({
     min: 0.1,
     max: 5,
+    fractionDigits: 2,
   });
 };

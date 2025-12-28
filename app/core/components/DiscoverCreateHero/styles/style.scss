@@ -1,0 +1,76 @@
+.discover-create-hero {
+    width: 100%;
+    padding: 104px 20px 170px;
+    overflow: hidden;
+
+    .discover-create-hero__container {
+        position: relative;
+
+        .discover-create-hero__content {
+            width: 100%;
+            max-width: 568px;
+
+            .title {
+                margin-bottom: 28px;
+            }
+
+            .description {
+                margin-bottom: 44px;
+            }
+
+            .discover-create-hero__buttons {
+                margin-bottom: 80px;
+                max-width: 342px;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 22px;
+            }
+
+            .discover-create-hero__advantages {
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                gap: 60px;
+                max-width: 436px;
+
+                .discover-create-hero__advantages-item {
+                    width: 100%;
+
+                    p {
+                        font-family: 'Public Sans';
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 36px;
+                        line-height: 42px;
+                        color: #141416;
+                        margin-bottom: 10px;
+                    }
+
+                    span {
+                        font-family: 'Inter';
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 12px;
+                        line-height: 16px;
+                        color: #848586;
+                    }
+                }
+            }
+        }
+
+        .discover-create-hero__images {
+            position: relative;
+            right: -150px;
+            display: none;
+            .dot-img {}
+
+            .arrow-img {}
+
+            .nft-left-img {}
+
+            .nft-right-img {}
+        }
+    }
+}

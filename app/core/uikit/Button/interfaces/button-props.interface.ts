@@ -7,5 +7,6 @@ export interface IButtonProps {
     theme: ETheme;
     value?: string;
     click?: () => void;
-    Icon?: React.ReactNode
+    Icon?: React.ReactNode;
+    maxWidth?: string;
 }

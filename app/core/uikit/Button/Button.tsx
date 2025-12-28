@@ -6,10 +6,11 @@ const Button = ({
     theme,
     value,
     Icon,
+    maxWidth,
     click
 }: IButtonProps) => {
   return (
-    <button className={`button ${theme} ${bgType}`} onClick={click}>
+    <button className={`button ${theme} ${bgType}`} onClick={click} style={{maxWidth}}>
         {value}
         {Icon}
     </button>

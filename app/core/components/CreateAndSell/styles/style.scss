@@ -1,0 +1,38 @@
+.create-and-sell {
+    width: 100%;
+    padding: 120px 20px;
+    .create-and-sell__container {
+        width: 100%;
+        background-color: var(--gray-900);
+        padding: 30px;
+        padding-left: 66px;
+        border-radius: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .create-and-sell__content {
+            .title {
+                margin-bottom: 20px;
+            }
+
+            .discover-create-hero__buttons {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 24px;
+                margin-top: 56px;
+            }
+        }
+
+        .discover-create-hero__img {
+            width: 100%;
+            max-width: 370px;
+            img {
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+                border-radius: 16px;
+            }
+        }
+    }
+}
