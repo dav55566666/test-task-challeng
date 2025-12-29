@@ -1,44 +1,22 @@
 'use client';
 import { Button, Description, EBgType, EDescriptionColors, EHeadingType, ETitleColor, Title } from '../../uikit'
-import { ETextFont, ETextSize, ETextWeight, ETheme } from '../../common'
+import { ETextFont, ETextSize, ETextWeight, ETheme, TNullable } from '../../common'
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap/all';
+import { imagesAnimation } from './helpers';
 
 const DiscoverCreateHero = () => {
-  const leftImgRef = useRef<HTMLImageElement>(null);
-  const rightImgRef = useRef<HTMLImageElement>(null);
-  const arrowImgRef = useRef<HTMLImageElement>(null);
+  const leftImgRef = useRef<TNullable<HTMLImageElement>>(null);
+  const rightImgRef = useRef<TNullable<HTMLImageElement>>(null);
+  const arrowImgRef = useRef<TNullable<HTMLImageElement>>(null);
 
   useEffect(() => {
     if (!leftImgRef.current || !rightImgRef.current || !arrowImgRef.current) return;
-
-    const tl = gsap.timeline({
-      defaults: {
-        ease: 'power3.out',
-        duration: 2,
-      },
-    });
-
-    tl.to(leftImgRef.current, {
-      left: -80
-    });
-
-    tl.to(
-      rightImgRef.current,
-      {
-        right: 0
-      },
-      '-=0.6'
-    );
-
-    tl.to(
-      arrowImgRef.current,
-      {
-        opacity: 1,
-      },
-      '-=0.4'
-    );
-
+    imagesAnimation({
+      leftImgRef: leftImgRef,
+      rightImgRef: rightImgRef,
+      arrowImgRef: arrowImgRef
+    })
   }, []);
   return (
     <section className="discover-create-hero">

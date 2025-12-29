@@ -41,6 +41,14 @@
         &.size-large {
             font-size: 76px;
             line-height: 84px;
+            @media(max-width: $md1) {
+                font-size: 54px;
+                line-height: 62px;
+            }
+            @media(max-width: $md2) {
+                font-size: 48px;
+                line-height: 54px;
+            }
         }
 
         &.color-dark-gray {
