@@ -10,6 +10,10 @@
         padding: 0 16px;
     }
 
+    @media(max-width: 1024px) {
+        padding: 50px 16px;
+    }
+
     .services-detail__container {
         .services-detail__content {
             width: 100%;

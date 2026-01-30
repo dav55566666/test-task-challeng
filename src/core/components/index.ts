@@ -7,3 +7,4 @@ export * from './ContactItem';
 export * from './ReviewItem';
 export * from './Reviews';
 export * from './ServicesDetail';
+export * from './HeaderMobileMenu';

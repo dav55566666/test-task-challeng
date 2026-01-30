@@ -1,12 +1,12 @@
-import { HeaderBurgerIcon, IMAGES, InstaIcon, TgIcon, UserIcon, XIcon } from "../../assets"
+import { useState } from "react";
+import { CloseIcon, HeaderBurgerIcon, IMAGES, InstaIcon, TgIcon, UserIcon, XIcon } from "../../assets"
 import { Button, ButtonTypesEnum, DropDown, FontFamilyEnum, FontSizesEnum, FontStyleEnum, FontWeightEnum } from "../../uikit"
 import { langOptionsData } from "./datas";
 import './styles/style.scss';
+import { HeaderMobileMenu } from "../HeaderMobileMenu";
 
 export const Header = () => {
-
-
-
+  const [isActiveMobileMenu, setIsActiveMobileMenu] = useState<boolean>(false);
   return (
     <header className="header">
       <div className="header__container container">
@@ -14,9 +14,9 @@ export const Header = () => {
           <div className="header__mobile">
             <img src={IMAGES.logo} alt="" />
             <Button
-              click={() => { }}
+              click={() => {setIsActiveMobileMenu(!isActiveMobileMenu)}}
               type={ButtonTypesEnum.ICON}
-              Icon={<HeaderBurgerIcon />}
+              Icon={isActiveMobileMenu ? <CloseIcon /> : <HeaderBurgerIcon />}
             />
           </div>
           <div className="header__soc flex gap-20 align-center">
@@ -60,6 +60,7 @@ export const Header = () => {
           </div>
         </div>
       </div>
+      {isActiveMobileMenu && <HeaderMobileMenu />}
     </header>
   )
 }

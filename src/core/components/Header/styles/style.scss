@@ -11,6 +11,9 @@
         padding: 20px 16px;
         background: #15120F;
         border-top: 1px solid #272118;
+        border-bottom: 1px solid #272118;
+        position: sticky;
+        top: 0;
     }
 
     .header__content {
