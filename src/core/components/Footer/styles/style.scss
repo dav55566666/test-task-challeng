@@ -1,0 +1,12 @@
+.footer {
+    width: 100%;
+    padding: 0 30px;
+    background: rgba(33, 27, 22, 0.57);
+    border-top: 1px solid #272118;
+    backdrop-filter: blur(15.7px);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}

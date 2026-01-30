@@ -1,82 +1,75 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
-import nextVitals from 'eslint-config-next/core-web-vitals';
-import nextTs from 'eslint-config-next/typescript';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
 
-export default defineConfig([
-  ...nextVitals,
-  ...nextTs,
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
 
-  {
-    files: ['**/*.ts', '**/*.tsx'],
+export default defineConfig([globalIgnores(['dist']), {
+  files: ['**/*.{ts,tsx}'],
 
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        project: true,
-        sourceType: 'module',
-      },
-    },
+  extends: [
+    js.configs.recommended,
+    ...tseslint.configs.recommended,
+    reactHooks.configs.flat.recommended,
+    reactRefresh.configs.vite,
+  ],
 
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
-
-    rules: {
-      /**
-       * ======================
-       * NAMING CONVENTIONS
-       * ======================
-       */
-
-      '@typescript-eslint/naming-convention': [
-        'error',
-
-        // Interfaces → I
-        {
-          selector: 'interface',
-          format: ['PascalCase'],
-          custom: {
-            regex: '^I[A-Z]',
-            match: true,
-          },
-        },
-
-        // Types → T
-        {
-          selector: 'typeAlias',
-          format: ['PascalCase'],
-          custom: {
-            regex: '^T[A-Z]',
-            match: true,
-          },
-        },
-
-        // Enums → E
-        {
-          selector: 'enum',
-          format: ['PascalCase'],
-          custom: {
-            regex: '^E[A-Z]',
-            match: true,
-          },
-        },
-      ],
-
-      /**
-       * ======================
-       * QUOTES
-       * ======================
-       */
-      quotes: ['error', 'single', { allowTemplateLiterals: true }],
-    },
+  languageOptions: {
+    ecmaVersion: 2020,
+    globals: globals.browser,
   },
 
-  globalIgnores([
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-  ]),
-]);
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'error',
+
+    '@typescript-eslint/naming-convention': [
+      'error',
+
+      {
+        selector: 'interface',
+        format: ['PascalCase'],
+        custom: {
+          regex: '^I[A-Z]',
+          match: true,
+        },
+      },
+
+      {
+        selector: 'typeAlias',
+        format: ['PascalCase'],
+      },
+
+      {
+        selector: 'enum',
+        format: ['PascalCase'],
+      },
+
+      {
+        selector: 'enumMember',
+        format: ['UPPER_CASE'],
+      },
+
+      {
+        selector: 'variableLike',
+        format: ['camelCase', 'PascalCase'],
+      },
+
+      {
+        selector: 'property',
+        format: ['camelCase'],
+        leadingUnderscore: 'forbid',
+        trailingUnderscore: 'forbid',
+      },
+    ],
+
+    'camelcase': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_' },
+    ],
+  },
+}, ...storybook.configs["flat/recommended"], ...storybook.configs["flat/recommended"]])
