@@ -9,6 +9,17 @@
     background: #2C2520;
     border-radius: 20px;
     border: 1px solid transparent;
+    @media(max-width: 1660px) {
+        height: 80px;
+        gap: 10px;
+    }
+
+    svg {
+        @media(max-width: 1660px) {
+            width: 30px;
+            height: auto;
+        }
+    }
 
     .text {
         display: flex;

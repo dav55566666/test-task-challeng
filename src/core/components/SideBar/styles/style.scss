@@ -4,11 +4,18 @@
     grid-row: span 3;
     background: #15120F;
     border-right: 1px solid #272118;
+    @media(max-width: 1024px) {
+        display: none;
+    }
 
     .logo {
         width: 100%;
         display: block;
         padding: 24px 20px 46px;
+
+        @media(max-width: 1660px) {
+            padding: 10px 10px 20px;
+        }
 
         img {
             width: 100%;
@@ -27,49 +34,63 @@
             border-right: 1px solid #272118;
             position: relative;
 
-            .text {
-                white-space: nowrap;
-                position: absolute;
-                top: 42%;
-                left: 50%;
-                text-align: left;
-                transform: translate(-50%, -50%) rotate(-90deg);
+            @media(max-width: 1660px) {
+                width: 100px;
+                height: 150px;
             }
 
-            svg {
-                position: absolute;
-                top: 86%;
-                left: 50%;
-                transform: translate(-50%, -50%) rotate(-90deg);
-            }
 
-            &:nth-child(2) {
-                .text {
-                    top: 40%;
-                    left: 50%;
-                }
-
-                svg {
-                    top: 78%;
-                    left: 50%;
-                }
-            }
-
-            &:nth-child(3) {
-                .text {
-                    top: 40%;
-                    left: 50%;
-                }
-
-                svg {
-                    top: 72%;
-                    left: 50%;
-                }
-            }
         }
 
         .sidebar__item {
             position: relative;
+
+            .button {
+                .text {
+                    white-space: nowrap;
+                    position: absolute;
+                    top: 42%;
+                    left: 50%;
+                    text-align: left;
+                    transform: translate(-50%, -50%) rotate(-90deg);
+                }
+
+                svg {
+                    position: absolute;
+                    top: 86%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotate(-90deg);
+                }
+            }
+
+
+            &:nth-child(2) {
+                .button {
+                    .text {
+                        top: 40%;
+                        left: 50%;
+                    }
+
+                    svg {
+                        top: 78%;
+                        left: 50%;
+                    }
+                }
+            }
+
+            &:nth-child(3) {
+                .button {
+                    .text {
+                        top: 40%;
+                        left: 50%;
+                    }
+    
+                    svg {
+                        top: 72%;
+                        left: 50%;
+                    }
+                }
+            }
 
             &::before {
                 content: '';
@@ -105,6 +126,11 @@
                 left: 120px;
                 top: 0;
                 display: none;
+
+                @media(max-width: 1660px) {
+                    left: 100px;
+                }
+
                 .hiden-menu__title {
                     margin-bottom: 18px;
                 }
@@ -113,16 +139,19 @@
                     display: flex;
                     flex-direction: column;
                     gap: 18px;
+
                     li {
                         display: flex;
                         justify-content: flex-start;
                         align-items: center;
                         gap: 14px;
+
                         .icons {
                             img {
                                 display: none;
                                 width: 20px;
                                 height: 20px;
+
                                 &:first-child {
                                     display: block;
                                 }
@@ -135,7 +164,10 @@
                                     &:first-child {
                                         display: none;
                                     }
-                                    &:last-child {display: block;}
+
+                                    &:last-child {
+                                        display: block;
+                                    }
                                 }
                             }
                         }
@@ -149,6 +181,23 @@
                     opacity: 1;
                 }
 
+                .button {
+                    .text {
+                        color: #A97522 !important;
+                    }
+
+                    svg path,
+                    svg rect {
+                        fill: #A97522 !important;
+                    }
+                }
+            }
+
+            &:hover {
+                .hiden-menu {
+                    display: block;
+                }
+
                 .icon-menu {
                     svg {
                         &:last-child {
@@ -159,20 +208,6 @@
                             display: none;
                         }
                     }
-                }
-
-                .button {
-                    .text {
-                        color: #A97522 !important;
-                    }
-
-                    svg path {
-                        fill: #A97522 !important;
-                    }
-                }
-
-                .hiden-menu {
-                    display: block;
                 }
             }
         }

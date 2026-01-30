@@ -23,4 +23,13 @@
 
     &.style-normal {font-style: normal;}
     &.style-italic {font-style: italic;}
+
+    @media(max-width: 1660px) {
+        &.size-l {font-size: 12px;}
+        &.size-m {font-size: 14px;}
+        &.size-xs {font-size: 16px;}
+        &.size-xl {font-size: 20px;}
+        &.size-xm {font-size: 24px;}
+        &.size-xx {font-size: 36px;}
+    }
 }

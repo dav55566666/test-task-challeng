@@ -9,4 +9,7 @@
     align-items: center;
     position: relative;
     z-index: 2;
+    @media(max-width: 1024px) {
+        padding: 20px 16px;
+    }
 }

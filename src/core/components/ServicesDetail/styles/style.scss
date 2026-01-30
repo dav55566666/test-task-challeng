@@ -6,6 +6,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    @media(max-width: 1660px) {
+        padding: 0 16px;
+    }
 
     .services-detail__container {
         .services-detail__content {
@@ -17,8 +20,18 @@
             box-shadow: 0px 4px 138.5px -43px #000000;
             backdrop-filter: blur(17.5px);
             border-radius: 20px;
+            @media(max-width: 1660px) {
+                padding: 30px 110px;
+            }
+
+            @media(max-width: 1024px) {
+                padding: 22px;
+            }
 
             .bg-images {
+                @media(max-width: 1024px) {
+                    display: none;
+                }
                 img {
                     position: absolute;
                     left: -16px;
@@ -27,6 +40,10 @@
                     height: 708px;
                     object-fit: cover;
                     object-position: top;
+                    @media(max-width: 1660px) {
+                        width: 120px;
+                        height: auto;
+                    }
 
                     &:nth-child(2) {
                         left: unset;
@@ -38,7 +55,9 @@
             .services-detail__title {
                 width: 100%;
                 margin-bottom: 38px;
-                margin-bottom: 38px;
+                @media(max-width: 1660px) {
+                    margin-bottom: 20px;
+                }
 
                 h2 {
                     display: flex;
@@ -46,30 +65,53 @@
                     align-items: center;
                     gap: 14px;
                     margin-bottom: 30px;
+                    @media(max-width: 1660px) {
+                        margin-bottom: 20px;
+                    }
 
                     img {
                         width: 34px;
                         height: 34px;
+                        @media(max-width: 1660px) {
+                            width: 30px;
+                            height: 30px;
+                        }
                     }
                 }
 
                 p {
                     line-height: 209%;
+                    @media(max-width: 1660px) {
+                        line-height: 130%;
+                    }
                 }
             }
 
             .services-detail__info {
                 width: 100%;
                 margin-bottom: 26px;
+                @media(max-width: 1660px) {
+                    margin-bottom: 16px;
+                }
 
                 h4 {
                     margin-bottom: 18px;
+                    @media(max-width: 1660px) {
+                        margin-bottom: 12px;
+                    }
                 }
 
                 .services-detail__grid {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
                     gap: 18px;
+                    @media(max-width: 1660px) {
+                        gap: 10px;
+                    }
+
+                    @media(max-width: 1024px) {
+                        grid-template-columns: 1fr;
+                    }
                 }
 
                 .services-detail__item {
@@ -79,6 +121,9 @@
                     align-items: flex-start;
                     gap: 18px;
                     position: relative;
+                    @media(max-width: 1660px) {
+                        gap: 10px;
+                    }
 
                     &::before {
                         content: '';
@@ -90,6 +135,11 @@
                         background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), radial-gradient(78.39% 78.39% at 50% 0%, #FEED6C 0%, #A97522 100%);
                         border: 1px solid #FEED6C;
                         box-shadow: 0px 4px 14px #000000;
+                        @media(max-width: 1660px) {
+                            width: 16px;
+                            height: 16px;
+                            min-width: 16px;
+                        }
                     }
 
                     span {
@@ -104,6 +154,10 @@
                 p {
                     line-height: 209%;
                     margin-bottom: 78px;
+                    @media(max-width: 1660px) {
+                        margin-bottom: 30px;
+                        line-height: 140%;
+                    }
                 }
                 .button {
                     max-width: 252px;

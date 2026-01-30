@@ -3,12 +3,60 @@
     z-index: 10;
     padding: 38px 30px;
 
+    @media(max-width: 1660px) {
+        padding: 16px;
+    }
+
+    @media(max-width: 1024px) {
+        padding: 20px 16px;
+        background: #15120F;
+        border-top: 1px solid #272118;
+    }
+
+    .header__content {
+        align-items: center;
+        
+    }
+
+    .header__soc {
+        @media(max-width: 1660px) {
+            gap: 10px;
+        }
+
+        @media(max-width: 1024px) {
+            display: none;
+        }
+    }
+
+    .header__mobile {
+        display: none;
+
+        @media(max-width: 1024px) {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+
+            img {
+                width: 60px;
+            }
+        }
+    }
+
     &__container {
         width: 100%;
+
         .soc {
             &:hover {
                 svg path {
-                    fill: #A97522!important
+                    fill: #A97522 !important
+                }
+            }
+
+            svg {
+                @media(max-width: 1660px) {
+                    width: 26px;
+                    height: 26px;
                 }
             }
         }
@@ -18,16 +66,34 @@
         width: 100%;
         max-width: 472px;
 
+        @media(max-width: 1660px) {
+            max-width: 450px;
+        }
+
+        @media(max-width: 1024px) {
+            justify-content: flex-end !important;
+            gap: 6px;
+        }
+
         .button {
             flex-direction: row-reverse;
             height: unset;
-            
+
             .icon {
                 padding: 14px;
                 border-radius: 14px;
                 background-color: #2C2520;
                 position: relative;
                 z-index: 2;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                @media(max-width: 1660px) {
+                    width: 50px;
+                    height: 50px;
+                    padding: 0;
+                }
 
                 &::after {
                     content: "";
@@ -43,6 +109,7 @@
                     opacity: 0;
                     transition: all 0.5s;
                 }
+
                 svg {
                     position: relative;
                     z-index: 2;
@@ -53,6 +120,37 @@
                 .icon::after {
                     opacity: 1;
                 }
+            }
+
+        }
+
+        .login-btn {
+            @media(max-width: 1024px) {
+                max-width: 50px;
+
+                .text {
+                    display: none;
+                }
+
+                .icon {
+                    display: flex !important;
+                    justify-content: center;
+                    align-items: center;
+
+                    &::after {
+                        opacity: 1;
+                    }
+
+                    svg path {
+                        fill: #17110B !important;
+                    }
+                }
+            }
+        }
+
+        @media(max-width: 1024px) {
+            .dropdown__title .left {
+                display: none !important;
             }
         }
     }
