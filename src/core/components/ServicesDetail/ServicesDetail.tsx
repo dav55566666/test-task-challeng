@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './styles/style.scss';
 import { IMAGES } from '../../assets';
 import { Button, ButtonBgs, ButtonTypesEnum, FontFamilyEnum, FontSizesEnum, FontStyleEnum, FontWeightEnum, Text } from '../../uikit';
+import { servicesData } from '../SideBar';
 
 export const ServicesDetail = () => {
     const { slug } = useParams();
@@ -18,7 +19,7 @@ export const ServicesDetail = () => {
                         <h2>
                             <img src={IMAGES.logo} alt="" />
                             <Text
-                                label={slug || ''}
+                                label={servicesData.find(el => el.slug === slug)?.title || ''}
                                 textStyles={{
                                     fontFamily: FontFamilyEnum.INTER,
                                     fontSize: FontSizesEnum.XM,

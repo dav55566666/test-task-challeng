@@ -46,7 +46,7 @@ export const SideBar = () => {
                 <ul>
                   {
                     servicesData.map(el => (
-                      <li key={el.id} onClick={() => navigate(`/services/${el.title}`)}>
+                      <li key={el.id} onClick={() => navigate(`/services/${el.slug}`)}>
                         <span className="icons">
                           <img src={IMAGES.miniLogo} alt="" />
                           <img src={IMAGES.logo} alt="" />
