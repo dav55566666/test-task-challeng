@@ -44,7 +44,7 @@ export const Home = () => {
                                 fontFamily: FontFamilyEnum.MONTSERRAT,
                                 fontSize: FontSizesEnum.XL,
                                 fontStyle: FontStyleEnum.NORMAL,
-                                fontWeight: FontWeightEnum.BOLD,
+                                fontWeight: FontWeightEnum.SEMI_BOLD,
                                 color: '#17110B'
                             }}
                         />
@@ -87,7 +87,7 @@ export const Home = () => {
                                     fontFamily: FontFamilyEnum.MONTSERRAT,
                                     fontSize: FontSizesEnum.XL,
                                     fontStyle: FontStyleEnum.NORMAL,
-                                    fontWeight: FontWeightEnum.BOLD,
+                                    fontWeight: FontWeightEnum.SEMI_BOLD,
                                     color: '#CDBDAE'
                                 }}
                             />
@@ -101,7 +101,7 @@ export const Home = () => {
                                     fontFamily: FontFamilyEnum.MONTSERRAT,
                                     fontSize: FontSizesEnum.XL,
                                     fontStyle: FontStyleEnum.NORMAL,
-                                    fontWeight: FontWeightEnum.BOLD,
+                                    fontWeight: FontWeightEnum.SEMI_BOLD,
                                     color: '#CDBDAE'
                                 }}
                             />

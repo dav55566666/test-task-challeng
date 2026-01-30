@@ -16,7 +16,7 @@ export const Reviews = () => {
                                 <Text
                                     label='Мы в СМИ'
                                     textStyles={{
-                                        fontFamily: FontFamilyEnum.RUBIK,
+                                        fontFamily: FontFamilyEnum.INTER,
                                         fontSize: FontSizesEnum.XL,
                                         fontStyle: FontStyleEnum.NORMAL,
                                         fontWeight: FontWeightEnum.BLACK,
@@ -52,7 +52,7 @@ export const Reviews = () => {
                                 <Text
                                     label='Мы в интернете'
                                     textStyles={{
-                                        fontFamily: FontFamilyEnum.RUBIK,
+                                        fontFamily: FontFamilyEnum.INTER,
                                         fontSize: FontSizesEnum.XL,
                                         fontStyle: FontStyleEnum.NORMAL,
                                         fontWeight: FontWeightEnum.BLACK,

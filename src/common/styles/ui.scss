@@ -1,20 +1,4 @@
-.button {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 48px;
-	border-radius: 6px;
-	font-family: Montserrat;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 18px;
-	@media (max-width: $md3) {
-		height: 36px;
-		font-size: 14px;
-	}
-}
+
 
 .menu {
 	display: flex;
@@ -222,4 +206,9 @@
 			line-height: 100%;
 		}
 	}
+}
+
+
+a,button, li {
+	cursor: pointer;
 }

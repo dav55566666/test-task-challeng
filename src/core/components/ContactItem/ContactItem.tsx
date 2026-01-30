@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FontFamilyEnum, FontSizesEnum, FontStyleEnum, FontWeightEnum, Text } from "../../uikit"
 import type { IContactsItemProps } from "./interfaces";
 import './styles/style.scss';
@@ -9,7 +10,7 @@ export const ContactItem = ({
     isActive
 }: IContactsItemProps) => {
     return (
-        <div className={`contact-item ${isActive && 'active'}`}>
+        <Link to={''} className={`contact-item ${isActive && 'active'}`}>
             <div className="icon">
                 {Icon}
             </div>
@@ -30,11 +31,11 @@ export const ContactItem = ({
                         fontFamily: FontFamilyEnum.INTER,
                         fontSize: FontSizesEnum.XS,
                         fontStyle: FontStyleEnum.NORMAL,
-                        fontWeight: FontWeightEnum.REGULAR,
+                        fontWeight: FontWeightEnum.SEMI_BOLD,
                         color: '#CDBDAE'
                     }}
                 />
             </div>
-        </div>
+        </Link>
     )
 }

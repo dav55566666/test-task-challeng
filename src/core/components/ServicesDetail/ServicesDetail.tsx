@@ -193,7 +193,7 @@ export const ServicesDetail = () => {
                                 fontFamily: FontFamilyEnum.MONTSERRAT,
                                 fontSize: FontSizesEnum.XL,
                                 fontStyle: FontStyleEnum.NORMAL,
-                                fontWeight: FontWeightEnum.BOLD,
+                                fontWeight: FontWeightEnum.SEMI_BOLD,
                                 color: '#CDBDAE'
                             }}
                         />
