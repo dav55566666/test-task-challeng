@@ -25,7 +25,7 @@ export const Contacts = () => {
                         <Text
                             label='Контакты'
                             textStyles={{
-                                fontFamily: FontFamilyEnum.INTER,
+                                fontFamily: FontFamilyEnum.RUBIK,
                                 fontSize: FontSizesEnum.XX,
                                 fontStyle: FontStyleEnum.NORMAL,
                                 fontWeight: FontWeightEnum.BLACK,
