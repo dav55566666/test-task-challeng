@@ -2,8 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { IMAGES } from '../../assets';
 import { Button, ButtonBgs, ButtonTypesEnum, FontFamilyEnum, FontSizesEnum, FontStyleEnum, FontWeightEnum, Text } from '../../uikit';
 import './styles/style.scss';
+import type { ISideBarProps } from '../SideBar';
 
-export const Home = () => {
+export const Home = ({
+    isActiveSideBar,
+    setIsActiveSideBar
+}: ISideBarProps) => {
     const navigate = useNavigate()
     return (
         <section className="home">
@@ -36,7 +40,7 @@ export const Home = () => {
                         </p>
                         <Button
                             label="Наши услуги"
-                            click={() => {}}
+                            click={() => {setIsActiveSideBar(!isActiveSideBar)}}
                             type={ButtonTypesEnum.DEFAULT}
                             gap={20}
                             bg={ButtonBgs.GOLD_GRADIENT}

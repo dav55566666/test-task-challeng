@@ -1,9 +1,12 @@
-import { Home } from "../../components"
+import { Home, type ISideBarProps } from "../../components"
 
-export const HomePage = () => {
+export const HomePage = ({
+  setIsActiveSideBar,
+  isActiveSideBar
+}: ISideBarProps) => {
   return (
     <>
-        <Home />
+        <Home {...{isActiveSideBar, setIsActiveSideBar}} />
     </>
   )
 }

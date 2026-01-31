@@ -3,10 +3,14 @@ import { Button, ButtonBgs, ButtonTypesEnum, FontFamilyEnum, FontSizesEnum, Font
 import { BurgerIcon, CloseIcon, ContactsMenuIcon, IMAGES, ReviewMenuIcon } from "../../assets"
 import './styles/style.scss';
 import { servicesData } from "./datas";
+import type { ISideBarProps } from "./interfaces";
 
-export const SideBar = () => {
+export const SideBar = ({
+  isActiveSideBar,
+  setIsActiveSideBar
+}: ISideBarProps) => {
   const navigate = useNavigate()
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
   return (
     <>
       <div className="sidebar">
@@ -14,7 +18,7 @@ export const SideBar = () => {
           <img src={IMAGES.logo} alt="logo" />
         </Link>
         <div className="sidebar-menu flex gap-12">
-          <div className={`sidebar__item ${pathname.includes('/services') && 'active'}`}>
+          <div className={`sidebar__item ${pathname.includes('/services') || isActiveSideBar && 'active'}`} onMouseMove={() => {setIsActiveSideBar(true)}} onMouseLeave={() => {setIsActiveSideBar(false)}}>
             <Button
               label="Наши услуги"
               click={() => { }}
@@ -30,7 +34,9 @@ export const SideBar = () => {
                 color: '#CDBDAE'
               }}
             />
-            <div className="hiden-menu">
+            <div className="hiden-menu" style={{
+              display: isActiveSideBar ? 'block' : 'none'
+            }}>
               <div className="hiden-menu__title">
                 <Text
                   label="Наши услуги"
@@ -72,7 +78,7 @@ export const SideBar = () => {
           <div className={`sidebar__item ${pathname === '/contacts' && 'active'}`}>
             <Button
               label="Контакты"
-              click={() => {navigate('/contacts')}}
+              click={() => { navigate('/contacts') }}
               type={ButtonTypesEnum.ICON_TEXT}
               Icon={<ContactsMenuIcon />}
               bg={ButtonBgs.DARK_BROWN}
@@ -88,7 +94,7 @@ export const SideBar = () => {
           <div className={`sidebar__item ${pathname === '/reviews' && 'active'}`}>
             <Button
               label="Отзывы"
-              click={() => {navigate('/reviews')}}
+              click={() => { navigate('/reviews') }}
               type={ButtonTypesEnum.ICON_TEXT}
               Icon={<ReviewMenuIcon />}
               bg={ButtonBgs.DARK_BROWN}
