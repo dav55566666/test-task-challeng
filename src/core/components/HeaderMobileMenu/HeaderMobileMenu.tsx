@@ -3,10 +3,13 @@ import { Button, ButtonBgs, ButtonTypesEnum, FontFamilyEnum, FontSizesEnum, Font
 import { servicesData } from "../SideBar"
 import { ContactsMenuIcon, IMAGES, ReviewMenuIcon } from "../../assets";
 import './styles/style.scss';
+import type { IHeaderMobileMenuProps } from "./interfaces";
 
-export const HeaderMobileMenu = () => {
+export const HeaderMobileMenu = ({
+    setIsShow
+}: IHeaderMobileMenuProps) => {
     const navigate = useNavigate();
-    const {pathname} = useLocation()
+    const { pathname } = useLocation()
     return (
         <div className="header-mobile-menu">
             <div className="header-mobile-menu__title">
@@ -25,7 +28,10 @@ export const HeaderMobileMenu = () => {
                 <ul>
                     {
                         servicesData.map(el => (
-                            <li key={el.id} onClick={() => navigate(`/services/${el.slug}`)}>
+                            <li key={el.id} onClick={() => {
+                                setIsShow(false)
+                                navigate(`/services/${el.slug}`)
+                            }}>
                                 <span className="icons">
                                     <img src={IMAGES.miniLogo} alt="" />
                                     <img src={IMAGES.logo} alt="" />
@@ -48,7 +54,10 @@ export const HeaderMobileMenu = () => {
             <div className={`header-mobile-menu__item ${pathname === '/contacts' && 'active'}`}>
                 <Button
                     label="Контакты"
-                    click={() => { navigate('/contacts') }}
+                    click={() => {
+                        setIsShow(false)
+                        navigate('/contacts')
+                    }}
                     type={ButtonTypesEnum.ICON_TEXT}
                     Icon={<ContactsMenuIcon />}
                     bg={ButtonBgs.DARK_BROWN}
@@ -64,7 +73,10 @@ export const HeaderMobileMenu = () => {
             <div className={`header-mobile-menu__item ${pathname === '/reviews' && 'active'}`}>
                 <Button
                     label="Отзывы"
-                    click={() => { navigate('/reviews') }}
+                    click={() => { 
+                        setIsShow(false)
+                        navigate('/reviews') 
+                    }}
                     type={ButtonTypesEnum.ICON_TEXT}
                     Icon={<ReviewMenuIcon />}
                     bg={ButtonBgs.DARK_BROWN}

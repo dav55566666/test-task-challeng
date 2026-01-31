@@ -60,7 +60,7 @@ export const Header = () => {
           </div>
         </div>
       </div>
-      {isActiveMobileMenu && <HeaderMobileMenu />}
+      {isActiveMobileMenu && <HeaderMobileMenu setIsShow={setIsActiveMobileMenu} />}
     </header>
   )
 }
