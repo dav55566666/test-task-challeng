@@ -4,6 +4,7 @@ import { Button, ButtonTypesEnum, DropDown, FontFamilyEnum, FontSizesEnum, FontS
 import { langOptionsData } from "./datas";
 import './styles/style.scss';
 import { HeaderMobileMenu } from "../HeaderMobileMenu";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const [isActiveMobileMenu, setIsActiveMobileMenu] = useState<boolean>(false);
@@ -12,7 +13,9 @@ export const Header = () => {
       <div className="header__container container">
         <div className="header__content flex between gap-16">
           <div className="header__mobile">
-            <img src={IMAGES.logo} alt="" />
+            <Link to={'/'} >
+              <img src={IMAGES.logo} alt=""  />
+            </Link>
             <Button
               click={() => {setIsActiveMobileMenu(!isActiveMobileMenu)}}
               type={ButtonTypesEnum.ICON}

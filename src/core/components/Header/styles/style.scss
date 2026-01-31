@@ -156,5 +156,13 @@
                 display: none !important;
             }
         }
+        
+        .dropdown-option {
+            .button {
+                width: 100%;
+                justify-content: flex-start;
+                border-radius: 14px;
+            }
+        }
     }
 }
