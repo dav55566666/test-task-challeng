@@ -1,12 +1,20 @@
-import './styles/app.css';
-import '../common/styles/style.scss';
-import { Navigation } from '../navigation';
+import { AppNavigation, AppRouter } from './AppNavigation';
+import '../core/styles/global.scss';
+import styles from './styles/style.module.scss';
 
-export const App = () => {
-
+function App() {
   return (
-    <div className='wrapper'>
-      <Navigation />
+    <div className={styles.wrapper}>
+      <header className={styles.header}>
+        <div className={`${styles.headerContainer} container`}>
+          <AppNavigation />
+        </div>
+      </header>
+      <main className={styles.page}>
+        <AppRouter />
+      </main>
     </div>
   );
-};
+}
+
+export default App;

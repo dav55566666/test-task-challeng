@@ -1,1 +1,1 @@
-export * from './button-props.interface';
+export type { IButtonProps } from './button-props.interface';

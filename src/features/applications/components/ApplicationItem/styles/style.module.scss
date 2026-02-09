@@ -1,0 +1,58 @@
+.item {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.participant {
+  font-weight: 600;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.meta {
+  font-size: 13px;
+  color: #7f8c8d;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-transform: capitalize;
+
+  &_new {
+    background-color: #e8f4fd;
+    color: #2980b9;
+  }
+
+  &_in_progress {
+    background-color: #fef9e7;
+    color: #b7950b;
+  }
+
+  &_completed {
+    background-color: #eafaf1;
+    color: #27ae60;
+  }
+
+  &_rejected {
+    background-color: #fdedec;
+    color: #c0392b;
+  }
+}

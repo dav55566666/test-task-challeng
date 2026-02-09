@@ -1,3 +1,3 @@
-export * from './Button';
-export * from './enums';
-export * from './interfaces';
+export { Button } from './Button';
+export type { IButtonProps } from './interfaces';
+export { ButtonVariantEnum } from './enums';

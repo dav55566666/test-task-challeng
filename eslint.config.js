@@ -1,6 +1,3 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -8,68 +5,19 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default defineConfig([globalIgnores(['dist']), {
-  files: ['**/*.{ts,tsx}'],
-
-  extends: [
-    js.configs.recommended,
-    ...tseslint.configs.recommended,
-    reactHooks.configs.flat.recommended,
-    reactRefresh.configs.vite,
-  ],
-
-  languageOptions: {
-    ecmaVersion: 2020,
-    globals: globals.browser,
-  },
-
-  rules: {
-    '@typescript-eslint/no-explicit-any': 'error',
-
-    '@typescript-eslint/naming-convention': [
-      'error',
-
-      {
-        selector: 'interface',
-        format: ['PascalCase'],
-        custom: {
-          regex: '^I[A-Z]',
-          match: true,
-        },
-      },
-
-      {
-        selector: 'typeAlias',
-        format: ['PascalCase'],
-      },
-
-      {
-        selector: 'enum',
-        format: ['PascalCase'],
-      },
-
-      {
-        selector: 'enumMember',
-        format: ['UPPER_CASE'],
-      },
-
-      {
-        selector: 'variableLike',
-        format: ['camelCase', 'PascalCase'],
-      },
-
-      {
-        selector: 'property',
-        format: ['camelCase'],
-        leadingUnderscore: 'forbid',
-        trailingUnderscore: 'forbid',
-      },
+export default defineConfig([
+  globalIgnores(['dist', 'public/mockServiceWorker.js']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
     ],
-
-    'camelcase': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      { argsIgnorePattern: '^_' },
-    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
   },
-}, ...storybook.configs["flat/recommended"], ...storybook.configs["flat/recommended"]])
+])

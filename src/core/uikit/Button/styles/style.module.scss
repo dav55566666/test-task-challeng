@@ -1,0 +1,50 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  min-height: 44px;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &_primary {
+    background-color: #2c3e50;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background-color: #34495e;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.3);
+    }
+  }
+
+  &_secondary {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+
+    &:hover:not(:disabled) {
+      background-color: #dfe6e9;
+    }
+  }
+
+  &_outline {
+    background-color: transparent;
+    color: #2c3e50;
+    border: 2px solid #2c3e50;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(44, 62, 80, 0.06);
+    }
+  }
+
+  &_fullWidth {
+    width: 100%;
+  }
+}

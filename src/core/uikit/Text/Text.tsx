@@ -1,11 +1,17 @@
-import type { ITextProps } from "./interfaces"
-import "./styles/style.scss";
+import type { ITextProps } from './interfaces';
+import styles from './styles/style.module.scss';
 
-export const Text = ({
-    label,
-    textStyles
-}: ITextProps) => {
+export function Text({
+  variant = 'body',
+  as: Component = 'span',
+  className = '',
+  children,
+  ...rest
+}: ITextProps) {
+  const classNames = [styles.text, styles[`text_${variant}`], className].filter(Boolean).join(' ');
   return (
-    <span className={`text ${textStyles.fontFamily} ${textStyles.fontSize} ${textStyles.fontStyle} ${textStyles.fontWeight}`} style={{color: textStyles.color}}>{label}</span>
-  )
+    <Component className={classNames} {...rest}>
+      {children}
+    </Component>
+  );
 }

@@ -1,3 +1,3 @@
-export * from './Text';
-export * from './interfaces';
-export * from './enums';
+export { Text } from './Text';
+export type { ITextProps, TextVariantType } from './interfaces';
+export { TextTagEnum } from './enums';

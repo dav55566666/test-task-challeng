@@ -1,0 +1,58 @@
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+
+  &_fullWidth {
+    width: 100%;
+  }
+}
+
+.inputLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  border: 1px solid #dfe6e9;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: #95a5a6;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+  }
+
+  &_error {
+    border-color: #e74c3c;
+
+    &:focus {
+      border-color: #e74c3c;
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+    }
+  }
+
+  &[type='checkbox'] {
+    width: auto;
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 6px;
+    accent-color: #2c3e50;
+  }
+}
+
+.inputError {
+  font-size: 12px;
+  color: #e74c3c;
+}

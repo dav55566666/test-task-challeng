@@ -1,2 +1,1 @@
-export * from './text-props.interface';
-export * from './text-styles.interface';
+export type { ITextProps, TextVariantType } from './text-props.interface';
