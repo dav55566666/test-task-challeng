@@ -3,6 +3,7 @@ import '../core/styles/global.scss';
 import styles from './styles/style.module.scss';
 
 function App() {
+  
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
