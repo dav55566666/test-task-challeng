@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './features/store';
-import App from './App';
+import App from './App/App';
 
 async function enableMocking() {
   if (import.meta.env.MODE !== 'development') return;
