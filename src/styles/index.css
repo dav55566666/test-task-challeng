@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* shadcn-style H S L tokens (used by tailwind.config theme colors) */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --ring: 222.2 84% 4.9%;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+body {
+  margin: 0;
+}

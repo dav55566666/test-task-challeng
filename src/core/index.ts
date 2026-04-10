@@ -1,4 +1,5 @@
-export * from './assets';
 export * from './components';
+export * from './design';
+export * from './pages';
 export * from './uikit';
-export * from './styles';
+export * from './wrappers';

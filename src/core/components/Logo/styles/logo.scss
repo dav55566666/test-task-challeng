@@ -1,0 +1,70 @@
+.logo-animation {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .logo-animation__svg-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .logo-animation__mask {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    will-change: filter;
+  }
+
+  .logo-animation__mask-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    &--stable {
+      z-index: 0;
+    }
+
+    &--wave {
+      z-index: 1;
+      mask-mode: alpha;
+      -webkit-mask-mode: alpha;
+      will-change: filter;
+    }
+  }
+
+  .logo-animation__video {
+    width: 450px;
+    height: 450px;
+    z-index: 1;
+
+    video {
+      object-fit: cover;
+      object-position: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-animation .logo-animation__mask {
+    animation: none;
+    filter: none;
+  }
+
+  .logo-animation .logo-animation__mask-img--wave {
+    opacity: 0;
+  }
+}

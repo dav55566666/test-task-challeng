@@ -1,0 +1,7 @@
+export enum IconsName {
+  HOME_ICON,
+  ABOUT_US_ICON,
+  CASES_ICON,
+  CONTACTS_ICON,
+  SERVICES_ICON,
+}
