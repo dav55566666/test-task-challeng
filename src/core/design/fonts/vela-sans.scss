@@ -1,0 +1,71 @@
+/* Локальные файлы: src/core/design/fonts/ — пути относительно этого SCSS */
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src:
+    url("./VelaSans-ExtraLight.woff2") format("woff2"),
+    url("./VelaSans-ExtraLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src:
+    url("./VelaSans-Light.woff2") format("woff2"),
+    url("./VelaSans-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("./VelaSans-Regular.woff2") format("woff2"),
+    url("./VelaSans-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    url("./VelaSans-Medium.woff2") format("woff2"),
+    url("./VelaSans-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    url("./VelaSans-SemiBold.woff2") format("woff2"),
+    url("./VelaSans-SemiBold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url("./VelaSans-Bold.woff2") format("woff2"),
+    url("./VelaSans-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Vela Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src:
+    url("./VelaSans-ExtraBold.woff2") format("woff2"),
+    url("./VelaSans-ExtraBold.woff") format("woff");
+}

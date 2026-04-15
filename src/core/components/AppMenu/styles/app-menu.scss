@@ -1,0 +1,118 @@
+.app-menu__nav-shell {
+  position: relative;
+  z-index: 50;
+  pointer-events: auto;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0.45s step-end;
+  visibility: visible;
+}
+
+.app-menu__nav-shell--hidden {
+  opacity: 0;
+  transform: translateX(18px);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0.45s step-start;
+}
+
+.app-menu__fab-stack {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(-50%) translateX(16px);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0.45s step-start;
+}
+
+.app-menu__fab-stack--visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0.45s step-end;
+}
+
+.app-menu__fab-btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 4px 24px rgba(98, 56, 209, 0.12);
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 6px 28px rgba(98, 56, 209, 0.18);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(113, 141, 241, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+.app-menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(2px);
+  animation: app-menu-backdrop-in 0.35s ease forwards;
+}
+
+@keyframes app-menu-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-menu__nav-shell,
+  .app-menu__nav-shell--hidden,
+  .app-menu__fab-stack,
+  .app-menu__fab-stack--visible {
+    transition-duration: 0.01ms;
+  }
+
+  .app-menu__backdrop {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,123 @@
+.main-directions {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 20px 56px;
+}
+
+.main-directions__eyebrow {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(51, 51, 51, 0.45);
+}
+
+.main-directions__headline {
+  margin: 0 0 40px;
+  max-width: 920px;
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #111;
+}
+
+.main-directions__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main-directions__item {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  &:last-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+}
+
+.main-directions__link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 200px) minmax(0, 1fr);
+  gap: 20px 32px;
+  align-items: start;
+  padding: 22px 0;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s ease;
+
+  @media (max-width: 720px) {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px 16px;
+
+    .main-directions__desc {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &:hover {
+    background: rgba(113, 141, 241, 0.04);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(113, 141, 241, 0.55);
+    outline-offset: 2px;
+  }
+}
+
+.main-directions__icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  transition:
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+.main-directions__link:hover .main-directions__icon-wrap {
+  background: rgba(134, 217, 250, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(113, 141, 241, 0.2),
+    0 8px 28px rgba(98, 56, 209, 0.18);
+}
+
+.main-directions__arrow {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: 0.75;
+  transform: rotate(-135deg);
+}
+
+.main-directions__title {
+  margin: 0;
+  padding-top: 2px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111;
+}
+
+.main-directions__desc {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(51, 51, 51, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-directions__link,
+  .main-directions__icon-wrap {
+    transition: none;
+  }
+}

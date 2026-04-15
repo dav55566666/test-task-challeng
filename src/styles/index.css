@@ -1,10 +1,17 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 /* shadcn-style H S L tokens (used by tailwind.config theme colors) */
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;
   --ring: 222.2 84% 4.9%;
+  /* Header block: 24px + 24px padding + ~24px logo — used by sticky section bars */
+  --site-header-sticky-height: 4.5rem;
+}
+
+html {
+  overflow-x: clip;
 }
 
 #root {
@@ -13,4 +20,5 @@
 
 body {
   margin: 0;
+  overflow-x: clip;
 }

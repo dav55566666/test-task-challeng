@@ -1,0 +1,1 @@
+export { useMaxIntersectionIndex } from "./useMaxIntersectionIndex";

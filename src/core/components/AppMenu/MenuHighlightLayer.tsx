@@ -1,4 +1,4 @@
-import arrowIcon from "../../../assets/arrow.svg";
+import { IMAGES } from "../../design";
 
 type MenuHighlightLayerProps = {
   translateXRem: number;
@@ -37,7 +37,7 @@ export const MenuHighlightLayer = ({
         >
           <span className="pointer-events-none absolute -right-10 top-1/2 z-[20] flex -translate-y-1/2 items-center">
             <img
-              src={arrowIcon}
+              src={IMAGES.arrow}
               alt=""
               aria-hidden
               className="h-2.5 w-6 shrink-0 object-contain"

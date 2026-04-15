@@ -1,0 +1,1 @@
+export { AboutManifestoSection } from "./AboutManifestoSection";

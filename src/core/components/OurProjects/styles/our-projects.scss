@@ -1,0 +1,16 @@
+.our-projects__figure-wash {
+  background: #fafafaa3;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.our-projects__figure-wash.is-clear {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .our-projects__figure-wash {
+    transition: none;
+    opacity: 0;
+  }
+}

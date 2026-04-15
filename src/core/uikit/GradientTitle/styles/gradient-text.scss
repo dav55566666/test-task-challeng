@@ -1,0 +1,60 @@
+.gradient-text {
+  font-size: var(--gradient-title-mobile-size, inherit);
+  font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 110%;
+  letter-spacing: -0.02em;
+  /* Плотные стопы без alpha: в кадре всегда минимум два разных оттенка */
+  background-image: linear-gradient(
+    82.53deg,
+    #a39ce8 0%,
+    #7b8cf0 14%,
+    #4d6fe8 28%,
+    #5ba8f0 42%,
+    #3d9ee8 56%,
+    #5ec4f5 70%,
+    #7ad4f8 84%,
+    #b8b4ec 100%
+  );
+  /* Крупнее фон — при сдвиге позиции заметнее смена пары цветов в тексте */
+  background-size: 320% 320%;
+  background-position: 0% 40%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text-drift 10s ease-in-out infinite alternate;
+}
+
+@media (min-width: 640px) {
+  .gradient-text {
+    font-size: var(--gradient-title-desktop-size, inherit);
+  }
+}
+
+@keyframes gradient-text-drift {
+  0% {
+    background-position: 0% 25%;
+  }
+  50% {
+    background-position: 88% 58%;
+  }
+  100% {
+    background-position: 100% 32%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text {
+    animation: none;
+    background-position: 0% 45%;
+    background-size: 100% 100%;
+    background-image: linear-gradient(
+      82.53deg,
+      #a39ce8 0%,
+      #4d6fe8 45%,
+      #5ec4f5 100%
+    );
+  }
+}

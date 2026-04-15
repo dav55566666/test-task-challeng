@@ -1,0 +1,31 @@
+.main {
+  width: 100%;
+  padding: 24px 20px;
+  min-height: 100vh;
+  &__text {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 440px;
+    p {
+      font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 120%;
+      letter-spacing: 0.03em;
+      color: rgba(51, 51, 51, 0.4);
+    }
+  }
+  &__logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -100px;
+    overflow: visible;
+  }
+}

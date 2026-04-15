@@ -48,7 +48,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
           className={
             "relative z-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
             (isTarget
-              ? "overflow-hidden border-0 bg-transparent text-white"
+              ? "overflow-hidden border border-transparent bg-transparent text-white"
               : "border border-transparent text-[#333333]/30")
           }
         >

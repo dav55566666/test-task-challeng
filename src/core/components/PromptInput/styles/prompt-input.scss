@@ -1,0 +1,55 @@
+.prompt-input {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0.875rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  display: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background-image:
+      linear-gradient(85.58deg, #c7c4f0 7.66%, #74baec 46.24%, #84caec 87.92%),
+      conic-gradient(
+        from 2.98deg at 82.54% 66.18%,
+        #6238d1 0deg,
+        rgba(45, 91, 221, 0) 95.19deg,
+        rgba(98, 56, 209, 0) 357.89deg,
+        rgba(98, 56, 209, 0) 360deg
+      );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+.prompt-input__field {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: rgba(15, 23, 42, 0.88);
+  outline: none;
+
+  &::placeholder {
+    color: rgba(15, 23, 42, 0.38);
+  }
+}

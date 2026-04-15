@@ -1,12 +1,12 @@
-import { BrowserRouter } from "react-router-dom"
-import type { IAppProvidersProps } from "./interfaces"
+import { BrowserRouter } from "react-router-dom";
 
-export const AppProviders = ({children}: IAppProvidersProps) => {
+import type { IAppProvidersProps } from "./interfaces";
+import { ScrollProvider } from "./ScrollProvider";
+
+export const AppProviders = ({ children }: IAppProvidersProps) => {
   return (
-    <>
-        <BrowserRouter>
-            {children}
-        </BrowserRouter>
-    </>
-  )
-}
+    <BrowserRouter>
+      <ScrollProvider>{children}</ScrollProvider>
+    </BrowserRouter>
+  );
+};
