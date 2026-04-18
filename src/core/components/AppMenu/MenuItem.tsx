@@ -9,6 +9,8 @@ type MenuItemProps = {
   isTarget: boolean;
   translateXRem: number;
   rotateDeg: number;
+  /** Открыто из FAB поверх тёмного backdrop — неактивные пункты светлые. */
+  overDarkBackdrop?: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -24,6 +26,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
       isTarget,
       translateXRem,
       rotateDeg,
+      overDarkBackdrop = false,
       onClick,
       onMouseEnter,
       onMouseLeave,
@@ -49,7 +52,9 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
             "relative z-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
             (isTarget
               ? "overflow-hidden border border-transparent bg-transparent text-white"
-              : "border border-transparent text-[#333333]/30")
+              : overDarkBackdrop
+                ? "border border-transparent text-white/85"
+                : "border border-transparent text-[#333333]/30")
           }
         >
           {isTarget ? (
@@ -66,7 +71,9 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
                 height: MENU_ICON_PX,
                 ...(isTarget
                   ? { color: "#ffffff", solid: true }
-                  : {}),
+                  : overDarkBackdrop
+                    ? { color: "rgba(255, 255, 255, 0.88)", solid: true }
+                    : {}),
               }}
             />
           </span>

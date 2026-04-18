@@ -11,6 +11,7 @@ export const IconsName = {
   TG_ICON: 6,
   LINKEDIN_ICON: 7,
   BURGER_ICON: 8,
+  ARROW_ICON: 9,
 } as const;
 
 export type IconsName = (typeof IconsName)[keyof typeof IconsName];

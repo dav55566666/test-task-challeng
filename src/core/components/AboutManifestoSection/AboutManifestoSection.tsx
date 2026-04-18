@@ -4,6 +4,7 @@ import {
   ABOUT_STATS,
 } from "../../data";
 import { IMAGES } from "../../design";
+import { GradientTitle, TextTag } from "../../uikit";
 
 export const AboutManifestoSection = () => {
   return (
@@ -55,9 +56,12 @@ export const AboutManifestoSection = () => {
       <dl className="m-0 mt-14 grid grid-cols-2 gap-x-6 gap-y-8 md:mt-18 md:gap-x-10 md:gap-y-10">
         {ABOUT_STATS.map((stat) => (
           <div key={`${stat.value}-${stat.label}`} className="min-w-0">
-            <dt className="text-3xl font-medium leading-none tracking-tight md:text-4xl">
-              {stat.value}
-            </dt>
+              <GradientTitle
+                value={stat.value}
+                currentSize={36}
+                mobileSize={30}
+                tag={TextTag.H3}
+              />
             <dd className="m-0 mt-3.5 font-light leading-tight text-[#33333366] text-sm">
               {stat.label}
             </dd>

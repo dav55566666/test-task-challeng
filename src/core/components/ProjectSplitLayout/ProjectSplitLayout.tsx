@@ -22,6 +22,8 @@ export const caseStudyBodyCopyClass =
   "m-0 w-full text-[15px] leading-tight font-light text-[#33333366] mt-5";
 
 export type ProjectSplitLayoutProps = {
+  /** Root element `id` (e.g. in-page anchors). */
+  id?: string;
   /** Left column on desktop (sticky). Also used in the mobile sticky bar unless `mobileSticky` is `false`. */
   sidebar: () => ReactNode;
   /**
@@ -48,6 +50,7 @@ export type ProjectSplitLayoutProps = {
 };
 
 export function ProjectSplitLayout({
+  id,
   sidebar,
   mobileSticky,
   children,
@@ -70,6 +73,7 @@ export function ProjectSplitLayout({
 
   return (
     <Tag
+      id={id}
       className={shellClass}
       {...(ariaLabel ? { "aria-label": ariaLabel } : {})}
     >

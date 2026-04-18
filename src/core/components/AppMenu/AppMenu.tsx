@@ -8,12 +8,16 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useScrollSubscribe } from "../../../app/providers";
+import { useProjectsUiStore } from "../../../store";
 import { BurgerIcon, LinkedinIcon, TgIcon } from "../../design/Icon/Icons";
+import { AppMenuMobileDock } from "./AppMenuMobileDock";
 import { MENU_LINKS, ROW_LAYOUT, SOCIAL_LINKS } from "./constants";
 import { MenuBlobFilterDefs } from "./MenuBlobFilterDefs";
 import { MenuHighlightLayer } from "./MenuHighlightLayer";
 import { MenuItem } from "./MenuItem";
 import "./styles/app-menu.scss";
+
+type MenuLink = (typeof MENU_LINKS)[number];
 
 type HighlightMetrics = {
   top: number;
@@ -62,6 +66,7 @@ function shouldUseCompactFab(): boolean {
 export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const casesListActiveSlug = useProjectsUiStore((s) => s.casesListActiveSlug);
 
   const [activeId, setActiveId] = useState<string>("home");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -71,6 +76,12 @@ export const Sidebar = () => {
   const [layoutTick, setLayoutTick] = useState(0);
   const [compactFab, setCompactFab] = useState(false);
   const [menuExpandedFromFab, setMenuExpandedFromFab] = useState(false);
+  const [pathnameSnapshot, setPathnameSnapshot] = useState(location.pathname);
+
+  if (location.pathname !== pathnameSnapshot) {
+    setPathnameSnapshot(location.pathname);
+    setMenuExpandedFromFab(false);
+  }
 
   const navRef = useRef<HTMLElement>(null);
   const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -104,6 +115,10 @@ export const Sidebar = () => {
   useEffect(() => {
     return () => clearHoverTimer();
   }, [clearHoverTimer]);
+
+  /** На главной полное меню до скролла; на всех остальных страницах по умолчанию «закрыто» (FAB). */
+  const isHomeRoute = location.pathname === "/";
+  const menuInCompactStyle = !isHomeRoute || compactFab;
 
   const routeActiveId =
     MENU_LINKS.find(
@@ -166,20 +181,99 @@ export const Sidebar = () => {
     };
   }, []);
 
-  const showFabStack = compactFab && !menuExpandedFromFab;
-  const showMainNav = !compactFab || menuExpandedFromFab;
+  const showFabStack = menuInCompactStyle && !menuExpandedFromFab;
+  const showMainNav = !menuInCompactStyle || menuExpandedFromFab;
+  /** Меню открыто из FAB поверх затемнённого backdrop. */
+  const menuOverDarkBackdrop = menuInCompactStyle && menuExpandedFromFab;
+
+  const navigateToMenuItem = useCallback(
+    (item: MenuLink) => {
+      if ("path" in item && item.path) {
+        if (item.path === "/" && location.pathname.startsWith("/projects")) {
+          const detailMatch = /^\/projects\/([^/]+)$/.exec(location.pathname);
+          const slug = detailMatch?.[1] ?? casesListActiveSlug;
+          if (slug) {
+            navigate({
+              pathname: "/",
+              hash: `#project-${slug}`,
+            });
+          } else {
+            navigate("/");
+          }
+        } else {
+          navigate(item.path);
+        }
+      }
+      setActiveId(item.id);
+      if (menuInCompactStyle) {
+        setMenuExpandedFromFab(false);
+      }
+    },
+    [
+      casesListActiveSlug,
+      location.pathname,
+      menuInCompactStyle,
+      navigate,
+    ]
+  );
 
   return (
-    <aside className="pointer-events-none fixed inset-y-0 right-0 z-50 flex items-center pr-6">
-      {compactFab && menuExpandedFromFab ? (
+    <>
+      {menuInCompactStyle && menuExpandedFromFab ? (
         <button
           type="button"
-          className="app-menu__backdrop pointer-events-auto"
+          className="app-menu__backdrop app-menu__backdrop--fab-open pointer-events-auto"
           aria-label="Закрыть меню"
           onClick={() => setMenuExpandedFromFab(false)}
         />
       ) : null}
 
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 lg:hidden">
+        <AppMenuMobileDock
+          visible={showMainNav}
+          targetId={targetId}
+          onItemActivate={navigateToMenuItem}
+          overDarkBackdrop={menuOverDarkBackdrop}
+        />
+      </div>
+
+      <div
+        className={
+          "app-menu__fab-stack " +
+          (showFabStack ? "app-menu__fab-stack--visible" : "")
+        }
+        aria-hidden={!showFabStack}
+      >
+        <a
+          className="app-menu__fab-btn"
+          href={SOCIAL_LINKS.telegram}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Telegram"
+        >
+          <TgIcon style={{ width: 24, height: 24 }} />
+        </a>
+        <a
+          className="app-menu__fab-btn"
+          href={SOCIAL_LINKS.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          <LinkedinIcon style={{ width: 24, height: 24 }} />
+        </a>
+        <button
+          type="button"
+          className="app-menu__fab-btn"
+          aria-label="Открыть меню"
+          aria-expanded={showMainNav && menuInCompactStyle}
+          onClick={() => setMenuExpandedFromFab(true)}
+        >
+          <BurgerIcon style={{ width: 20, height: 14 }} />
+        </button>
+      </div>
+
+      <aside className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden items-center pr-6 lg:flex">
       <div
         className={
           "app-menu__nav-shell relative " +
@@ -220,12 +314,8 @@ export const Sidebar = () => {
                 isTarget={targetId === item.id}
                 translateXRem={rowLayout.translateXRem}
                 rotateDeg={rowLayout.rotateDeg}
-                onClick={() => {
-                  if ("path" in item && item.path) {
-                    navigate(item.path);
-                  }
-                  setActiveId(item.id);
-                }}
+                overDarkBackdrop={menuOverDarkBackdrop}
+                onClick={() => navigateToMenuItem(item)}
                 onMouseEnter={() => setHoveredIdImmediate(item.id)}
                 onMouseLeave={scheduleHoveredIdClear}
               />
@@ -233,43 +323,8 @@ export const Sidebar = () => {
           })}
         </nav>
       </div>
-
-      <div
-        className={
-          "app-menu__fab-stack " +
-          (showFabStack ? "app-menu__fab-stack--visible" : "")
-        }
-        aria-hidden={!showFabStack}
-      >
-        <a
-          className="app-menu__fab-btn"
-          href={SOCIAL_LINKS.telegram}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Telegram"
-        >
-          <TgIcon style={{ width: 24, height: 24 }} />
-        </a>
-        <a
-          className="app-menu__fab-btn"
-          href={SOCIAL_LINKS.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn"
-        >
-          <LinkedinIcon style={{ width: 24, height: 24 }} />
-        </a>
-        <button
-          type="button"
-          className="app-menu__fab-btn"
-          aria-label="Открыть меню"
-          aria-expanded={showMainNav && compactFab}
-          onClick={() => setMenuExpandedFromFab(true)}
-        >
-          <BurgerIcon style={{ width: 20, height: 14 }} />
-        </button>
-      </div>
     </aside>
+    </>
   );
 };
 

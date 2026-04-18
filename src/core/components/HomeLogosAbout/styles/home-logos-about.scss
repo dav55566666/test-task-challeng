@@ -5,7 +5,6 @@
 }
 
 .home-logos-about__cloud {
-  max-width: 1120px;
   margin: 0 auto 56px;
 }
 
@@ -49,56 +48,57 @@
 }
 
 .home-logos-about__about {
-  max-width: 1120px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 40px 48px;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .home-logos-about__title {
-  margin: 0 0 16px;
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: #111;
+  width: 100%;
+  max-width: 25%;
+  h2 {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 110%;
+    letter-spacing: -0.02em;
+    color: #333333;
+  }
+  .home-logos-about__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(51, 51, 51, 0.45);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    padding-left: 16px;
+    margin-top: 10px;
+  
+    img {
+      width: 14px;
+      height: 14px;
+      opacity: 0.65;
+    }
+  
+    &:hover {
+      color: rgba(51, 51, 51, 0.75);
+    }
+  
+    &:focus-visible {
+      outline: 2px solid rgba(113, 141, 241, 0.55);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  }
 }
 
-.home-logos-about__more {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 15px;
-  font-weight: 500;
-  color: rgba(51, 51, 51, 0.45);
-  text-decoration: none;
-  transition: color 0.2s ease;
-
-  img {
-    width: 14px;
-    height: 14px;
-    opacity: 0.65;
-  }
-
-  &:hover {
-    color: rgba(51, 51, 51, 0.75);
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(113, 141, 241, 0.55);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-}
 
 .home-logos-about__stats {
+  width: 100%;
+  max-width: 75%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px 40px;

@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 import { IMAGES } from "../../design";
 import "./styles/home-logos-about.scss";
+import { GradientTitle, TextTag } from "../../uikit";
 
-const LOGO_PLACEHOLDER_COUNT = 24;
 
 const STATS: { value: string; label: string; underline?: boolean }[] = [
   {
@@ -36,18 +36,9 @@ const STATS: { value: string; label: string; underline?: boolean }[] = [
 export const HomeLogosAbout = () => {
   return (
     <section className="home-logos-about" aria-labelledby="home-logos-about-heading">
-      <div className="home-logos-about__cloud">
-        <div className="home-logos-about__grid" aria-hidden>
-          {Array.from({ length: LOGO_PLACEHOLDER_COUNT }).map((_, i) => (
-            <div key={i} className="home-logos-about__logo-cell" />
-          ))}
-        </div>
-        <div className="home-logos-about__plus">230+</div>
-      </div>
-
       <div className="home-logos-about__about">
-        <div>
-          <h2 id="home-logos-about-heading" className="home-logos-about__title">
+        <div className="home-logos-about__title">
+          <h2 id="home-logos-about-heading">
             О нас
           </h2>
           <Link to="/about" className="home-logos-about__more">
@@ -59,14 +50,12 @@ export const HomeLogosAbout = () => {
         <div className="home-logos-about__stats">
           {STATS.map((stat) => (
             <div key={stat.value + stat.label}>
-              <p
-                className={
-                  "home-logos-about__stat-value" +
-                  (stat.underline ? " home-logos-about__stat-value--underline" : "")
-                }
-              >
-                {stat.value}
-              </p>
+              <GradientTitle 
+                value={stat.value}
+                currentSize={36}
+                mobileSize={30}
+                tag={TextTag.H3}
+              />
               <p className="home-logos-about__stat-label">{stat.label}</p>
             </div>
           ))}

@@ -6,3 +6,13 @@
     padding: 24px 20px;
     background-color: #fff;
 }
+
+.header__projects-tabs {
+    @media (min-width: 768px) {
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}

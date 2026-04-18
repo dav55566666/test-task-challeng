@@ -1,5 +1,5 @@
 const FIGURE_CLASS =
-    "relative m-0 overflow-hidden rounded-xl shadow-[0_8px_40px_rgba(15,23,42,0.08)] md:rounded-[1.25rem]";
+    "relative m-0 overflow-hidden rounded-xl md:rounded-[1.25rem]";
 
 
 export function ProjectGallery({

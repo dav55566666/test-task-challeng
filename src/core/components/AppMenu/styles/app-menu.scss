@@ -22,15 +22,16 @@
 
 .app-menu__fab-stack {
   position: fixed;
-  right: 1.5rem;
-  top: 50%;
+  right: 1rem;
+  bottom: 1rem;
+  top: auto;
   z-index: 50;
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
   align-items: center;
   opacity: 0;
-  transform: translateY(-50%) translateX(16px);
+  transform: translateX(16px);
   pointer-events: none;
   visibility: hidden;
   transition:
@@ -39,15 +40,30 @@
     visibility 0.45s step-start;
 }
 
+@media (min-width: 1024px) {
+  .app-menu__fab-stack {
+    right: 1.5rem;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%) translateX(16px);
+  }
+}
+
 .app-menu__fab-stack--visible {
   opacity: 1;
-  transform: translateY(-50%) translateX(0);
   pointer-events: auto;
   visibility: visible;
+  transform: translateX(0);
   transition:
     opacity 0.45s ease,
     transform 0.45s ease,
     visibility 0.45s step-end;
+}
+
+@media (min-width: 1024px) {
+  .app-menu__fab-stack--visible {
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
 .app-menu__fab-btn {
@@ -94,12 +110,219 @@
   animation: app-menu-backdrop-in 0.35s ease forwards;
 }
 
+.app-menu__backdrop--fab-open {
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(4px);
+}
+
 @keyframes app-menu-backdrop-in {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Мобильное меню (max-width 1023px): дуга снизу */
+.app-menu__mobile-dock {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 12px max(8px, env(safe-area-inset-bottom, 0px));
+}
+
+.app-menu__mobile-dock__inner {
+  position: relative;
+  width: 100%;
+  max-width: 32rem;
+  padding: 1.35rem 0.5rem 0.35rem;
+  /* Верхняя кромка дока — фиксированное скругление как в типичном bottom-sheet в Figma */
+  border-radius: 36px 36px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 -12px 48px rgba(98, 56, 209, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  transition:
+    transform 0.42s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+}
+
+.app-menu__mobile-dock__glow {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: 15%;
+  width: 120%;
+  height: 85%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 65% 55% at 45% 65%,
+      rgba(175, 165, 235, 0.55) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 55% 50% at 58% 55%,
+      rgba(88, 125, 238, 0.5) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 50% 70%,
+      rgba(134, 217, 250, 0.42) 0%,
+      transparent 55%
+    );
+  filter: blur(18px);
+  animation: app-menu-mobile-glow 9s ease-in-out infinite;
+}
+
+.app-menu__mobile-dock__list {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0.25rem;
+}
+
+.app-menu__mobile-dock__item {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 4.75rem;
+  display: flex;
+  justify-content: center;
+}
+
+.app-menu__mobile-dock__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0.5rem 0.25rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  /* Карточка пункта: скругление ~20–22px из макета (squircle-ощущение) */
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.45);
+  color: rgba(51, 51, 51, 0.45);
+  font-family:
+    "Vela Sans",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(113, 141, 241, 0.85);
+    outline-offset: 2px;
+  }
+}
+
+.app-menu__mobile-dock__btn--active {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: linear-gradient(145deg, #6b8cf0 0%, #5578e8 55%, #4a6ee3 100%);
+  color: #ffffff;
+  box-shadow:
+    0 8px 28px rgba(86, 120, 232, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Неактивные пункты поверх тёмного backdrop (меню открыто из FAB) */
+.app-menu__mobile-dock__btn--on-dark {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+}
+
+.app-menu__mobile-dock--over-backdrop .app-menu__mobile-dock__handle {
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.app-menu__mobile-dock__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    display: block;
+  }
+}
+
+.app-menu__mobile-dock__label {
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-menu__mobile-dock__handle {
+  position: relative;
+  z-index: 2;
+  width: 2.5rem;
+  height: 0.25rem;
+  margin: 0.65rem auto 0.15rem;
+  border-radius: 999px;
+  background: rgba(51, 51, 51, 0.32);
+}
+
+.app-menu__mobile-dock--hidden .app-menu__mobile-dock__inner {
+  transform: translateY(calc(100% + 1.25rem));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-menu__mobile-dock--visible {
+  pointer-events: auto;
+}
+
+.app-menu__mobile-dock--visible .app-menu__mobile-dock__inner {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes app-menu-mobile-glow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    filter: blur(18px) hue-rotate(0deg) saturate(1.05);
+    opacity: 0.88;
+  }
+  33% {
+    transform: translateX(-50%) scale(1.06) translate(6px, -8px);
+    filter: blur(22px) hue-rotate(22deg) saturate(1.2);
+    opacity: 1;
+  }
+  66% {
+    transform: translateX(-50%) scale(0.96) translate(-5px, 4px);
+    filter: blur(20px) hue-rotate(-14deg) saturate(1.12);
+    opacity: 0.92;
   }
 }
 
@@ -114,5 +337,13 @@
   .app-menu__backdrop {
     animation: none;
     opacity: 1;
+  }
+
+  .app-menu__mobile-dock__inner {
+    transition-duration: 0.01ms;
+  }
+
+  .app-menu__mobile-dock__glow {
+    animation: none;
   }
 }

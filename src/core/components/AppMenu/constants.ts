@@ -1,7 +1,7 @@
 import { IconsName } from "../../design/Icon";
 
 export const MENU_LINKS = [
-  { id: "services", label: "Услуги", icon: IconsName.SERVICES_ICON },
+  { id: "services", label: "Услуги", icon: IconsName.SERVICES_ICON, path: "/directions" },
   { id: "cases", label: "Кейсы", icon: IconsName.CASES_ICON, path: "/projects" },
   { id: "home", label: "Главная", icon: IconsName.HOME_ICON, path: "/" },
   { id: "about", label: "О нас", icon: IconsName.ABOUT_US_ICON, path: "/about" },
@@ -29,3 +29,9 @@ export const ROW_LAYOUT = [
   { rotateDeg: -15, translateXRem: SHIFT_MID_REM },
   { rotateDeg: -20, translateXRem: SHIFT_OUT_REM },
 ] as const;
+
+/**
+ * Нижнее мобильное меню: углы как в Figma (слева направо: Услуги → Контакты).
+ * Слева — против часовой (отрицательный rotate в CSS), справа — по часовой.
+ */
+export const MOBILE_ARC_ROTATIONS_DEG = [-12, -6, 0, 6, 12] as const;

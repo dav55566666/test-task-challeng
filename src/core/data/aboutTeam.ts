@@ -1,11 +1,11 @@
-import { IMAGES } from "../design";
+import teamMemberVideo from "../../assets/team-member.mp4";
 
 export type TeamMember = {
   id: string;
   name: string;
   role: string;
   bio: string;
-  imageSrc: string;
+  videoSrc: string;
   imageAlt: string;
 };
 
@@ -15,7 +15,7 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
     name: "Макс Смирнов",
     role: "CEO Fabula",
     bio: "Для большей эффективности, мы оставили творческое людям и передали операционные процессы разработанной ИИ-инфраструктуре.",
-    imageSrc: IMAGES.person1,
+    videoSrc: teamMemberVideo,
     imageAlt: "Макс Смирнов",
   },
   {
@@ -23,7 +23,7 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
     name: "Кирилл Жуков",
     role: "CEO Fabula",
     bio: "Мы верим, что современные маркетинговые и коммуникационные вызовы нужно решать единой командой, обогащённой профильными талантами.",
-    imageSrc: IMAGES.person2,
+    videoSrc: teamMemberVideo,
     imageAlt: "Кирилл Жуков в худи Fabula",
   },
   {
@@ -31,7 +31,7 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
     name: "Кирилл Жуков",
     role: "CEO Fabula",
     bio: "Для большей эффективности, мы оставили творческое людям и передали операционные процессы разработанной ИИ-инфраструктуре.",
-    imageSrc: IMAGES.person3,
+    videoSrc: teamMemberVideo,
     imageAlt: "Кирилл Жуков в костюме Fabula",
   },
 ];

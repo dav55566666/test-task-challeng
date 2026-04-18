@@ -1,14 +1,9 @@
-// import logoBgVideo from '../../assets/logo-bg-video.mp4';
 import arrow from '../../assets/arrow.svg';
 import arrowRightTop from '../../assets/arrow-right-top.svg';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowUp from '../../assets/arrow-up.svg';
 import logoMask from '../../assets/logo-mask.png';
-/** Маска анимации лого: даунсэмпл из `big-logo.png` (напр. `sips -Z 2560 big-logo.png -o logo-mask-gradient.png`). */
 import logoMaskGradient from '../../assets/logo-mask-gradient.png';
-import person1 from '../../assets/person1.png';
-import person2 from '../../assets/person2.png';
-import person3 from '../../assets/person3.png';
 import project1 from '../../assets/project1.png';
 import project2 from '../../assets/project2.png';
 import project3 from '../../assets/project3.png';
@@ -35,9 +30,6 @@ export const IMAGES = {
   project1_3,
   project1_4,
   project1_5,
-  person1,
-  person2,
-  person3,
 } as const;
 
 export const PRODUCT_CASE_GALLERY = [

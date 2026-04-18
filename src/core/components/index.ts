@@ -10,3 +10,4 @@ export * from "./Header";
 export * from "./HomeLogosAbout";
 export * from "./Main";
 export * from "./MainDirections";
+export * from "./Partners";

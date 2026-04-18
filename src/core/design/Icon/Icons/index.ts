@@ -7,3 +7,4 @@ export * from "./LinkedinIcon";
 export * from "./Logo";
 export * from "./ServicesIcon";
 export * from "./TgIcon";
+export * from './ArrowIcon';

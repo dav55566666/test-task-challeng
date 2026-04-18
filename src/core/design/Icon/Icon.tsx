@@ -1,6 +1,7 @@
 import { IconsName } from "./enums";
 import {
   AboutUsIcon,
+  ArrowIcon,
   BurgerIcon,
   CasesIcon,
   ContactUsIcon,
@@ -32,6 +33,8 @@ export const Icon = ({ name, style }: IconProps) => {
       return <LinkedinIcon style={style} />;
     case IconsName.BURGER_ICON:
       return <BurgerIcon style={style} />;
+    case IconsName.ARROW_ICON:
+      return <ArrowIcon style={style} />;
     default:
       return null;
   }

@@ -3,6 +3,7 @@ import {
   Main,
   MainDirections,
   OurProjects,
+  Partners,
   PromptInput,
   SiteFooter,
 } from "../../components";
@@ -22,6 +23,7 @@ export const Home = () => {
       </div>
       <OurProjects limit={3} />
       <MainDirections />
+      <Partners />
       <HomeLogosAbout />
       <SiteFooter />
     </div>
