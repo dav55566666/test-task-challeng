@@ -10,3 +10,16 @@
 .about-us__card-image {
   aspect-ratio: 4 / 5;
 }
+
+.about-us__section-title {
+  font-size: 36px;
+  line-height: 110%;
+
+  @media (max-width: 1500px) {
+    font-size: 36px;
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 30px;
+  }
+}

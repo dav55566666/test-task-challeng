@@ -1,5 +1,5 @@
 import { Icon } from "../../design/Icon";
-import { MENU_LINKS, MOBILE_ARC_ROTATIONS_DEG } from "./constants";
+import { MENU_LINKS, MOBILE_DOCK_ITEM_TRANSFORMS } from "./constants";
 
 const ARC_ICON_PX = 20;
 
@@ -34,14 +34,17 @@ export const AppMenuMobileDock = ({
         <ul className="app-menu__mobile-dock__list">
           {MENU_LINKS.map((item, index) => {
             const isActive = targetId === item.id;
-            const rotate = MOBILE_ARC_ROTATIONS_DEG[index] ?? 0;
+            const t = MOBILE_DOCK_ITEM_TRANSFORMS[index];
+            const translateX = t?.x ?? 0;
+            const translateY = t?.y ?? 0;
+            const rotate = t?.rotate ?? 0;
             return (
               <li
                 key={item.id}
                 className="app-menu__mobile-dock__item"
                 style={{
-                  transform: `rotate(${rotate}deg)`,
-                  transformOrigin: "bottom center",
+                  transform: `translate(${translateX}px, ${translateY}px) rotate(${rotate}deg)`,
+                  transformOrigin: "center bottom",
                 }}
               >
                 <button

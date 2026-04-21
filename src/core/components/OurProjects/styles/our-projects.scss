@@ -17,6 +17,13 @@
   will-change: opacity, transform;
 }
 
+@media (min-width: 1500px) {
+  #our-projects .gradient-text,
+  #our-projects .our-projects__active-copy-content h3 {
+    font-size: 36px;
+  }
+}
+
 @keyframes our-projects-copy-fade {
   from {
     opacity: 0;

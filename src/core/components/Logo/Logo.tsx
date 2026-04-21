@@ -1,23 +1,51 @@
-import type { CSSProperties } from 'react';
-import { useId } from 'react';
+import type { CSSProperties } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
+import { Plyr } from "plyr-react";
 import { IMAGES } from '../../design';
 import { LOGO_INNER_HOLE } from './logoShape';
 import './styles/logo.scss';
+import "plyr-react/plyr.css";
 
 export const Logo = () => {
-  const uid = useId().replace(/:/g, '');
+  const uid = useId().replace(/:/g, "");
   const filterId = `logo-mask-wave-${uid}`;
   const innerMaskId = `logo-mask-inner-${uid}`;
   const innerHoleSoftFilterId = `logo-inner-hole-soft-${uid}`;
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
+  const playerSource = useMemo(
+    () => ({
+      type: "video" as const,
+      sources: [{ src: IMAGES.logoVideo, type: "video/mp4" }],
+    }),
+    []
+  );
+
+  useEffect(() => {
+    if (!isPlayerOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsPlayerOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isPlayerOpen]);
 
   return (
-    <div className="logo-animation">
-      <div className="logo-animation__scale">
-        <div className="logo-animation__mask">
-          <svg className="logo-animation__svg-filters" aria-hidden focusable="false">
-            <defs>
+    <>
+      <div className="logo-animation">
+        <div className="logo-animation__scale">
+          <div className="logo-animation__mask">
+            <svg className="logo-animation__svg-filters" aria-hidden focusable="false">
+              <defs>
               {/* Мягкий край «дырки» в маске — без резкого излома у внутреннего контура */}
               <filter
                 id={innerHoleSoftFilterId}
@@ -132,18 +160,17 @@ export const Logo = () => {
                 <feDisplacementMap
                   in="SourceGraphic"
                   in2="noiseDispSoft"
-                  scale="12"
+                  scale="15.2"
                   xChannelSelector="R"
                   yChannelSelector="G"
                   edgeMode="duplicate"
                   result="dist"
                 >
-                  {/* +40% к прежней амплитуде; поле ограничено альфой — внутренняя граница по маске/стабильному слою как раньше */}
-                  {/* Амплитуда почти ровная — «вдув» не доминирует; волна идёт от сдвига поля (feOffset) */}
+                  {/* Амплитуда выше, но зона деформации всё так же ограничена alpha/mask, внутренний контур остаётся стабильным */}
                   <animate
                     attributeName="scale"
                     dur="5s"
-                    values="11.7;12.3;11.7"
+                    values="14.6;15.8;14.6"
                     keyTimes="0;0.5;1"
                     repeatCount="indefinite"
                     calcMode="spline"
@@ -151,30 +178,76 @@ export const Logo = () => {
                   />
                 </feDisplacementMap>
               </filter>
-            </defs>
-          </svg>
-          <img
-            className="logo-animation__mask-img logo-animation__mask-img--stable"
-            src={IMAGES.logoMaskGradient}
-            alt=""
-          />
-          <img
-            className="logo-animation__mask-img logo-animation__mask-img--wave"
-            src={IMAGES.logoMaskGradient}
-            alt=""
-            style={
-              {
-                filter: `url(#${filterId})`,
-                mask: `url(#${innerMaskId})`,
-                WebkitMask: `url(#${innerMaskId})`,
-              } as CSSProperties
-            }
-          />
-        </div>
-        <div className="logo-animation__video">
-          <video src={IMAGES.logoVideo} autoPlay muted loop playsInline />
+              </defs>
+            </svg>
+            <img
+              className="logo-animation__mask-img logo-animation__mask-img--stable"
+              src={IMAGES.logoMaskGradient}
+              alt=""
+            />
+            <img
+              className="logo-animation__mask-img logo-animation__mask-img--wave"
+              src={IMAGES.logoMaskGradient}
+              alt=""
+              style={
+                {
+                  filter: `url(#${filterId})`,
+                  mask: `url(#${innerMaskId})`,
+                  WebkitMask: `url(#${innerMaskId})`,
+                } as CSSProperties
+              }
+            />
+          </div>
+          <button
+            type="button"
+            className="logo-animation__video"
+            onClick={() => setIsPlayerOpen(true)}
+            aria-label="Открыть видео логотипа"
+          >
+            <video src={IMAGES.logoVideo} autoPlay muted loop playsInline />
+          </button>
         </div>
       </div>
-    </div>
+
+      {isPlayerOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-5"
+          onClick={() => setIsPlayerOpen(false)}
+          role="presentation"
+        >
+          <div
+            className="relative w-full max-w-5xl rounded-2xl bg-black p-4 md:p-6"
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Видео логотипа"
+          >
+            <button
+              type="button"
+              onClick={() => setIsPlayerOpen(false)}
+              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111]"
+              aria-label="Закрыть плеер"
+            >
+              Close
+            </button>
+            <Plyr
+              source={playerSource}
+              options={{
+                autoplay: true,
+                controls: [
+                  "play-large",
+                  "play",
+                  "progress",
+                  "current-time",
+                  "mute",
+                  "volume",
+                  "fullscreen",
+                ],
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 };

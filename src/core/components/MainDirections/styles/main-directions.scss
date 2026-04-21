@@ -3,6 +3,14 @@
   padding: 120px 20px;
   font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
 
+  @media (max-width: 900px) {
+    padding: 80px 16px 68px;
+  }
+
+  @media (max-width: 520px) {
+    padding: 64px 14px 54px;
+  }
+
   .main-directions__container {
     .main-directions__eyebrow {
       font-style: normal;
@@ -27,10 +35,13 @@
       line-height: 110%;
       letter-spacing: -0.02em;
       color: #333333;
+      @media (max-width: 1500px) {
+        font-size: 36px;
+      }
       @media (max-width: 1024px) {
         max-width: 100%;
         margin-bottom: 40px;
-        font-size: 20px;
+        font-size: 30px;
         line-height: 110%;
       }
     }

@@ -31,7 +31,13 @@ export const ROW_LAYOUT = [
 ] as const;
 
 /**
- * Нижнее мобильное меню: углы как в Figma (слева направо: Услуги → Контакты).
- * Слева — против часовой (отрицательный rotate в CSS), справа — по часовой.
+ * Мобильный док: позиции пунктов (Услуги → Контакты).
+ * Эталон под вьюпорт ~424–464px в DevTools; порядок: translate(x, y) затем rotate, origin center bottom.
  */
-export const MOBILE_ARC_ROTATIONS_DEG = [-12, -6, 0, 6, 12] as const;
+export const MOBILE_DOCK_ITEM_TRANSFORMS = [
+  { x: 15, y: 90, rotate: -60 },
+  { x: -9, y: 21, rotate: -37 },
+  { x: -2, y: 0, rotate: 0 },
+  { x: 9, y: 21, rotate: 37 },
+  { x: -15, y: 90, rotate: 60 },
+] as const;
