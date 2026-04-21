@@ -13,7 +13,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: scale(1.3);
+    /* Базовый масштаб уменьшен на 30% от прежнего (×0.7) */
+    transform: scale(0.91);
     transform-origin: center center;
     pointer-events: auto;
     will-change: transform;
@@ -76,27 +77,40 @@
   }
 }
 
+/* Шире 1500px — логотип плавно уменьшается вместе с ростом вьюпорта */
+@media (min-width: 1500px) {
+  .logo-animation .logo-animation__scale {
+    transform: scale(
+      clamp(
+        0.546,
+        calc(0.91 - (100vw - 1500px) * 0.000245),
+        0.91
+      )
+    );
+  }
+}
+
 @media (max-width: 1024px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(1.18);
+    transform: scale(0.826);
   }
 }
 
 @media (max-width: 768px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(1.06);
+    transform: scale(0.742);
   }
 }
 
 @media (max-width: 420px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.96);
+    transform: scale(0.672);
   }
 }
 
 @media (max-width: 360px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.9);
+    transform: scale(0.63);
   }
 }
 
