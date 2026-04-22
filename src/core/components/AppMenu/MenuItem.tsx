@@ -26,7 +26,6 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
       isTarget,
       translateXRem,
       rotateDeg,
-      overDarkBackdrop = false,
       onClick,
       onMouseEnter,
       onMouseLeave,
