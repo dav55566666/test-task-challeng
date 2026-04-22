@@ -1,3 +1,7 @@
+.menu-item-blob-glow-fade {
+  min-height: 40px;
+}
+
 .menu-highlight__filter-svg {
   position: absolute;
   width: 0;
@@ -29,15 +33,16 @@
   top: 50%;
   width: 118%;
   height: 162%;
+  min-height: 40px;
   transform: translate(-50%, -50%);
   border-radius: 58% 42% 52% 48% / 44% 56% 48% 52%;
-  opacity: 0.92;
+  opacity: 0.84;
   background-image: repeating-linear-gradient(
     90deg,
-    rgba(74, 197, 242, 0.78) 0px,
-    rgba(72, 101, 252, 0.74) 40px,
-    rgba(25, 129, 242, 0.78) 80px,
-    rgba(74, 197, 242, 0.78) 120px
+    rgba(74, 197, 242, 0.68) 0px,
+    rgba(72, 101, 252, 0.64) 40px,
+    rgba(25, 129, 242, 0.68) 80px,
+    rgba(74, 197, 242, 0.68) 120px
   );
   filter: blur(12px);
   animation:

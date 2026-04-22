@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import "animate.css";
 
 import { useMainDirectionsStore } from "../../../store";
 import "./styles/main-directions.scss";
@@ -9,6 +11,77 @@ const HEADLINE =
 
 export const MainDirections = () => {
   const items = useMainDirectionsStore((s) => s.items);
+  const listRef = useRef<HTMLUListElement | null>(null);
+
+  useEffect(() => {
+    const initWowForList = () => {
+      const listElement = listRef.current;
+      if (!listElement) {
+        return;
+      }
+
+      const listItems = Array.from(
+        listElement.querySelectorAll<HTMLLIElement>(".main-directions__item"),
+      );
+      const indexes = listItems.map((_, index) => index);
+
+      for (let i = indexes.length - 1; i > 0; i -= 1) {
+        const randomValue = crypto.getRandomValues(new Uint32Array(1))[0];
+        const randomIndex = randomValue % (i + 1);
+        [indexes[i], indexes[randomIndex]] = [indexes[randomIndex], indexes[i]];
+      }
+
+      const randomOrder = indexes.reduce<number[]>((acc, itemIndex, order) => {
+        acc[itemIndex] = order;
+        return acc;
+      }, []);
+
+      listItems.forEach((listItem, index) => {
+        listItem.setAttribute(
+          "data-wow-delay",
+          `${(randomOrder[index] * 0.14).toFixed(2)}s`,
+        );
+      });
+
+      const wow = new window.WOW({
+        boxClass: "wow",
+        animateClass: "main-directions-wow-animated",
+        offset: 60,
+        mobile: true,
+        live: false,
+      });
+
+      wow.init();
+      wow.sync();
+    };
+
+    if (window.WOW) {
+      initWowForList();
+      return;
+    }
+
+    const wowScriptId = "wowjs-cdn-script";
+    const existingScript = document.getElementById(wowScriptId);
+
+    if (existingScript) {
+      existingScript.addEventListener("load", initWowForList);
+      return () => {
+        existingScript.removeEventListener("load", initWowForList);
+      };
+    }
+
+    const script = document.createElement("script");
+    script.id = wowScriptId;
+    script.src =
+      "https://cdn.jsdelivr.net/npm/wowjs@1.1.3/dist/wow.min.js";
+    script.async = true;
+    script.addEventListener("load", initWowForList);
+    document.head.appendChild(script);
+
+    return () => {
+      script.removeEventListener("load", initWowForList);
+    };
+  }, [items.length]);
 
   return (
     <section className="main-directions" aria-labelledby="main-directions-heading">
@@ -18,9 +91,13 @@ export const MainDirections = () => {
           {HEADLINE}
         </h2>
         <div className="main-direction__text">
-          <ul className="main-directions__list">
+          <ul ref={listRef} className="main-directions__list">
             {items.map((item) => (
-              <li key={item.id} className="main-directions__item">
+              <li
+                key={item.id}
+                className="main-directions__item wow"
+                data-wow-duration="0.7s"
+              >
                 <Link
                   to={`/directions/${item.slug}`}
                   className="main-directions__link"

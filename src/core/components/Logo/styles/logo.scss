@@ -13,8 +13,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Базовый масштаб уменьшен на 30% от прежнего (×0.7) */
-    transform: scale(0.91);
+    transform: scale(1.092);
     transform-origin: center center;
     pointer-events: auto;
     will-change: transform;
@@ -82,9 +81,9 @@
   .logo-animation .logo-animation__scale {
     transform: scale(
       clamp(
-        0.546,
-        calc(0.91 - (100vw - 1500px) * 0.000245),
-        0.91
+        0.6552,
+        calc(1.092 - (100vw - 1500px) * 0.000294),
+        1.092
       )
     );
   }
@@ -92,25 +91,25 @@
 
 @media (max-width: 1024px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.826);
+    transform: scale(0.9912);
   }
 }
 
 @media (max-width: 768px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.742);
+    transform: scale(0.8904);
   }
 }
 
 @media (max-width: 420px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.672);
+    transform: scale(0.8064);
   }
 }
 
 @media (max-width: 360px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.63);
+    transform: scale(0.756);
   }
 }
 

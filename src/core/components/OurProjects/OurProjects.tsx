@@ -130,13 +130,18 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
     <ProjectSplitLayout
       id="our-projects"
       aria-label="Наши проекты"
-      className="our-projects__scroll-target pb-5"
+      className={`our-projects__scroll-target ${showTabs ? "pb-5" : ""}`}
       sidebarDesktopOnly={showTabs}
       mobileSticky={
         showTabs
           ? () => (
             <>
-              <h2 className="mb-3 text-4xl md:hidden">Наши проекты</h2>
+              <GradientTitle
+                value="Наши проекты"
+                currentSize={36}
+                mobileSize={30}
+                tag={TextTag.H2}
+              />
               <Tabs
                 items={PROJECT_TABS}
                 activeValue={casesActiveTab}
@@ -175,11 +180,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
           <ProjectSplitPrompt className="hidden md:mt-0" />
         </>
       )}
-      mainClassName={
-        showTabs
-          ? "flex min-w-0 flex-col gap-6 md:gap-5 md:pr-32"
-          : "flex min-w-0 flex-col gap-6 md:gap-5"
-      }
+      mainClassName='flex min-w-0 flex-col gap-4'
     >
       {projects.map((item, i) => (
         <article

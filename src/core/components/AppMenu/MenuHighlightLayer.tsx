@@ -9,6 +9,8 @@ type MenuHighlightLayerProps = {
   buttonHeightPx: number;
 };
 
+const HIGHLIGHT_LEFT_GLOW_PADDING_PX = 96;
+
 export const MenuHighlightLayer = ({
   translateXRem,
   rotateDeg,
@@ -20,7 +22,12 @@ export const MenuHighlightLayer = ({
   return (
     <div
       className="pointer-events-none absolute right-0 z-[1] w-full transition-[top,height] duration-[600ms] ease-out"
-      style={{ top: topPx, height: heightPx }}
+      style={{
+        top: topPx,
+        height: heightPx,
+        left: -HIGHLIGHT_LEFT_GLOW_PADDING_PX,
+        width: `calc(100% + ${HIGHLIGHT_LEFT_GLOW_PADDING_PX}px)`,
+      }}
       aria-hidden
     >
       <div

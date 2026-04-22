@@ -6,5 +6,61 @@
 }
 
 .app-shell {
+  position: relative;
   background-color: #fff;
+
+  &__cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #8091ff;
+    filter: blur(12px);
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    will-change: transform;
+    box-shadow: 0 0 18px rgba(128, 145, 255, 0.7);
+    animation:
+      app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate;
+    transition: transform 0.08s linear, opacity 0.2s ease;
+  }
+
+  &__cursor-glow--visible {
+    opacity: 0.95;
+  }
+}
+
+@keyframes app-shell-cursor-palette {
+  0% {
+    background: #8091ff;
+    box-shadow: 0 0 18px rgba(128, 145, 255, 0.7);
+  }
+  33% {
+    background: #5de2ff;
+    box-shadow: 0 0 22px rgba(93, 226, 255, 0.75);
+  }
+  66% {
+    background: #9d7bff;
+    box-shadow: 0 0 22px rgba(157, 123, 255, 0.75);
+  }
+  100% {
+    background: #8091ff;
+    box-shadow: 0 0 18px rgba(128, 145, 255, 0.7);
+  }
+}
+
+@keyframes app-shell-cursor-shape {
+  0% {
+    border-radius: 50% 45% 60% 40%;
+  }
+  50% {
+    border-radius: 38% 62% 42% 58%;
+  }
+  100% {
+    border-radius: 55% 40% 52% 48%;
+  }
 }

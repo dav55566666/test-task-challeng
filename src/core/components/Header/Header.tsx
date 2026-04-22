@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { useProjectsUiStore } from "../../../store";
 import { PROJECT_TABS } from "../../data";
@@ -33,10 +33,12 @@ export const Header = () => {
         }
       >
         <div className="shrink-0">
-          <Icon name={IconsName.LOGO_ICON} />
+          <Link to="/">
+            <Icon name={IconsName.LOGO_ICON} />
+          </Link>
         </div>
         {showProjectsTabs ? (
-          <div className="header__projects-tabs hidden min-w-0 md:flex md:items-center md:justify-start md:overflow-x-auto md:overscroll-x-contain md:pr-32">
+          <div className="header__projects-tabs hidden min-w-0 md:flex md:items-center md:justify-start md:overflow-x-auto md:overscroll-x-contain">
             <Tabs
               items={PROJECT_TABS}
               activeValue={casesActiveTab}

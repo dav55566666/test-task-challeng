@@ -34,6 +34,14 @@ const SCROLL_THRESHOLD_VIEWPORT_RATIO = 0.1;
 /** Задержка сброса hover: без неё при движении по пунктам курсор на мгновение «в пустоте» между кнопками и стрелка/дуга прыгают на активный пункт. */
 const HOVER_CLEAR_DELAY_MS = 320;
 
+const DESKTOP_HIGHLIGHT_TOP_BY_ID: Record<string, number> = {
+  services: 10,
+  cases: 94,
+  home: 172,
+  about: 250,
+  contacts: 332,
+};
+
 function menuPathMatches(menuPath: string, pathname: string): boolean {
   if (menuPath === "/") {
     return pathname === "/";
@@ -165,6 +173,13 @@ export const Sidebar = () => {
     const layout = ROW_LAYOUT[idx >= 0 ? idx : 2];
     const row = rowRefs.current[targetId];
     const next = row ? readHighlightMetrics(row, layout) : null;
+    if (next) {
+      const fixedTop = DESKTOP_HIGHLIGHT_TOP_BY_ID[targetId];
+      if (typeof fixedTop === "number") {
+        next.top = fixedTop;
+        next.height = 46;
+      }
+    }
     // eslint-disable-next-line react-hooks/set-state-in-effect -- sync highlight overlay to measured row geometry
     setHighlightMetrics(next);
   }, [targetId, layoutTick]);
@@ -281,12 +296,19 @@ export const Sidebar = () => {
         }
       >
         <div
-          className="pointer-events-none absolute top-1/2 left-17 size-209.5 -translate-y-1/2 rounded-l-full border border-[#6238D1]/24"
+          className={
+            "app-menu__desktop-arc-bg pointer-events-none absolute top-1/2 -translate-y-1/2 " +
+            (menuOverDarkBackdrop ? "app-menu__desktop-arc-bg--visible" : "")
+          }
+          aria-hidden
+        />
+        <div
+          className="app-menu__desktop-arc pointer-events-none absolute top-1/2 -translate-y-1/2"
           aria-hidden
         />
         <nav
           ref={navRef}
-          className="pointer-events-auto relative z-10 flex -translate-x-26 flex-col items-end gap-10 overflow-visible pr-8"
+          className="app-menu__desktop-nav pointer-events-auto relative z-10 flex -translate-x-26 flex-col items-end gap-10 overflow-visible pr-8"
           aria-label="Sidebar navigation"
           onMouseEnter={clearHoverTimer}
         >

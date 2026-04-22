@@ -55,13 +55,13 @@ export const AboutUs = () => {
   return (
     <>
       <main
-        className="about-us px-5 pt-3 pb-10 md:pb-14 relative"
+        className="about-us px-4 pt-9 md:pt-20 pb-11 md:pb-16 relative"
         aria-labelledby="about-hero-heading"
       >
-        <div className="mb-16 md:mb-36 max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-7xl">
+        <div className="mb-16 md:mb-36 max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-310">
           <GradientTitle
             value={ABOUT_HERO_HEADLINE}
-            currentSize={60}
+            currentSize={64}
             mobileSize={40}
             tag={TextTag.H1}
           />
@@ -82,7 +82,7 @@ export const AboutUs = () => {
               />
             </>
           )}
-          mainClassName="flex min-w-0 flex-col gap-12 md:gap-16 lg:gap-20"
+          mainClassName="flex min-w-0 flex-col gap-24 lg:gap-28"
         >
           <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TEAM_MEMBERS.map((member) => (
@@ -111,7 +111,7 @@ export const AboutUs = () => {
                   </span>
                 </button>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                  <span className="text-xl sm:text-2xl text-[#1a1a1a]">
+                  <span className="text-xl md:text-2xl text-[#1a1a1a]">
                     {member.name}
                   </span>
                   <span className="text-sm font-light text-[#33333366]">

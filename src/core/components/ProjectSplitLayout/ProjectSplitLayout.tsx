@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
 const SHELL =
-  "flex flex-col gap-6 px-5 pt-3 md:grid md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] md:items-start";
+  "flex flex-col gap-6 px-4 pt-3 md:grid md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] md:items-start";
 
 const MOBILE_STICKY_DEFAULT =
-  "sticky top-[var(--site-header-sticky-height)] z-10 -mx-5 bg-white px-5 py-3 shadow-[0_1px_0_0_rgb(0_0_0/.06)] md:hidden";
+  "sticky top-[var(--site-header-sticky-height)] z-10 -mx-5 bg-white px-5 py-3 md:hidden";
 
 const DESKTOP_SIDEBAR_BASE =
   "relative w-full min-w-0 max-w-none flex-col self-start md:sticky md:top-[var(--site-header-sticky-height)] md:z-10 md:max-w-xs md:pb-2";
@@ -19,7 +19,7 @@ const MAIN_DEFAULT = "min-w-0";
 
 /** Shared body style for case-study / product copy blocks */
 export const caseStudyBodyCopyClass =
-  "m-0 w-full text-[15px] leading-tight font-light text-[#33333366] mt-5";
+  "m-0 w-full text-[15px] leading-tight font-light text-[#33333366] mt-4";
 
 export type ProjectSplitLayoutProps = {
   /** Root element `id` (e.g. in-page anchors). */

@@ -5,25 +5,21 @@
   font-weight: 500;
   line-height: 110%;
   letter-spacing: -0.02em;
-  /* Чередуем фиолетовый и синий по всей длине, чтобы всегда были оба оттенка */
+  /* User-requested palette with visible animated shift */
   background-image: linear-gradient(
     82.53deg,
-    #8d5bff 0%,
-    #3f7bff 16%,
-    #9a63ff 32%,
-    #3a8dff 48%,
-    #874bff 64%,
-    #4a76ff 80%,
-    #915fff 100%
+    #c7c4f0 2.9%,
+    #718df1 49.58%,
+    #86d9fa 100%
   );
-  /* Крупный фон + диагональный сдвиг усиливают перелив, сохраняя обе палитры */
-  background-size: 260% 260%;
-  background-position: 0% 50%;
+  /* Fast and obvious color transition while staying smooth */
+  background-size: 320% 320%;
+  background-position: 0% 52%;
   background-repeat: no-repeat;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-text-drift 10s ease-in-out infinite alternate;
+  animation: gradient-text-drift 1.9s ease-in-out infinite alternate;
 }
 
 @media (min-width: 640px) {
@@ -34,13 +30,13 @@
 
 @keyframes gradient-text-drift {
   0% {
-    background-position: 0% 45%;
+    background-position: 0% 44%;
   }
   50% {
-    background-position: 72% 58%;
+    background-position: 58% 56%;
   }
   100% {
-    background-position: 100% 45%;
+    background-position: 100% 44%;
   }
 }
 
@@ -51,9 +47,9 @@
     background-size: 100% 100%;
     background-image: linear-gradient(
       82.53deg,
-      #8d5bff 0%,
-      #3f7bff 50%,
-      #915fff 100%
+      #c7c4f0 2.9%,
+      #718df1 49.58%,
+      #86d9fa 100%
     );
   }
 }

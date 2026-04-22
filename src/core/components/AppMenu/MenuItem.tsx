@@ -36,7 +36,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
     return (
       <div
         ref={ref}
-        className="relative z-10 overflow-visible transition-transform duration-[600ms] ease-out"
+        className="app-menu__desktop-item relative z-10 overflow-visible transition-transform duration-[600ms] ease-out"
         style={{
           transform: `translateX(${translateXRem}rem) rotate(${rotateDeg}deg)`,
           transformOrigin: "right center",
@@ -49,12 +49,10 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           className={
-            "relative z-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
+            "app-menu__desktop-item-btn relative z-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 " +
             (isTarget
               ? "overflow-hidden border border-transparent bg-transparent text-white"
-              : overDarkBackdrop
-                ? "border border-transparent text-white/85"
-                : "border border-transparent text-[#333333]/30")
+              : "border border-transparent text-[#333333]/30")
           }
         >
           {isTarget ? (
@@ -71,9 +69,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
                 height: MENU_ICON_PX,
                 ...(isTarget
                   ? { color: "#ffffff", solid: true }
-                  : overDarkBackdrop
-                    ? { color: "rgba(255, 255, 255, 0.88)", solid: true }
-                    : {}),
+                  : {}),
               }}
             />
           </span>

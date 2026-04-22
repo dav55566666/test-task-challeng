@@ -16,7 +16,7 @@ export const AboutManifestoSection = () => {
         {ABOUT_MANIFESTO_PARAGRAPHS.map((lines, i) => (
           <p
             key={i}
-            className="m-0 flex flex-col gap-0 text-start leading-[1.35] tracking-[-0.02em] text-[#1a1a1a] text-2xl md:text-3xl"
+            className="m-0 flex flex-col gap-0 text-start leading-[1.35] tracking-[-0.02em] text-[#1a1a1a] text-3xl md:text-4xl"
           >
             {lines.map((line, j) => (
               <span
@@ -33,13 +33,13 @@ export const AboutManifestoSection = () => {
         ))}
       </div>
 
-      <ul className="m-0 mt-10 flex w-full min-w-0 max-w-150 list-none flex-col gap-4 p-0 md:mt-12">
+      <ul className="m-0 mt-8 flex w-full min-w-0 max-w-150 list-none flex-col gap-4 p-0 md:mt-10">
         {ABOUT_MANIFESTO_BULLETS.map((item) => (
           <li
             key={item}
-            className="flex gap-3 text-base font-light leading-normal text-[#666666] md:text-[15px] md:leading-relaxed"
+            className="flex gap-3 font-light leading-normal text-[#666666] text-lg md:leading-relaxed"
           >
-            <span className="mt-0.5 shrink-0" aria-hidden>
+            <span className="mt-2.5 shrink-0" aria-hidden>
               <img
                 src={IMAGES.arrowRight}
                 alt=""
@@ -62,7 +62,7 @@ export const AboutManifestoSection = () => {
                 mobileSize={30}
                 tag={TextTag.H3}
               />
-            <dd className="m-0 mt-3.5 font-light leading-tight text-[#33333366] text-sm">
+            <dd className="m-0 mt-3 font-light leading-tight text-[#33333366] text-sm md:text-[15px]">
               {stat.label}
             </dd>
           </div>
