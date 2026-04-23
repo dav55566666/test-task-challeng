@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { useEffect, useId, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
 import { IMAGES } from '../../design';
 import { LOGO_INNER_HOLE } from './logoShape';
@@ -10,7 +11,7 @@ export const Logo = () => {
   const uid = useId().replace(/:/g, "");
   const filterId = `logo-mask-wave-${uid}`;
   const innerMaskId = `logo-mask-inner-${uid}`;
-  const innerHoleSoftFilterId = `logo-inner-hole-soft-${uid}`;
+  const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
@@ -46,18 +47,18 @@ export const Logo = () => {
           <div className="logo-animation__mask">
             <svg className="logo-animation__svg-filters" aria-hidden focusable="false">
               <defs>
-              {/* Мягкий край «дырки» в маске — без резкого излома у внутреннего контура */}
+              {/* Размытие только по альфа-маске: мягкий переход стабильного центра ↔ волна (без среза) */}
               <filter
-                id={innerHoleSoftFilterId}
+                id={innerHoleMaskFeatherId}
                 filterUnits="objectBoundingBox"
                 primitiveUnits="objectBoundingBox"
-                x="-0.2"
-                y="-0.2"
-                width="1.4"
-                height="1.4"
+                x="-0.25"
+                y="-0.25"
+                width="1.5"
+                height="1.5"
                 colorInterpolationFilters="sRGB"
               >
-                <feGaussianBlur in="SourceGraphic" stdDeviation="0.007" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0.014" />
               </filter>
               <mask
                 id={innerMaskId}
@@ -70,7 +71,7 @@ export const Logo = () => {
                   cy={cy}
                   r={r}
                   fill="black"
-                  filter={`url(#${innerHoleSoftFilterId})`}
+                  filter={`url(#${innerHoleMaskFeatherId})`}
                 />
               </mask>
               <filter
@@ -90,8 +91,7 @@ export const Logo = () => {
                   stitchTiles="stitch"
                   result="noise"
                 />
-                <feGaussianBlur in="noise" stdDeviation="20" result="noiseBlur" />
-                <feOffset in="noiseBlur" result="noiseScrollX" dx="0" dy="0">
+                <feOffset in="noise" result="noiseScrollX" dx="0" dy="0">
                   <animate
                     attributeName="dx"
                     dur="5s"
@@ -152,25 +152,25 @@ export const Logo = () => {
                   k4="0"
                   result="noiseForDisplacement"
                 />
+                {/* Сглаживание карты смещения: меньше «ступенек» на стыке зон с разной волной */}
                 <feGaussianBlur
                   in="noiseForDisplacement"
-                  stdDeviation="0.9"
-                  result="noiseDispSoft"
+                  stdDeviation="0.85"
+                  result="noiseDispMapSoft"
                 />
                 <feDisplacementMap
                   in="SourceGraphic"
-                  in2="noiseDispSoft"
-                  scale="15.2"
+                  in2="noiseDispMapSoft"
+                  scale="9.2"
                   xChannelSelector="R"
                   yChannelSelector="G"
                   edgeMode="duplicate"
                   result="dist"
                 >
-                  {/* Амплитуда выше, но зона деформации всё так же ограничена alpha/mask, внутренний контур остаётся стабильным */}
                   <animate
                     attributeName="scale"
                     dur="5s"
-                    values="14.6;15.8;14.6"
+                    values="8.4;9.1;8.4"
                     keyTimes="0;0.5;1"
                     repeatCount="indefinite"
                     calcMode="spline"
@@ -209,45 +209,48 @@ export const Logo = () => {
         </div>
       </div>
 
-      {isPlayerOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-5"
-          onClick={() => setIsPlayerOpen(false)}
-          role="presentation"
-        >
-          <div
-            className="relative w-full max-w-5xl rounded-2xl bg-black p-4 md:p-6"
-            onClick={(event) => event.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Видео логотипа"
-          >
-            <button
-              type="button"
+      {isPlayerOpen
+        ? createPortal(
+            <div
+              className="logo-video-modal fixed inset-0 flex items-center justify-center bg-black/75 px-5"
               onClick={() => setIsPlayerOpen(false)}
-              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111]"
-              aria-label="Закрыть плеер"
+              role="presentation"
             >
-              Close
-            </button>
-            <Plyr
-              source={playerSource}
-              options={{
-                autoplay: true,
-                controls: [
-                  "play-large",
-                  "play",
-                  "progress",
-                  "current-time",
-                  "mute",
-                  "volume",
-                  "fullscreen",
-                ],
-              }}
-            />
-          </div>
-        </div>
-      ) : null}
+              <div
+                className="relative w-full max-w-5xl overflow-hidden rounded-[10px] p-4 md:p-6"
+                onClick={(event) => event.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Видео логотипа"
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsPlayerOpen(false)}
+                  className="absolute right-10 top-10 z-10 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111]"
+                  aria-label="Закрыть плеер"
+                >
+                  Close
+                </button>
+                <Plyr
+                  source={playerSource}
+                  options={{
+                    autoplay: true,
+                    controls: [
+                      "play-large",
+                      "play",
+                      "progress",
+                      "current-time",
+                      "mute",
+                      "volume",
+                      "fullscreen",
+                    ],
+                  }}
+                />
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </>
   );
 };

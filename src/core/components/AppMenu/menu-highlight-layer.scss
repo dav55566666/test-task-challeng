@@ -1,20 +1,68 @@
 .menu-item-blob-glow-fade {
   min-height: 40px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.menu-highlight__filter-svg {
+.menu-item-blob-glow-fade--on {
+  opacity: 1;
+}
+
+/* Фиксированный холст под блоб: морфинг только через clip-path + сдвиг градиента */
+.menu-highlight__blob-unified {
+  /* было 204px, −20% */
+  --menu-blob-w: 163px;
+  --menu-blob-h: 96px;
   position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  width: var(--menu-blob-w);
+  height: var(--menu-blob-h);
+  margin-left: calc(var(--menu-blob-w) / -2);
+  margin-top: calc(var(--menu-blob-h) / -2);
+  backface-visibility: hidden;
+  border-radius: 0;
+  opacity: 0.66;
+  background-color: transparent;
+  background-image:
+    radial-gradient(
+      120% 100% at 0% 50%,
+      rgba(186, 104, 255, 0.5) 0%,
+      transparent 55%
+    ),
+    radial-gradient(90% 120% at 100% 0%, rgba(14, 165, 233, 0.55) 0%, transparent 50%),
+    linear-gradient(
+      118deg,
+      rgba(199, 210, 254, 0.58) 0%,
+      rgba(56, 189, 248, 0.5) 38%,
+      rgba(129, 140, 248, 0.52) 70%,
+      rgba(125, 211, 252, 0.48) 100%
+    );
+  background-size:
+    140% 140%,
+    130% 130%,
+    220% 220%;
+  background-position:
+    0% 50%,
+    100% 0%,
+    0% 50%;
+  background-repeat: no-repeat;
+  filter: blur(16px) saturate(1.15);
+  will-change: clip-path, background-position, background-size;
+  /* 4× cubic — только гладкие стыки, без углов polygon */
+  clip-path: path(
+    "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
+  );
+  animation:
+    menu-liquid-clip 3.8s ease-in-out infinite,
+    menu-liquid-surface 2.8s ease-in-out infinite;
 }
 
 .menu-highlight__blobs-outer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  animation: menu-highlight-hue 7.15s ease-in-out infinite;
+  animation: menu-highlight-hue 4.6s ease-in-out infinite;
   will-change: filter;
 }
 
@@ -23,90 +71,71 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  will-change: filter;
+  will-change: transform;
 }
 
-/* Один блоб: градиент слева направо, морфинг + SVG displacement (без rotate) */
-.menu-highlight__blob-unified {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 118%;
-  height: 162%;
-  min-height: 40px;
-  transform: translate(-50%, -50%);
-  border-radius: 58% 42% 52% 48% / 44% 56% 48% 52%;
-  opacity: 0.84;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(74, 197, 242, 0.68) 0px,
-    rgba(72, 101, 252, 0.64) 40px,
-    rgba(25, 129, 242, 0.68) 80px,
-    rgba(74, 197, 242, 0.68) 120px
-  );
-  filter: blur(12px);
-  animation:
-    menu-unified-blob-morph 5.2s ease-in-out infinite,
-    menu-unified-gradient-shift 3.58s linear infinite;
-  will-change: transform, width, height, border-radius, background-position;
-}
-
-@keyframes menu-unified-gradient-shift {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: -120px 0;
-  }
-}
-
-@keyframes menu-unified-blob-morph {
+@keyframes menu-liquid-surface {
   0%,
   100% {
-    width: 118%;
-    height: 162%;
-    border-radius: 58% 42% 52% 48% / 44% 56% 48% 52%;
-    transform: translate(-50%, -50%) scale(1);
+    background-size:
+      140% 140%,
+      130% 130%,
+      220% 220%;
+    background-position:
+      0% 50%,
+      100% 0%,
+      0% 50%;
   }
-  20% {
-    width: 138%;
-    height: 142%;
-    border-radius: 44% 56% 50% 50% / 56% 44% 50% 50%;
-    transform: translate(-50%, -50%) scale(1.06, 0.93);
+  50% {
+    background-size:
+      178% 168%,
+      110% 118%,
+      300% 230%;
+    background-position:
+      28% 32%,
+      72% 12%,
+      100% 60%;
   }
-  40% {
-    width: 100%;
-    height: 192%;
-    border-radius: 62% 38% 42% 58% / 48% 52% 38% 62%;
-    transform: translate(-50%, -50%) scale(0.92, 1.08);
+}
+
+/* Одинаковая схема: M + 4×C + Z — браузер интерполирует кривые, без острых углов */
+@keyframes menu-liquid-clip {
+  0%,
+  100% {
+    clip-path: path(
+      "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
+    );
   }
-  60% {
-    width: 132%;
-    height: 148%;
-    border-radius: 36% 64% 58% 42% / 52% 48% 44% 56%;
-    transform: translate(-50%, -50%) scale(1.04, 0.97);
+  25% {
+    clip-path: path(
+      "M 50% 0% C 90% 0% 100% 36% 100% 56% C 100% 86% 70% 100% 50% 100% C 4% 100% 0% 55% 0% 40% C 0% 10% 0% 0% 50% 0% Z"
+    );
   }
-  80% {
-    width: 108%;
-    height: 176%;
-    border-radius: 52% 48% 36% 64% / 40% 60% 54% 46%;
-    transform: translate(-50%, -50%) scale(0.97, 1.03);
+  50% {
+    clip-path: path(
+      "M 50% 12% C 62% 0% 100% 36% 100% 60% C 100% 90% 100% 96% 36% 90% C 24% 94% 0% 80% 0% 40% C 0% 22% 32% 12% 50% 12% Z"
+    );
+  }
+  75% {
+    clip-path: path(
+      "M 50% 0% C 86% 10% 100% 14% 100% 36% C 100% 68% 60% 100% 50% 100% C 32% 100% 0% 90% 0% 50% C 0% 32% 12% 0% 50% 0% Z"
+    );
   }
 }
 
 @keyframes menu-highlight-hue {
   0%,
   100% {
-    filter: hue-rotate(-10deg) saturate(1.1) brightness(1.02);
+    filter: hue-rotate(-14deg) saturate(1.12) brightness(1.01);
   }
-  28% {
+  25% {
+    filter: hue-rotate(24deg) saturate(1.42) brightness(1.07);
+  }
+  50% {
+    filter: hue-rotate(-18deg) saturate(1.2) brightness(0.98);
+  }
+  75% {
     filter: hue-rotate(16deg) saturate(1.35) brightness(1.05);
-  }
-  52% {
-    filter: hue-rotate(-12deg) saturate(1.2) brightness(0.98);
-  }
-  76% {
-    filter: hue-rotate(10deg) saturate(1.28) brightness(1.04);
   }
 }
 
@@ -120,15 +149,13 @@
     filter: none;
   }
 
-  .menu-highlight__blobs-wave {
-    filter: none !important;
-  }
-
   .menu-highlight__blob-unified {
     animation: none;
-    width: 118%;
-    height: 162%;
-    border-radius: 50%;
-    background-position: 0 0;
+    background-size: 130% 130%, 120% 120%, 200% 200%;
+    background-position: 0% 50%, 100% 0%, 0% 50%;
+    filter: blur(10px) saturate(1.05);
+    clip-path: path(
+      "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
+    );
   }
 }

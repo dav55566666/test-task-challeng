@@ -129,7 +129,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
   return (
     <ProjectSplitLayout
       id="our-projects"
-      aria-label="Наши проекты"
+      aria-label="Наши кейсы"
       className={`our-projects__scroll-target ${showTabs ? "pb-5" : ""}`}
       sidebarDesktopOnly={showTabs}
       mobileSticky={
@@ -137,7 +137,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
           ? () => (
             <>
               <GradientTitle
-                value="Наши проекты"
+                value="Наши кейсы"
                 currentSize={36}
                 mobileSize={30}
                 tag={TextTag.H2}
@@ -158,7 +158,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
       sidebar={() => (
         <>
           <div className="flex flex-col">
-            <GradientTitle value="Наши проекты" currentSize={36} mobileSize={24} tag={TextTag.H2} />
+            <GradientTitle value="Наши кейсы" currentSize={36} mobileSize={24} tag={TextTag.H2} />
             <div
               className="our-projects__active-copy hidden md:block"
               aria-live="polite"

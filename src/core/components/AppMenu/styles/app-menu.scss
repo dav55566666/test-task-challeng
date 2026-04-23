@@ -15,12 +15,12 @@
   pointer-events: none;
   visibility: hidden;
   transition:
-    opacity 0.45s ease 0.8s,
-    transform 0.45s ease 0.8s,
-    visibility 0s linear 1.26s;
+    opacity 0.45s ease 1.4s,
+    transform 0.45s ease 1.4s,
+    visibility 0s linear 1.86s;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .app-menu__desktop-arc-bg {
     left: -9.75rem;
     width: 80.375rem;
@@ -71,32 +71,60 @@
     animation: app-menu-desktop-arc-open 520ms cubic-bezier(0.24, 0.78, 0.2, 1) both;
   }
 
+  /* Первым гаснут градиенты, затем дуга+стрелка, затем кнопки сверху (i0) вниз (i4) */
   .app-menu__nav-shell--hidden .app-menu__desktop-arc {
-    animation: app-menu-desktop-arc-close 440ms cubic-bezier(0.52, 0.03, 0.77, 0.2) 620ms both;
+    animation: app-menu-desktop-arc-close 440ms cubic-bezier(0.52, 0.03, 0.77, 0.2) 0.24s both;
+  }
+
+  .app-menu__nav-shell--hidden
+    .app-menu__desktop-item--glow
+    .menu-item-blob-glow-fade--on,
+  .app-menu__nav-shell--hidden
+    .app-menu__desktop-item--active
+    .app-menu__item-target-surface {
+    animation: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease 0s !important;
+  }
+
+  /* Блоб по --glow (ещё до --active). Тайминг: `menu-timings.ts` (MENU_GRADIENT_REVEAL_*, MENU_ACTIVE_RETURN_MS) */
+  .app-menu__nav-shell--stagger-open.app-menu__nav-shell:not(.app-menu__nav-shell--hidden)
+    .app-menu__desktop-item--glow
+    .menu-item-blob-glow-fade--on {
+    opacity: 0;
+    animation: app-menu-gradient-reveal 0.45s ease 1.2s forwards;
+  }
+
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-nav-highlight {
+    animation: app-menu-highlight-in 0.52s cubic-bezier(0.24, 0.78, 0.2, 1) 0.04s both;
+  }
+
+  .app-menu__nav-shell--hidden .app-menu__desktop-nav-highlight {
+    animation: app-menu-highlight-out 0.4s cubic-bezier(0.52, 0.03, 0.77, 0.2) 0.24s both;
   }
 
   .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item-btn {
     animation: app-menu-desktop-item-open 260ms cubic-bezier(0.2, 0.74, 0.24, 1) both;
   }
 
-  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item:nth-child(1) .app-menu__desktop-item-btn {
-    animation-delay: 860ms;
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item--i4 .app-menu__desktop-item-btn {
+    animation-delay: 0.5s;
   }
 
-  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item:nth-child(2) .app-menu__desktop-item-btn {
-    animation-delay: 620ms;
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item--i3 .app-menu__desktop-item-btn {
+    animation-delay: 0.6s;
   }
 
-  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item:nth-child(3) .app-menu__desktop-item-btn {
-    animation-delay: 500ms;
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item--i2 .app-menu__desktop-item-btn {
+    animation-delay: 0.7s;
   }
 
-  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item:nth-child(4) .app-menu__desktop-item-btn {
-    animation-delay: 740ms;
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item--i1 .app-menu__desktop-item-btn {
+    animation-delay: 0.8s;
   }
 
-  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item:nth-child(5) .app-menu__desktop-item-btn {
-    animation-delay: 980ms;
+  .app-menu__nav-shell:not(.app-menu__nav-shell--hidden) .app-menu__desktop-item--i0 .app-menu__desktop-item-btn {
+    animation-delay: 0.9s;
   }
 
   .app-menu__nav-shell--hidden .app-menu__desktop-item-btn {
@@ -104,24 +132,24 @@
     pointer-events: none;
   }
 
-  .app-menu__nav-shell--hidden .app-menu__desktop-item:nth-child(1) .app-menu__desktop-item-btn {
-    animation-delay: 0ms;
+  .app-menu__nav-shell--hidden .app-menu__desktop-item--i0 .app-menu__desktop-item-btn {
+    animation-delay: 0.7s;
   }
 
-  .app-menu__nav-shell--hidden .app-menu__desktop-item:nth-child(2) .app-menu__desktop-item-btn {
-    animation-delay: 90ms;
+  .app-menu__nav-shell--hidden .app-menu__desktop-item--i1 .app-menu__desktop-item-btn {
+    animation-delay: 0.8s;
   }
 
-  .app-menu__nav-shell--hidden .app-menu__desktop-item:nth-child(3) .app-menu__desktop-item-btn {
-    animation-delay: 180ms;
+  .app-menu__nav-shell--hidden .app-menu__desktop-item--i2 .app-menu__desktop-item-btn {
+    animation-delay: 0.9s;
   }
 
-  .app-menu__nav-shell--hidden .app-menu__desktop-item:nth-child(4) .app-menu__desktop-item-btn {
-    animation-delay: 270ms;
+  .app-menu__nav-shell--hidden .app-menu__desktop-item--i3 .app-menu__desktop-item-btn {
+    animation-delay: 1s;
   }
 
-  .app-menu__nav-shell--hidden .app-menu__desktop-item:nth-child(5) .app-menu__desktop-item-btn {
-    animation-delay: 360ms;
+  .app-menu__nav-shell--hidden .app-menu__desktop-item--i4 .app-menu__desktop-item-btn {
+    animation-delay: 1.1s;
   }
 }
 
@@ -173,6 +201,33 @@
   }
 }
 
+@keyframes app-menu-highlight-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes app-menu-highlight-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes app-menu-gradient-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .app-menu__fab-stack {
   position: fixed;
   right: 1rem;
@@ -193,7 +248,7 @@
     visibility 0.45s step-start;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .app-menu__fab-stack {
     right: 1.5rem;
     bottom: auto;
@@ -213,7 +268,7 @@
     visibility 0.45s step-end;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .app-menu__fab-stack--visible {
     transform: translateY(-50%) translateX(0);
   }
@@ -277,7 +332,7 @@
   }
 }
 
-/* Мобильное меню (max-width 1023px): дуга снизу */
+/* Мобильное меню (нижняя дуга; до `xl` в вёрстке) */
 .app-menu__mobile-dock {
   display: flex;
   justify-content: center;
@@ -734,5 +789,18 @@
   .app-menu__desktop-item-btn {
     animation: none !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .app-menu__desktop-nav-highlight {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .app-menu__nav-shell--stagger-open
+    .app-menu__desktop-item--glow
+    .menu-item-blob-glow-fade--on,
+  .app-menu__nav-shell--stagger-open .app-menu__desktop-item--active .app-menu__item-target-surface {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }

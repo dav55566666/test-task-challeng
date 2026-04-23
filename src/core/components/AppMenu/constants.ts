@@ -4,7 +4,7 @@ export const MENU_LINKS = [
   { id: "services", label: "Услуги", icon: IconsName.SERVICES_ICON, path: "/directions" },
   { id: "cases", label: "Кейсы", icon: IconsName.CASES_ICON, path: "/projects" },
   { id: "home", label: "Главная", icon: IconsName.HOME_ICON, path: "/" },
-  { id: "about", label: "О нас", icon: IconsName.ABOUT_US_ICON, path: "/about" },
+  { id: "about", label: "Мы", icon: IconsName.ABOUT_US_ICON, path: "/about" },
   {
     id: "contacts",
     label: "Контакты",

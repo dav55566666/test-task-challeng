@@ -5,21 +5,29 @@
   font-weight: 500;
   line-height: 110%;
   letter-spacing: -0.02em;
-  /* User-requested palette with visible animated shift */
+  /*
+   * Two identical halves in one image (0–50% = 50–100%): with size 200% the
+   * 0% and 100% keyframe positions look the same, so the loop is seamless
+   * (right → left of the *pattern* = the shine moves to the right).
+   */
   background-image: linear-gradient(
-    82.53deg,
-    #c7c4f0 2.9%,
-    #718df1 49.58%,
-    #86d9fa 100%
+    90deg,
+    #c7c4f0 0%,
+    #718df1 16.66%,
+    #86d9fa 33.33%,
+    #c7c4f0 50%,
+    #718df1 66.66%,
+    #86d9fa 83.33%,
+    #c7c4f0 100%
   );
-  /* Fast and obvious color transition while staying smooth */
-  background-size: 320% 320%;
-  background-position: 0% 52%;
+  background-size: 200% 100%;
+  background-position: 0% 50%;
   background-repeat: no-repeat;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-text-drift 1.9s ease-in-out infinite alternate;
+  /* Slow, constant drift — no back-and-forth, no jarring end-of-frame jump */
+  animation: gradient-text-drift 2.64s linear infinite;
 }
 
 @media (min-width: 640px) {
@@ -30,13 +38,10 @@
 
 @keyframes gradient-text-drift {
   0% {
-    background-position: 0% 44%;
-  }
-  50% {
-    background-position: 58% 56%;
+    background-position: 0% 50%;
   }
   100% {
-    background-position: 100% 44%;
+    background-position: 100% 50%;
   }
 }
 

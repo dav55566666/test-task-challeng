@@ -76,6 +76,13 @@
   }
 }
 
+.logo-video-modal {
+  z-index: 100000000;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.26) 58%, rgba(255, 255, 255, 0.18) 100%);
+  backdrop-filter: blur(18px) saturate(1.08);
+  box-shadow: 0 8px 36px rgba(80, 94, 128, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
 /* Шире 1500px — логотип плавно уменьшается вместе с ростом вьюпорта */
 @media (min-width: 1500px) {
   .logo-animation .logo-animation__scale {

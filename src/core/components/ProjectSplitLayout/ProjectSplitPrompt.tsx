@@ -3,7 +3,7 @@ import type { InputHTMLAttributes } from "react";
 import { PromptInput } from "../PromptInput";
 
 const BASE =
-  "w-full md:absolute md:-bottom-101.5 md:left-0 md:block";
+  "w-full min-[1024px]:absolute min-[1024px]:-bottom-101.5 min-[1024px]:left-0 min-[1024px]:block";
 
 export type ProjectSplitPromptProps = Pick<
   InputHTMLAttributes<HTMLInputElement>,

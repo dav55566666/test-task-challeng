@@ -5,9 +5,10 @@ import "animate.css";
 import { useMainDirectionsStore } from "../../../store";
 import "./styles/main-directions.scss";
 import { Icon, IconsName } from "../../design/Icon";
+import { GradientTitle, TextTag } from "../../uikit";
 
 const HEADLINE =
-  "Мы помогаем брендам проявлять себя наиболее вдохновляюще. Обладать их причудами, их культурой. Помогаем им быть уверенными в себе и привлекательными";
+  "Стратегический ум, творческий подход и ловкие руки нашей команды приводят клиентов к результатам, который долгие годы служит бенчмарком качества и креативности";
 
 export const MainDirections = () => {
   const items = useMainDirectionsStore((s) => s.items);
@@ -87,9 +88,15 @@ export const MainDirections = () => {
     <section className="main-directions" aria-labelledby="main-directions-heading">
       <div className="main-directions__container">
         <p className="main-directions__eyebrow">Главные направления</p>
-        <h2 id="main-directions-heading" className="main-directions__headline">
-          {HEADLINE}
-        </h2>
+        <div className="main-directions__headline">
+          <GradientTitle
+            id="main-directions-heading"
+            value={HEADLINE}
+            currentSize={36}
+            mobileSize={30}
+            tag={TextTag.H2}
+          />
+        </div>
         <div className="main-direction__text">
           <ul ref={listRef} className="main-directions__list">
             {items.map((item) => (

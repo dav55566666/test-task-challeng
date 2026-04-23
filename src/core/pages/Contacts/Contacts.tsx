@@ -23,7 +23,7 @@ export const Contacts = () => {
           sidebarDesktopOnly={false}
           sidebar={() => (
             <GradientTitle
-              value="Наши контакты"
+              value="Контакты"
               currentSize={36}
               mobileSize={30}
               tag={TextTag.H2}

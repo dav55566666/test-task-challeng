@@ -11,7 +11,7 @@ export const Partners = () => {
         <div className="partners__title">
           <h2 id="partners-heading">Нам доверяют</h2>
           <Link to="/about" className="partners__more">
-            Кейсы
+            Все кейсы
             <img src={IMAGES.arrowRightTop} alt="" aria-hidden />
           </Link>
         </div>

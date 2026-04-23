@@ -9,22 +9,24 @@ type AppMenuMobileDockProps = {
   visible: boolean;
   targetId: string;
   onItemActivate: (item: MenuLink) => void;
-  /** FAB + затемнённый фон — неактивные пункты светлые. */
-  overDarkBackdrop?: boolean;
+  /**
+   * Меню открыто из FAB с оверлеем: контраст неактивных пунктов.
+   * Без `app-menu__mobile-dock--over-backdrop` (правая панель) — на телефоне всегда нижняя дуга.
+   */
+  onDimmedBackdrop?: boolean;
 };
 
 export const AppMenuMobileDock = ({
   visible,
   targetId,
   onItemActivate,
-  overDarkBackdrop = false,
+  onDimmedBackdrop = false,
 }: AppMenuMobileDockProps) => {
   return (
     <nav
       className={
         "app-menu__mobile-dock " +
-        (visible ? "app-menu__mobile-dock--visible" : "app-menu__mobile-dock--hidden") +
-        (overDarkBackdrop ? " app-menu__mobile-dock--over-backdrop" : "")
+        (visible ? "app-menu__mobile-dock--visible" : "app-menu__mobile-dock--hidden")
       }
       aria-hidden={!visible}
       aria-label="Основная навигация"
@@ -52,7 +54,7 @@ export const AppMenuMobileDock = ({
                   className={
                     "app-menu__mobile-dock__btn " +
                     (isActive ? "app-menu__mobile-dock__btn--active" : "") +
-                    (overDarkBackdrop && !isActive
+                    (onDimmedBackdrop && !isActive
                       ? " app-menu__mobile-dock__btn--on-dark"
                       : "")
                   }
@@ -66,7 +68,7 @@ export const AppMenuMobileDock = ({
                         height: ARC_ICON_PX,
                         ...(isActive
                           ? { color: "#ffffff", solid: true }
-                          : overDarkBackdrop
+                          : onDimmedBackdrop
                             ? { color: "rgba(255, 255, 255, 0.9)", solid: true }
                             : {}),
                       }}

@@ -5,4 +5,5 @@ export interface IGradientTitleProps {
   currentSize: number;
   mobileSize: number;
   tag: TextTag;
+  id?: string;
 }

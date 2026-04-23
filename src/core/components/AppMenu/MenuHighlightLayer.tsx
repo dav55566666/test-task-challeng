@@ -21,7 +21,7 @@ export const MenuHighlightLayer = ({
 }: MenuHighlightLayerProps) => {
   return (
     <div
-      className="pointer-events-none absolute right-0 z-[1] w-full transition-[top,height] duration-[600ms] ease-out"
+      className="app-menu__desktop-nav-highlight pointer-events-none absolute right-0 z-[1] w-full transition-[top,height] duration-[600ms] ease-out"
       style={{
         top: topPx,
         height: heightPx,

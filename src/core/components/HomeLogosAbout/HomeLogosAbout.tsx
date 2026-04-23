@@ -7,7 +7,7 @@ import { GradientTitle, TextTag } from "../../uikit";
 
 const STATS: { value: string; label: string; underline?: boolean }[] = [
   {
-    value: "230+",
+    value: "130+",
     label: "международных и российских брендов",
   },
   {
@@ -39,10 +39,10 @@ export const HomeLogosAbout = () => {
       <div className="home-logos-about__about">
         <div className="home-logos-about__title">
           <h2 id="home-logos-about-heading">
-            О нас
+            Мы
           </h2>
           <Link to="/about" className="home-logos-about__more">
-            О нас
+            Команда
             <img src={IMAGES.arrowRightTop} alt="" aria-hidden />
           </Link>
         </div>
@@ -50,7 +50,7 @@ export const HomeLogosAbout = () => {
         <div className="home-logos-about__stats">
           {STATS.map((stat) => (
             <div key={stat.value + stat.label}>
-              <GradientTitle 
+              <GradientTitle
                 value={stat.value}
                 currentSize={36}
                 mobileSize={30}

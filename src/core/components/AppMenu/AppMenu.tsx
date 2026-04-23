@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { flushSync } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useScrollSubscribe } from "../../../app/providers";
@@ -12,9 +13,9 @@ import { useProjectsUiStore } from "../../../store";
 import { BurgerIcon, LinkedinIcon, TgIcon } from "../../design/Icon/Icons";
 import { AppMenuMobileDock } from "./AppMenuMobileDock";
 import { MENU_LINKS, ROW_LAYOUT, SOCIAL_LINKS } from "./constants";
-import { MenuBlobFilterDefs } from "./MenuBlobFilterDefs";
 import { MenuHighlightLayer } from "./MenuHighlightLayer";
 import { MenuItem } from "./MenuItem";
+import { MENU_ACTIVE_RETURN_MS } from "./menu-timings";
 import "./styles/app-menu.scss";
 
 type MenuLink = (typeof MENU_LINKS)[number];
@@ -31,8 +32,8 @@ type HighlightMetrics = {
 /** Вертикальный скролл ≥ этой доли высоты окна (px) → FAB; fixed-меню не участвует. */
 const SCROLL_THRESHOLD_VIEWPORT_RATIO = 0.1;
 
-/** Задержка сброса hover: без неё при движении по пунктам курсор на мгновение «в пустоте» между кнопками и стрелка/дуга прыгают на активный пункт. */
-const HOVER_CLEAR_DELAY_MS = 320;
+/** Сброс подсветки на маршрут: только после ухода с `<nav>`, курсор ≥ этого времени вне зоны меню. Внутри nav (в т.ч. пусто между кнопками) сброса нет. */
+const HOVER_RESET_MS_AFTER_LEAVING_MENU = 1000;
 
 const DESKTOP_HIGHLIGHT_TOP_BY_ID: Record<string, number> = {
   services: 10,
@@ -84,6 +85,13 @@ export const Sidebar = () => {
   const [layoutTick, setLayoutTick] = useState(0);
   const [compactFab, setCompactFab] = useState(false);
   const [menuExpandedFromFab, setMenuExpandedFromFab] = useState(false);
+  /** Ступенчатое «последний градиент» / отмена задержек после первого кадра открытия меню. */
+  const [staggerEntrance, setStaggerEntrance] = useState(false);
+  /** На один кадр+ перед закрытием: снять активный класс/блоб с кнопки до старта анимации. */
+  const [stripTargetBeforeClose, setStripTargetBeforeClose] = useState(false);
+  /** После открытия из «закрытого» сначала true — не вешаем --active, через DEFER ms последним. */
+  const [deferMenuActive, setDeferMenuActive] = useState(false);
+  const menuWasHiddenForTransitionRef = useRef(false);
   const [pathnameSnapshot, setPathnameSnapshot] = useState(location.pathname);
 
   if (location.pathname !== pathnameSnapshot) {
@@ -95,34 +103,36 @@ export const Sidebar = () => {
   const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const scrollRaf = useRef<number | null>(null);
   const compactFabRef = useRef(false);
-  const hoverClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverAfterLeaveNavTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
 
-  const clearHoverTimer = useCallback(() => {
-    if (hoverClearTimerRef.current !== null) {
-      clearTimeout(hoverClearTimerRef.current);
-      hoverClearTimerRef.current = null;
+  const clearHoverAfterLeaveMenuTimer = useCallback(() => {
+    if (hoverAfterLeaveNavTimerRef.current !== null) {
+      clearTimeout(hoverAfterLeaveNavTimerRef.current);
+      hoverAfterLeaveNavTimerRef.current = null;
     }
   }, []);
 
   const setHoveredIdImmediate = useCallback(
     (id: string) => {
-      clearHoverTimer();
+      clearHoverAfterLeaveMenuTimer();
       setHoveredId(id);
     },
-    [clearHoverTimer]
+    [clearHoverAfterLeaveMenuTimer]
   );
 
-  const scheduleHoveredIdClear = useCallback(() => {
-    clearHoverTimer();
-    hoverClearTimerRef.current = setTimeout(() => {
-      hoverClearTimerRef.current = null;
+  const scheduleResetHoverToRouteAfterLeavingNav = useCallback(() => {
+    clearHoverAfterLeaveMenuTimer();
+    hoverAfterLeaveNavTimerRef.current = setTimeout(() => {
+      hoverAfterLeaveNavTimerRef.current = null;
       setHoveredId(null);
-    }, HOVER_CLEAR_DELAY_MS);
-  }, [clearHoverTimer]);
+    }, HOVER_RESET_MS_AFTER_LEAVING_MENU);
+  }, [clearHoverAfterLeaveMenuTimer]);
 
   useEffect(() => {
-    return () => clearHoverTimer();
-  }, [clearHoverTimer]);
+    return () => clearHoverAfterLeaveMenuTimer();
+  }, [clearHoverAfterLeaveMenuTimer]);
 
   /** На главной полное меню до скролла; на всех остальных страницах по умолчанию «закрыто» (FAB). */
   const isHomeRoute = location.pathname === "/";
@@ -149,8 +159,21 @@ export const Sidebar = () => {
         setMenuExpandedFromFab(false);
       }
       if (prev !== next) {
-        setCompactFab(next);
-        compactFabRef.current = next;
+        if (!prev && next) {
+          flushSync(() => {
+            setStripTargetBeforeClose(true);
+          });
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setCompactFab(true);
+              compactFabRef.current = true;
+              setStripTargetBeforeClose(false);
+            });
+          });
+        } else {
+          setCompactFab(next);
+          compactFabRef.current = next;
+        }
       }
     });
   }, []);
@@ -196,8 +219,51 @@ export const Sidebar = () => {
     };
   }, []);
 
-  const showFabStack = menuInCompactStyle && !menuExpandedFromFab;
   const showMainNav = !menuInCompactStyle || menuExpandedFromFab;
+
+  /** Синхронно снимаем active/glow (flushSync), затем 2×rAF — и только потом анимация закрытия. */
+  const queueMenuCloseChoreography = useCallback((close: () => void) => {
+    flushSync(() => {
+      setStripTargetBeforeClose(true);
+    });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        close();
+        setStripTargetBeforeClose(false);
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!showMainNav) {
+      setStaggerEntrance(false);
+      setDeferMenuActive(false);
+      menuWasHiddenForTransitionRef.current = true;
+      return;
+    }
+    if (menuWasHiddenForTransitionRef.current) {
+      menuWasHiddenForTransitionRef.current = false;
+      setDeferMenuActive(true);
+      const t = window.setTimeout(() => {
+        setDeferMenuActive(false);
+      }, MENU_ACTIVE_RETURN_MS);
+      return () => window.clearTimeout(t);
+    }
+  }, [showMainNav]);
+
+  useEffect(() => {
+    if (!showMainNav) {
+      setStaggerEntrance(false);
+      return;
+    }
+    setStaggerEntrance(true);
+    const t = window.setTimeout(() => {
+      setStaggerEntrance(false);
+    }, 2200);
+    return () => window.clearTimeout(t);
+  }, [showMainNav]);
+
+  const showFabStack = menuInCompactStyle && !menuExpandedFromFab;
   /** Меню открыто из FAB поверх затемнённого backdrop. */
   const menuOverDarkBackdrop = menuInCompactStyle && menuExpandedFromFab;
 
@@ -221,7 +287,9 @@ export const Sidebar = () => {
       }
       setActiveId(item.id);
       if (menuInCompactStyle) {
-        setMenuExpandedFromFab(false);
+        queueMenuCloseChoreography(() => {
+          setMenuExpandedFromFab(false);
+        });
       }
     },
     [
@@ -229,6 +297,7 @@ export const Sidebar = () => {
       location.pathname,
       menuInCompactStyle,
       navigate,
+      queueMenuCloseChoreography,
     ]
   );
 
@@ -239,16 +308,20 @@ export const Sidebar = () => {
           type="button"
           className="app-menu__backdrop app-menu__backdrop--fab-open pointer-events-auto"
           aria-label="Закрыть меню"
-          onClick={() => setMenuExpandedFromFab(false)}
+          onClick={() => {
+            queueMenuCloseChoreography(() => {
+              setMenuExpandedFromFab(false);
+            });
+          }}
         />
       ) : null}
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 lg:hidden">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 xl:hidden">
         <AppMenuMobileDock
           visible={showMainNav}
           targetId={targetId}
           onItemActivate={navigateToMenuItem}
-          overDarkBackdrop={menuOverDarkBackdrop}
+          onDimmedBackdrop={menuOverDarkBackdrop}
         />
       </div>
 
@@ -288,11 +361,14 @@ export const Sidebar = () => {
         </button>
       </div>
 
-      <aside className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden items-center pr-6 lg:flex">
+      <aside className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden items-center pr-6 xl:flex">
       <div
         className={
           "app-menu__nav-shell relative " +
-          (showMainNav ? "" : "app-menu__nav-shell--hidden")
+          (showMainNav ? "" : "app-menu__nav-shell--hidden") +
+          (staggerEntrance && showMainNav
+            ? " app-menu__nav-shell--stagger-open"
+            : "")
         }
       >
         <div
@@ -310,9 +386,9 @@ export const Sidebar = () => {
           ref={navRef}
           className="app-menu__desktop-nav pointer-events-auto relative z-10 flex -translate-x-26 flex-col items-end gap-10 overflow-visible pr-8"
           aria-label="Sidebar navigation"
-          onMouseEnter={clearHoverTimer}
+          onMouseEnter={clearHoverAfterLeaveMenuTimer}
+          onMouseLeave={scheduleResetHoverToRouteAfterLeavingNav}
         >
-          <MenuBlobFilterDefs />
           {highlightMetrics ? (
             <MenuHighlightLayer
               translateXRem={highlightMetrics.translateXRem}
@@ -331,15 +407,20 @@ export const Sidebar = () => {
                 ref={(el) => {
                   rowRefs.current[item.id] = el;
                 }}
+                orderIndex={index}
                 label={item.label}
                 icon={item.icon}
-                isTarget={targetId === item.id}
+                glowTarget={targetId === item.id && !stripTargetBeforeClose}
+                isTarget={
+                  targetId === item.id &&
+                  !stripTargetBeforeClose &&
+                  !deferMenuActive
+                }
                 translateXRem={rowLayout.translateXRem}
                 rotateDeg={rowLayout.rotateDeg}
                 overDarkBackdrop={menuOverDarkBackdrop}
                 onClick={() => navigateToMenuItem(item)}
                 onMouseEnter={() => setHoveredIdImmediate(item.id)}
-                onMouseLeave={scheduleHoveredIdClear}
               />
             );
           })}
