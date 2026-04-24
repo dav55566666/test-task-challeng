@@ -1,4 +1,4 @@
-/* Один грид-ярус: текст сверху слева, логотип по центру; без transform на обёртке — не ломаем position:fixed у плеера логотипа */
+/* Один грид-ярус: текст сверху слева, логотип чуть выше центра */
 .main {
   position: relative;
   display: grid;
@@ -28,17 +28,18 @@
       font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
       font-style: normal;
       font-weight: 400;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 120%;
       letter-spacing: 0.03em;
       color: rgba(51, 51, 51, 0.4);
     }
   }
 
-  /* Логотип: центр ячейки, масштаб с viewport (vmin) */
+  /* Логотип: чуть выше визуального центра; плеер в портале — transform на обёртке ок */
   &__logo {
     grid-area: hero;
     place-self: center;
+    transform: translateY(-3vh);
     z-index: 1;
     width: min(100%, clamp(200px, 68vmin, 650px));
     max-width: calc(100vw - 40px);

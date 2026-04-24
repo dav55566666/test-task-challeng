@@ -16,33 +16,9 @@ export const MainDirections = () => {
 
   useEffect(() => {
     const initWowForList = () => {
-      const listElement = listRef.current;
-      if (!listElement) {
+      if (!listRef.current) {
         return;
       }
-
-      const listItems = Array.from(
-        listElement.querySelectorAll<HTMLLIElement>(".main-directions__item"),
-      );
-      const indexes = listItems.map((_, index) => index);
-
-      for (let i = indexes.length - 1; i > 0; i -= 1) {
-        const randomValue = crypto.getRandomValues(new Uint32Array(1))[0];
-        const randomIndex = randomValue % (i + 1);
-        [indexes[i], indexes[randomIndex]] = [indexes[randomIndex], indexes[i]];
-      }
-
-      const randomOrder = indexes.reduce<number[]>((acc, itemIndex, order) => {
-        acc[itemIndex] = order;
-        return acc;
-      }, []);
-
-      listItems.forEach((listItem, index) => {
-        listItem.setAttribute(
-          "data-wow-delay",
-          `${(randomOrder[index] * 0.14).toFixed(2)}s`,
-        );
-      });
 
       const wow = new window.WOW({
         boxClass: "wow",
@@ -99,12 +75,8 @@ export const MainDirections = () => {
         </div>
         <div className="main-direction__text">
           <ul ref={listRef} className="main-directions__list">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="main-directions__item wow"
-                data-wow-duration="0.7s"
-              >
+            {items.map((item, index) => (
+              <li key={item.id} className="main-directions__item">
                 <Link
                   to={`/directions/${item.slug}`}
                   className="main-directions__link"
@@ -114,7 +86,13 @@ export const MainDirections = () => {
                   </span>
                   <span className="main-directions__title">{item.title}</span>
                 </Link>
-                <p className="main-directions__desc">{item.listDescription}</p>
+                <p
+                  className="main-directions__desc wow"
+                  data-wow-duration="0.65s"
+                  data-wow-delay={`${(index * 0.12).toFixed(2)}s`}
+                >
+                  {item.listDescription}
+                </p>
               </li>
             ))}
           </ul>

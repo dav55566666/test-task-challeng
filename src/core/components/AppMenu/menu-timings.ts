@@ -1,5 +1,6 @@
 /**
- * Синхронно с `styles/app-menu.scss` (app-menu-nav-shell--stagger-open, app-menu-gradient-reveal).
+ * Синхронно с `styles/app-menu.scss` (app-menu-nav-shell--stagger-open, app-menu-gradient-reveal,
+ * app-menu__nav-shell--hidden — порядок: кнопки → дуга → glass).
  * Меняй селекторы и @keyframes в паре с этими числами.
  */
 export const MENU_GRADIENT_REVEAL_DELAY_MS = 1200;

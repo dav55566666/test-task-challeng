@@ -8,11 +8,10 @@
   opacity: 1;
 }
 
-/* Фиксированный холст под блоб: морфинг только через clip-path + сдвиг градиента */
+/* Градиент под активной кнопкой: фиксированный овальный холст, движение — через сдвиг/масштаб фона */
 .menu-highlight__blob-unified {
-  /* было 204px, −20% */
-  --menu-blob-w: 163px;
-  --menu-blob-h: 96px;
+  --menu-blob-w: 160px;
+  --menu-blob-h: 82px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -21,7 +20,8 @@
   margin-left: calc(var(--menu-blob-w) / -2);
   margin-top: calc(var(--menu-blob-h) / -2);
   backface-visibility: hidden;
-  border-radius: 0;
+  /* овал (эллипс) от прямоугольника 160×82 */
+  border-radius: 50%;
   opacity: 0.66;
   background-color: transparent;
   background-image:
@@ -48,14 +48,8 @@
     0% 50%;
   background-repeat: no-repeat;
   filter: blur(16px) saturate(1.15);
-  will-change: clip-path, background-position, background-size;
-  /* 4× cubic — только гладкие стыки, без углов polygon */
-  clip-path: path(
-    "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
-  );
-  animation:
-    menu-liquid-clip 3.8s ease-in-out infinite,
-    menu-liquid-surface 2.8s ease-in-out infinite;
+  will-change: background-position, background-size;
+  animation: menu-liquid-surface 2.8s ease-in-out infinite;
 }
 
 .menu-highlight__blobs-outer {
@@ -98,31 +92,6 @@
   }
 }
 
-/* Одинаковая схема: M + 4×C + Z — браузер интерполирует кривые, без острых углов */
-@keyframes menu-liquid-clip {
-  0%,
-  100% {
-    clip-path: path(
-      "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
-    );
-  }
-  25% {
-    clip-path: path(
-      "M 50% 0% C 90% 0% 100% 36% 100% 56% C 100% 86% 70% 100% 50% 100% C 4% 100% 0% 55% 0% 40% C 0% 10% 0% 0% 50% 0% Z"
-    );
-  }
-  50% {
-    clip-path: path(
-      "M 50% 12% C 62% 0% 100% 36% 100% 60% C 100% 90% 100% 96% 36% 90% C 24% 94% 0% 80% 0% 40% C 0% 22% 32% 12% 50% 12% Z"
-    );
-  }
-  75% {
-    clip-path: path(
-      "M 50% 0% C 86% 10% 100% 14% 100% 36% C 100% 68% 60% 100% 50% 100% C 32% 100% 0% 90% 0% 50% C 0% 32% 12% 0% 50% 0% Z"
-    );
-  }
-}
-
 @keyframes menu-highlight-hue {
   0%,
   100% {
@@ -154,8 +123,5 @@
     background-size: 130% 130%, 120% 120%, 200% 200%;
     background-position: 0% 50%, 100% 0%, 0% 50%;
     filter: blur(10px) saturate(1.05);
-    clip-path: path(
-      "M 50% 4% C 80% 4% 98% 26% 98% 50% C 98% 76% 78% 98% 50% 98% C 20% 98% 2% 74% 2% 50% C 2% 24% 20% 4% 50% 4% Z"
-    );
   }
 }

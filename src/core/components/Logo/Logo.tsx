@@ -212,12 +212,12 @@ export const Logo = () => {
       {isPlayerOpen
         ? createPortal(
             <div
-              className="logo-video-modal fixed inset-0 flex items-center justify-center bg-black/75 px-5"
+              className="logo-video-modal fixed inset-0 flex items-center justify-center px-5"
               onClick={() => setIsPlayerOpen(false)}
               role="presentation"
             >
               <div
-                className="relative w-full max-w-5xl overflow-hidden rounded-[10px] p-4 md:p-6"
+                className="logo-video-modal__content relative w-full max-w-5xl overflow-hidden rounded-[10px] p-4 md:p-6"
                 onClick={(event) => event.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
@@ -226,26 +226,28 @@ export const Logo = () => {
                 <button
                   type="button"
                   onClick={() => setIsPlayerOpen(false)}
-                  className="absolute right-10 top-10 z-10 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111]"
+                  className="absolute right-3 top-3 z-20 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111] md:right-4 md:top-4"
                   aria-label="Закрыть плеер"
                 >
                   Close
                 </button>
-                <Plyr
-                  source={playerSource}
-                  options={{
-                    autoplay: true,
-                    controls: [
-                      "play-large",
-                      "play",
-                      "progress",
-                      "current-time",
-                      "mute",
-                      "volume",
-                      "fullscreen",
-                    ],
-                  }}
-                />
+                <div className="logo-video-modal__player-wrap w-full max-h-[80vh]">
+                  <Plyr
+                    source={playerSource}
+                    options={{
+                      autoplay: true,
+                      controls: [
+                        "play-large",
+                        "play",
+                        "progress",
+                        "current-time",
+                        "mute",
+                        "volume",
+                        "fullscreen",
+                      ],
+                    }}
+                  />
+                </div>
               </div>
             </div>,
             document.body

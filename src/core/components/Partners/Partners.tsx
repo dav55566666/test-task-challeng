@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { IMAGES } from "../../design";
+import { TextTag, GradientTitle } from "../../uikit";
 import { PARTNER_LOGO_SRCS } from "./partnerLogos";
 import "./styles/partner.scss";
 
@@ -9,7 +10,13 @@ export const Partners = () => {
     <section className="partners" aria-labelledby="partners-heading">
       <div className="partners__content">
         <div className="partners__title">
-          <h2 id="partners-heading">Нам доверяют</h2>
+          <GradientTitle
+            id="partners-heading"
+            value="Нам доверяют"
+            currentSize={36}
+            mobileSize={30}
+            tag={TextTag.H2}
+          />
           <Link to="/about" className="partners__more">
             Все кейсы
             <img src={IMAGES.arrowRightTop} alt="" aria-hidden />
@@ -31,6 +38,11 @@ export const Partners = () => {
               />
             </div>
           ))}
+          <div className="partners__logo-cell partners__logo-cell--count" role="listitem">
+            <span className="partners__count" aria-label="более 130 брендов">
+              130+
+            </span>
+          </div>
         </div>
       </div>
     </section>

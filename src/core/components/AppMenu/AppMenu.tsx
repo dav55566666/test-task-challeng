@@ -316,7 +316,7 @@ export const Sidebar = () => {
         />
       ) : null}
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 xl:hidden">
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-10 xl:hidden">
         <AppMenuMobileDock
           visible={showMainNav}
           targetId={targetId}
@@ -361,7 +361,7 @@ export const Sidebar = () => {
         </button>
       </div>
 
-      <aside className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden items-center pr-6 xl:flex">
+      <aside className="pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center pr-6 xl:flex">
       <div
         className={
           "app-menu__nav-shell relative " +
@@ -404,6 +404,7 @@ export const Sidebar = () => {
             return (
               <MenuItem
                 key={item.id}
+                itemId={item.id}
                 ref={(el) => {
                   rowRefs.current[item.id] = el;
                 }}

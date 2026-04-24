@@ -77,10 +77,43 @@
 }
 
 .logo-video-modal {
-  z-index: 100000000;
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.26) 58%, rgba(255, 255, 255, 0.18) 100%);
-  backdrop-filter: blur(18px) saturate(1.08);
-  box-shadow: 0 8px 36px rgba(80, 94, 128, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  z-index: 20;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.1) 58%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  backdrop-filter: blur(16px) saturate(1.05);
+  box-shadow: 0 8px 32px rgba(80, 94, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.logo-video-modal__player-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #000;
+}
+
+.logo-video-modal__player-wrap :is(.plyr, .plyr--video) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.logo-video-modal__player-wrap :is(.plyr__video-wrapper, .plyr__video-embed) {
+  height: 100% !important;
+  min-height: 0;
+}
+
+.logo-video-modal__player-wrap .plyr__poster {
+  background-size: cover;
 }
 
 /* Шире 1500px — логотип плавно уменьшается вместе с ростом вьюпорта */
