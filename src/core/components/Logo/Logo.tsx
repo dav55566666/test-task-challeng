@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
 import { IMAGES } from '../../design';
@@ -13,15 +13,7 @@ export const Logo = () => {
   const innerMaskId = `logo-mask-inner-${uid}`;
   const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
-  const previewWrapRef = useRef<HTMLButtonElement>(null);
   const previewVideoRef = useRef<HTMLVideoElement>(null);
-
-  const syncPreviewAspectFromVideo = useCallback(() => {
-    const v = previewVideoRef.current;
-    const btn = previewWrapRef.current;
-    if (!v || !btn || !v.videoWidth || !v.videoHeight) return;
-    btn.style.aspectRatio = `${v.videoWidth} / ${v.videoHeight}`;
-  }, []);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
@@ -231,7 +223,6 @@ export const Logo = () => {
             />
           </div>
           <button
-            ref={previewWrapRef}
             type="button"
             className="logo-animation__video"
             onClick={() => setIsPlayerOpen(true)}
@@ -240,13 +231,12 @@ export const Logo = () => {
             <video
               ref={previewVideoRef}
               src={IMAGES.logoVideo}
-              poster={IMAGES.logoMaskGradient}
+              poster={IMAGES.logoVideoPoster}
               preload="auto"
               autoPlay
               muted
               loop
               playsInline
-              onLoadedMetadata={syncPreviewAspectFromVideo}
             />
           </button>
         </div>

@@ -13,9 +13,11 @@ import project1_3 from '../../assets/project1_3.png';
 import project1_4 from '../../assets/project1_4.png';
 import project1_5 from '../../assets/project1_5.png';
 import logoBgVideo from '../../assets/logo-bg-video.mp4';
+import logoVideoPoster from '../../assets/logo-video-poster.png';
 
 export const IMAGES = {
   logoVideo: logoBgVideo,
+  logoVideoPoster,
   logoMask,
   logoMaskGradient,
   arrow,
