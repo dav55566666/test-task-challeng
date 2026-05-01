@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useProjectsUiStore } from "../../../store";
 import { OUR_PROJECTS, PROJECT_TABS } from "../../data";
@@ -23,7 +23,6 @@ export type OurProjectsProps = {
 };
 
 export const OurProjects = ({ limit }: OurProjectsProps) => {
-  const location = useLocation();
   const showTabs = typeof limit !== "number";
   const figureRefs = useRef<(HTMLElement | null)[]>([]);
   const articleRefs = useRef<(HTMLElement | null)[]>([]);
@@ -31,9 +30,6 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
   const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
   const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
   const setScrollToCaseByTab = useProjectsUiStore((s) => s.setScrollToCaseByTab);
-  const setCasesListActiveSlug = useProjectsUiStore(
-    (s) => s.setCasesListActiveSlug
-  );
 
   const projects = useMemo(() => {
     if (typeof limit === "number") {
@@ -62,39 +58,6 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
     }
     setCasesActiveTab(scrollSyncedTab);
   }, [showTabs, scrollSyncedTab, setCasesActiveTab]);
-
-  useLayoutEffect(() => {
-    if (!showTabs) return;
-    const slug = projects[activeIndex ?? 0]?.slug;
-    if (slug) setCasesListActiveSlug(slug);
-  }, [showTabs, activeIndex, projects, setCasesListActiveSlug]);
-
-  useLayoutEffect(() => {
-    if (typeof limit !== "number") return;
-    const raw = location.hash.replace(/^#/, "");
-    if (!raw.startsWith("project-")) return;
-
-    const scrollToTarget = () => {
-      const behavior: ScrollBehavior = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches
-        ? "auto"
-        : "smooth";
-      const el = document.getElementById(raw);
-      if (el) {
-        el.scrollIntoView({ behavior, block: "start" });
-        return;
-      }
-      document.getElementById("our-projects")?.scrollIntoView({
-        behavior,
-        block: "start",
-      });
-    };
-
-    scrollToTarget();
-    const t = window.setTimeout(scrollToTarget, 120);
-    return () => window.clearTimeout(t);
-  }, [limit, location.pathname, location.hash]);
 
   const scrollListToTab = useCallback((value: string) => {
     const idx = projects.findIndex((p) => p.tabValue === value);

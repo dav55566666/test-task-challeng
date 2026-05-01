@@ -39,9 +39,12 @@ export const Partners = () => {
             </div>
           ))}
           <div className="partners__logo-cell partners__logo-cell--count" role="listitem">
-            <span className="partners__count" aria-label="более 130 брендов">
-              130+
-            </span>
+            <GradientTitle
+              value="+"
+              currentSize={36}
+              mobileSize={30}
+              tag={TextTag.H3}
+            />
           </div>
         </div>
       </div>

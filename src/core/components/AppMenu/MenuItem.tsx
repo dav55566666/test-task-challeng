@@ -82,6 +82,8 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
               className={
                 "app-menu__desktop-item-icon relative z-10 flex h-4 w-4 shrink-0 items-center justify-center [&_svg]:block" +
                 (itemId === "services" ? " app-menu__desktop-item-icon--services" : "") +
+                (itemId === "cases" ? " app-menu__desktop-item-icon--cases" : "") +
+                (itemId === "about" ? " app-menu__desktop-item-icon--about" : "") +
                 (itemId === "contacts" ? " app-menu__desktop-item-icon--contacts" : "")
               }
             >
@@ -96,7 +98,13 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
                 }}
               />
             </span>
-            <span className="relative z-10">{label}</span>
+            <span className="relative z-10 leading-none">{label}</span>
+            {/* Центр пилюли в viewport при rotate на строке — не центр AABB кнопки */}
+            <span
+              data-app-menu-arrow-anchor=""
+              className="pointer-events-none absolute left-1/2 top-1/2 h-px w-px -translate-x-1/2 -translate-y-1/2"
+              aria-hidden
+            />
           </button>
         </div>
       </div>

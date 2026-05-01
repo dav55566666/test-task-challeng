@@ -12,11 +12,11 @@ export const AboutManifestoSection = () => {
       className="about-manifesto-section w-full min-w-0 max-w-none self-start"
       aria-labelledby="about-manifesto-heading"
     >
-      <div className="flex w-full min-w-0 flex-col gap-[1.35em]">
+      <div className="flex w-full min-w-0 flex-col gap-4">
         {ABOUT_MANIFESTO_PARAGRAPHS.map((lines, i) => (
           <p
             key={i}
-            className="m-0 flex flex-col gap-0 text-start leading-[1.35] tracking-[-0.02em] text-[#1a1a1a] text-3xl md:text-4xl"
+            className="m-0 flex flex-col gap-0 text-start"
           >
             {lines.map((line, j) => (
               <span
@@ -26,7 +26,12 @@ export const AboutManifestoSection = () => {
                   maxWidth: `min(100%, ${line.maxRem}rem)`,
                 }}
               >
-                {line.text}
+                <GradientTitle
+                  value={line.text}
+                  currentSize={30}
+                  mobileSize={24}
+                  tag={TextTag.H3}
+                />
               </span>
             ))}
           </p>

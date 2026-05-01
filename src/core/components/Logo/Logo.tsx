@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
 import { IMAGES } from '../../design';
@@ -13,6 +13,15 @@ export const Logo = () => {
   const innerMaskId = `logo-mask-inner-${uid}`;
   const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const previewWrapRef = useRef<HTMLButtonElement>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
+
+  const syncPreviewAspectFromVideo = useCallback(() => {
+    const v = previewVideoRef.current;
+    const btn = previewWrapRef.current;
+    if (!v || !btn || !v.videoWidth || !v.videoHeight) return;
+    btn.style.aspectRatio = `${v.videoWidth} / ${v.videoHeight}`;
+  }, []);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
@@ -38,6 +47,29 @@ export const Logo = () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
+  }, [isPlayerOpen]);
+
+  /** Возврат из bfcache (назад в браузере): Safari иногда сбрасывает размеры видео до «квадрата». */
+  useEffect(() => {
+    const v = previewVideoRef.current;
+    if (!v) return;
+
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      v.load();
+      void v.play().catch(() => {});
+    };
+
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
+  /** После закрытия модалки снова запускаем превью (некоторые браузеры ставят фон на паузу). */
+  useEffect(() => {
+    if (isPlayerOpen) return;
+    const v = previewVideoRef.current;
+    if (!v) return;
+    void v.play().catch(() => {});
   }, [isPlayerOpen]);
 
   return (
@@ -199,12 +231,23 @@ export const Logo = () => {
             />
           </div>
           <button
+            ref={previewWrapRef}
             type="button"
             className="logo-animation__video"
             onClick={() => setIsPlayerOpen(true)}
             aria-label="Открыть видео логотипа"
           >
-            <video src={IMAGES.logoVideo} autoPlay muted loop playsInline />
+            <video
+              ref={previewVideoRef}
+              src={IMAGES.logoVideo}
+              poster={IMAGES.logoMaskGradient}
+              preload="auto"
+              autoPlay
+              muted
+              loop
+              playsInline
+              onLoadedMetadata={syncPreviewAspectFromVideo}
+            />
           </button>
         </div>
       </div>

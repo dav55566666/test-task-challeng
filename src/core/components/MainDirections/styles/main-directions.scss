@@ -1,14 +1,14 @@
 .main-directions {
   width: 100%;
-  padding: 120px 20px;
+  padding: 170px 20px;
   font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
 
   @media (max-width: 900px) {
-    padding: 80px 16px 68px;
+    padding: 110px 16px 68px;
   }
 
   @media (max-width: 520px) {
-    padding: 64px 14px 54px;
+    padding: 80px 14px 54px;
   }
 
   .main-directions__container {
@@ -53,7 +53,7 @@
           width: 100%;
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: flex-start;
           gap: 20px;
 
           @media (max-width: 1024px) {
@@ -177,6 +177,7 @@
             color: rgba(51, 51, 51, 0.4);
             text-align: left;
             width: 100%;
+            padding-top: 6px;
 
             &.main-directions-wow-animated {
               animation-name: main-directions-slide-in-right;

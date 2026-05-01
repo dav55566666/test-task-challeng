@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 440px;
+    max-width: 450px;
     p {
       font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
       font-style: normal;
@@ -55,5 +55,27 @@
       margin: 0;
       pointer-events: auto;
     }
+  }
+}
+
+/* Планшет / узкий десктоп: явно ниже центра и шире слот — заметнее, чем ±несколько vh */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .main__logo {
+    transform: translateY(11vh);
+    width: min(100%, clamp(220px, 88vmin, 650px));
+  }
+}
+
+/* Крупный телефон / узкий планшет ≤768px (не узкий мобильный ≤420px) */
+@media (max-width: 768px) and (min-width: 421px) {
+  .main__logo {
+    transform: translateY(12vh);
+    width: min(100%, clamp(200px, 86vmin, 650px));
+  }
+}
+
+@media (max-width: 420px) {
+  .main__logo {
+    width: min(100%, clamp(200px, 80vmin, 650px));
   }
 }

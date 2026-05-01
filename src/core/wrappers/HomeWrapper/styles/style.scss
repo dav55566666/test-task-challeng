@@ -32,6 +32,56 @@
   &__cursor-glow--visible {
     opacity: 0.95;
   }
+
+  &__cursor-glow--hidden-on-menu {
+    opacity: 0 !important;
+  }
+
+  /* Touch / narrow viewports: drift across the viewport (no cursor tracking). */
+  &__cursor-glow--wander {
+    opacity: 0.95;
+    transition: opacity 0.2s ease;
+    animation:
+      app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate,
+      app-shell-cursor-wander 56s ease-in-out infinite;
+  }
+}
+
+@keyframes app-shell-cursor-wander {
+  0% {
+    transform: translate3d(calc(12vw - 12px), calc(72vh - 12px), 0);
+  }
+  14% {
+    transform: translate3d(calc(78vw - 12px), calc(22vh - 12px), 0);
+  }
+  28% {
+    transform: translate3d(calc(84vw - 12px), calc(68vh - 12px), 0);
+  }
+  42% {
+    transform: translate3d(calc(38vw - 12px), calc(88vh - 12px), 0);
+  }
+  56% {
+    transform: translate3d(calc(18vw - 12px), calc(38vh - 12px), 0);
+  }
+  70% {
+    transform: translate3d(calc(62vw - 12px), calc(12vh - 12px), 0);
+  }
+  84% {
+    transform: translate3d(calc(52vw - 12px), calc(58vh - 12px), 0);
+  }
+  100% {
+    transform: translate3d(calc(12vw - 12px), calc(72vh - 12px), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__cursor-glow--wander {
+    animation:
+      app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate;
+    transform: translate3d(calc(50vw - 12px), calc(45vh - 12px), 0);
+  }
 }
 
 @keyframes app-shell-cursor-palette {

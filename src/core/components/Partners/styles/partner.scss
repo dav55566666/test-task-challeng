@@ -1,14 +1,14 @@
 .partners {
   width: 100%;
-  padding: 48px 20px 56px;
+  padding: 48px 73px 56px 20px;
   background: #fff;
 
   @media (max-width: 900px) {
-    padding: 36px 16px 42px;
+    padding: 36px 70px 42px 16px;
   }
 
   @media (max-width: 520px) {
-    padding: 30px 14px 36px;
+    padding: 30px 70px 36px 14px;
   }
 
   .partners__content {
@@ -78,15 +78,25 @@
 
     .partners__logo-cell {
       flex-shrink: 0;
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
-      max-height: 48px;
+      width: 112px;
+      height: 72px;
+      border: 1px solid rgba(26, 26, 26, 0.08);
+      border-radius: 10px;
+      background: #fff;
+
+      @media (max-width: 520px) {
+        width: 92px;
+        height: 60px;
+      }
 
       img {
         display: block;
-        max-width: min(120px, 28vw);
-        max-height: 48px;
+        max-width: 82%;
+        max-height: 82%;
         width: auto;
         height: auto;
         object-fit: contain;
@@ -94,6 +104,11 @@
 
       &--count {
         align-self: center;
+        border: none;
+
+        .gradient-text {
+          margin: 0;
+        }
       }
     }
 

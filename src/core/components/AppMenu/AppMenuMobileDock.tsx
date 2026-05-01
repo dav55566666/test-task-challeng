@@ -60,7 +60,7 @@ export const AppMenuMobileDock = ({
                   }
                   onClick={() => onItemActivate(item)}
                 >
-                  <span className="app-menu__mobile-dock__icon">
+                  <span className={`app-menu__mobile-dock__icon app-menu__mobile-dock__icon--${item.id}`}>
                     <Icon
                       name={item.icon}
                       style={{

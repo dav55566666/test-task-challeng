@@ -61,9 +61,9 @@ export const AboutUs = () => {
         <div className="mb-16 md:mb-36 max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-310">
           <GradientTitle
             value={ABOUT_HERO_HEADLINE}
-            currentSize={64}
-            mobileSize={40}
-            tag={TextTag.H1}
+            currentSize={36}
+            mobileSize={30}
+            tag={TextTag.H2}
           />
         </div>
         <ProjectSplitLayout
@@ -74,7 +74,12 @@ export const AboutUs = () => {
           sidebarDesktopOnly={false}
           sidebar={() => (
             <>
-              <h2 className="about-us__section-title m-0 text-[#333333]">О нас</h2>
+              <GradientTitle
+                value="О нас"
+                currentSize={36}
+                mobileSize={30}
+                tag={TextTag.H2}
+              />
               <PromptInput
                 className="w-full absolute top-50 left-0"
                 placeholder="Что вы хотите узнать?"

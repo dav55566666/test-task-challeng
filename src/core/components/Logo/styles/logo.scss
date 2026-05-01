@@ -62,8 +62,10 @@
     background: transparent;
     display: block;
     width: min(90%, 585px);
-    aspect-ratio: 1 / 1;
+    /* Совпадает с модалкой до loadedmetadata; точное значение — из размеров файла (Logo.tsx) */
+    aspect-ratio: 16 / 9;
     height: auto;
+    max-height: min(52vh, 100%);
     z-index: 1;
     cursor: pointer;
 
@@ -72,6 +74,7 @@
       object-position: center;
       width: 100%;
       height: 100%;
+      display: block;
     }
   }
 }
@@ -129,27 +132,29 @@
   }
 }
 
-@media (max-width: 1024px) {
+/* Планшет / узкий десктоп: крупнее базового десктопа (1.092), без прежнего даунскейла */
+@media (max-width: 1024px) and (min-width: 769px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.9912);
+    transform: scale(1.26);
   }
 }
 
-@media (max-width: 768px) {
+/* Узкие планшеты и крупные телефоны (712px и т.п.) — не даунскейлить как на маленьких экранах */
+@media (max-width: 768px) and (min-width: 421px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.8904);
+    transform: scale(1.2);
   }
 }
 
 @media (max-width: 420px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.8064);
+    transform: scale(0.93);
   }
 }
 
 @media (max-width: 360px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.756);
+    transform: scale(0.86);
   }
 }
 
