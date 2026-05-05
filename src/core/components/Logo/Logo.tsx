@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
+import type { APITypes } from "plyr-react";
 import { IMAGES } from '../../design';
 import { LOGO_INNER_HOLE } from './logoShape';
 import './styles/logo.scss';
@@ -14,9 +15,7 @@ export const Logo = () => {
   const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const previewVideoRef = useRef<HTMLVideoElement>(null);
-  const modalPlyrRef = useRef<{
-    plyr?: { muted: boolean; volume: number; play: () => Promise<unknown> | void };
-  } | null>(null);
+  const modalPlyrRef = useRef<APITypes | null>(null);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
