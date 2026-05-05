@@ -7,7 +7,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100dvh;
+  min-height: calc(100svh - var(--site-header-sticky-height, 4.5rem));
+  min-height: calc(100dvh - var(--site-header-sticky-height, 4.5rem));
+  height: calc(100dvh - var(--site-header-sticky-height, 4.5rem));
+
+  @supports not (height: 100dvh) {
+    min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
+    height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
+  }
 }
 
 .home-page__prompt {

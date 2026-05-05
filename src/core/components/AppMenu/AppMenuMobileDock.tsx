@@ -1,7 +1,7 @@
 import { Icon } from "../../design/Icon";
 import { MENU_LINKS, MOBILE_DOCK_ITEM_TRANSFORMS } from "./constants";
 
-const ARC_ICON_PX = 20;
+const ARC_ICON_PX = 18;
 
 type MenuLink = (typeof MENU_LINKS)[number];
 
@@ -33,6 +33,7 @@ export const AppMenuMobileDock = ({
     >
       <div className="app-menu__mobile-dock__inner">
         <div className="app-menu__mobile-dock__glow" aria-hidden />
+        <div className="app-menu__mobile-dock__glass-arc" aria-hidden />
         <ul className="app-menu__mobile-dock__list">
           {MENU_LINKS.map((item, index) => {
             const isActive = targetId === item.id;
@@ -69,8 +70,8 @@ export const AppMenuMobileDock = ({
                         ...(isActive
                           ? { color: "#ffffff", solid: true }
                           : onDimmedBackdrop
-                            ? { color: "rgba(255, 255, 255, 0.9)", solid: true }
-                            : {}),
+                            ? { color: "rgba(51, 51, 51, 0.32)", solid: true }
+                            : { color: "rgba(51, 51, 51, 0.32)", solid: true }),
                       }}
                     />
                   </span>

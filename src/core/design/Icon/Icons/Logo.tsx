@@ -122,32 +122,32 @@ export const Logo = ({ style }: IconSvgProps) => {
           <animate
             attributeName="x1"
             values="88.6842;83.5;90.2;88.6842"
-            dur="7.2s"
+            dur="4.2s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="y1"
             values="-8.7769;-2.4;-10.2;-8.7769"
-            dur="7.2s"
+            dur="4.2s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="x2"
             values="96.9378;104.6;93.1;96.9378"
-            dur="7.2s"
+            dur="4.2s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="y2"
             values="25.0142;29.3;20.7;25.0142"
-            dur="7.2s"
+            dur="4.2s"
             repeatCount="indefinite"
           />
           <stop stopColor="#00C4DB">
             <animate
               attributeName="stop-color"
               values="#00C4DB;#2EE7F6;#00C4DB"
-              dur="3.8s"
+              dur="2.2s"
               repeatCount="indefinite"
             />
           </stop>
@@ -155,7 +155,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#00C4DB;#18D3E9;#00C4DB"
-              dur="4.4s"
+              dur="2.6s"
               begin="-1.1s"
               repeatCount="indefinite"
             />
@@ -164,7 +164,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#2D5BDD;#4F7BFF;#2D5BDD"
-              dur="4.1s"
+              dur="2.4s"
               begin="-0.6s"
               repeatCount="indefinite"
             />
@@ -173,7 +173,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#6238D1;#8B5CFF;#6238D1"
-              dur="3.9s"
+              dur="2.3s"
               begin="-1.5s"
               repeatCount="indefinite"
             />
@@ -182,7 +182,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#6238D1;#7B4BF0;#6238D1"
-              dur="4.8s"
+              dur="2.8s"
               begin="-2.2s"
               repeatCount="indefinite"
             />
@@ -213,28 +213,28 @@ export const Logo = ({ style }: IconSvgProps) => {
           <animate
             attributeName="x1"
             values="7.27691;6.4;8.1;7.27691"
-            dur="5.6s"
+            dur="3.3s"
             begin="-0.9s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="y1"
             values="8.93024;10.4;8.1;8.93024"
-            dur="5.6s"
+            dur="3.3s"
             begin="-0.9s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="x2"
             values="10.9087;11.8;10.1;10.9087"
-            dur="5.6s"
+            dur="3.3s"
             begin="-0.9s"
             repeatCount="indefinite"
           />
           <animate
             attributeName="y2"
             values="22.2961;20.7;23.6;22.2961"
-            dur="5.6s"
+            dur="3.3s"
             begin="-0.9s"
             repeatCount="indefinite"
           />
@@ -242,7 +242,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#00C4DB;#2EE7F6;#00C4DB"
-              dur="3.4s"
+              dur="2s"
               begin="-0.3s"
               repeatCount="indefinite"
             />
@@ -251,7 +251,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#00C4DB;#1AD6EB;#00C4DB"
-              dur="3.9s"
+              dur="2.3s"
               begin="-1.4s"
               repeatCount="indefinite"
             />
@@ -260,7 +260,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#1354D4;#3A73F2;#1354D4"
-              dur="3.6s"
+              dur="2.1s"
               begin="-0.8s"
               repeatCount="indefinite"
             />
@@ -269,7 +269,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#6238D1;#8C61FF;#6238D1"
-              dur="3.3s"
+              dur="1.9s"
               begin="-1.9s"
               repeatCount="indefinite"
             />
@@ -278,7 +278,7 @@ export const Logo = ({ style }: IconSvgProps) => {
             <animate
               attributeName="stop-color"
               values="#6238D1;#7D4DF2;#6238D1"
-              dur="4.2s"
+              dur="2.5s"
               begin="-2.5s"
               repeatCount="indefinite"
             />

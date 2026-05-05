@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import "./tabs.scss";
 
 export type TabItem = {
   label: string;
@@ -109,8 +110,7 @@ export function Tabs({
       })}
       <span
         className={
-          "pointer-events-none absolute left-0 top-0 h-0.5 rounded-full " +
-          "bg-[linear-gradient(90deg,#C5B4E3_0%,#82C9E7_100%)] " +
+          "tabs__indicator pointer-events-none absolute left-0 top-0 h-0.5 rounded-full " +
           "transition-[transform,width,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
         }
         style={{

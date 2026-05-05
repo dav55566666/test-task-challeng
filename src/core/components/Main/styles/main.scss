@@ -1,4 +1,4 @@
-/* Один грид-ярус: текст сверху слева, логотип чуть выше центра */
+/* Hero-контент заполняет высоту первого экрана под sticky-хедером. */
 .main {
   position: relative;
   display: grid;
@@ -6,14 +6,11 @@
   grid-template-rows: 1fr;
   grid-template-areas: "hero";
   width: 100%;
-  min-height: 100svh;
-  min-height: 100dvh;
+  min-height: 100%;
+  height: 100%;
   padding: 24px 20px;
   box-sizing: border-box;
-  overflow: visible;
-  @supports not (min-height: 100dvh) {
-    min-height: 100vh;
-  }
+  overflow: hidden;
 
   &__text {
     grid-area: hero;
@@ -35,13 +32,12 @@
     }
   }
 
-  /* Логотип: чуть выше визуального центра; плеер в портале — transform на обёртке ок */
+  /* F-логотип: строго по центру доступной hero-области. */
   &__logo {
     grid-area: hero;
     place-self: center;
-    transform: translateY(-3vh);
     z-index: 1;
-    width: min(100%, clamp(200px, 68vmin, 650px));
+    width: min(100%, clamp(190px, 58vmin, 560px));
     max-width: calc(100vw - 40px);
     display: flex;
     align-items: center;
@@ -58,24 +54,22 @@
   }
 }
 
-/* Планшет / узкий десктоп: явно ниже центра и шире слот — заметнее, чем ±несколько vh */
+/* На брейкпоинтах меняем только размер, без вертикального сдвига. */
 @media (max-width: 1024px) and (min-width: 769px) {
   .main__logo {
-    transform: translateY(11vh);
-    width: min(100%, clamp(220px, 88vmin, 650px));
+    width: min(100%, clamp(200px, 68vmin, 520px));
   }
 }
 
 /* Крупный телефон / узкий планшет ≤768px (не узкий мобильный ≤420px) */
 @media (max-width: 768px) and (min-width: 421px) {
   .main__logo {
-    transform: translateY(12vh);
-    width: min(100%, clamp(200px, 86vmin, 650px));
+    width: min(100%, clamp(190px, 64vmin, 500px));
   }
 }
 
 @media (max-width: 420px) {
   .main__logo {
-    width: min(100%, clamp(200px, 80vmin, 650px));
+    width: min(100%, clamp(180px, 70vmin, 440px));
   }
 }

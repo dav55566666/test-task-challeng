@@ -14,6 +14,9 @@ export const Logo = () => {
   const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const previewVideoRef = useRef<HTMLVideoElement>(null);
+  const modalPlyrRef = useRef<{
+    plyr?: { muted: boolean; volume: number; play: () => Promise<unknown> | void };
+  } | null>(null);
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
@@ -27,8 +30,27 @@ export const Logo = () => {
   useEffect(() => {
     if (!isPlayerOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const html = document.documentElement;
+    const body = document.body;
+
+    const previousHtmlOverflow = html.style.overflow;
+    const previousHtmlOverscrollBehavior = html.style.overscrollBehavior;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPosition = body.style.position;
+    const previousBodyTop = body.style.top;
+    const previousBodyLeft = body.style.left;
+    const previousBodyRight = body.style.right;
+    const previousBodyWidth = body.style.width;
+
+    html.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsPlayerOpen(false);
@@ -36,7 +58,15 @@ export const Logo = () => {
 
     window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      html.style.overflow = previousHtmlOverflow;
+      html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
+      body.style.overflow = previousBodyOverflow;
+      body.style.position = previousBodyPosition;
+      body.style.top = previousBodyTop;
+      body.style.left = previousBodyLeft;
+      body.style.right = previousBodyRight;
+      body.style.width = previousBodyWidth;
+      window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [isPlayerOpen]);
@@ -62,6 +92,19 @@ export const Logo = () => {
     const v = previewVideoRef.current;
     if (!v) return;
     void v.play().catch(() => {});
+  }, [isPlayerOpen]);
+
+  /** Открытие модалки по клику — пытаемся сразу запустить ролик со звуком из user-gesture. */
+  useEffect(() => {
+    if (!isPlayerOpen) return;
+    const timer = window.setTimeout(() => {
+      const player = modalPlyrRef.current?.plyr;
+      if (!player) return;
+      player.muted = false;
+      player.volume = 1;
+      void Promise.resolve(player.play()).catch(() => {});
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [isPlayerOpen]);
 
   return (
@@ -228,6 +271,15 @@ export const Logo = () => {
             onClick={() => setIsPlayerOpen(true)}
             aria-label="Открыть видео логотипа"
           >
+            <span className="logo-animation__cta" aria-hidden>
+              ↗
+            </span>
+            <img
+              className="logo-animation__video-poster"
+              src={IMAGES.logoVideoPoster}
+              alt=""
+              aria-hidden
+            />
             <video
               ref={previewVideoRef}
               src={IMAGES.logoVideo}
@@ -266,9 +318,11 @@ export const Logo = () => {
                 </button>
                 <div className="logo-video-modal__player-wrap w-full max-h-[80vh]">
                   <Plyr
+                    ref={modalPlyrRef}
                     source={playerSource}
                     options={{
                       autoplay: true,
+                      muted: false,
                       controls: [
                         "play-large",
                         "play",

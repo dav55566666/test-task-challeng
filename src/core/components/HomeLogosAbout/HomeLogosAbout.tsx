@@ -38,9 +38,13 @@ export const HomeLogosAbout = () => {
     <section className="home-logos-about" aria-labelledby="home-logos-about-heading">
       <div className="home-logos-about__about">
         <div className="home-logos-about__title">
-          <h2 id="home-logos-about-heading">
-            Мы
-          </h2>
+          <GradientTitle
+            id="home-logos-about-heading"
+            value="Мы"
+            currentSize={36}
+            mobileSize={30}
+            tag={TextTag.H2}
+          />
           <Link to="/about" className="home-logos-about__more">
             Команда
             <img src={IMAGES.arrowRightTop} alt="" aria-hidden />

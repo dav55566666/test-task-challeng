@@ -48,9 +48,9 @@ export const ROW_LAYOUT = [
  * Меньший y — выше по дуге (ближе к линии скругления верха dock).
  */
 export const MOBILE_DOCK_ITEM_TRANSFORMS = [
-  { x: 13, y: 52, rotate: -54 },
-  { x: -7, y: 8, rotate: -32 },
-  { x: 0, y: -5, rotate: 0 },
-  { x: 7, y: 8, rotate: 32 },
-  { x: -13, y: 52, rotate: 54 },
+  { x: -3, y: 14, rotate: -24 },
+  { x: -1, y: 8, rotate: -12 },
+  { x: 0, y: 5, rotate: 0 },
+  { x: 1, y: 8, rotate: 12 },
+  { x: 3, y: 14, rotate: 24 },
 ] as const;

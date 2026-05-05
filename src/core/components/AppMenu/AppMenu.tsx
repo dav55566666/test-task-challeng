@@ -184,7 +184,6 @@ export const Sidebar = () => {
             requestAnimationFrame(() => {
               setCompactFab(true);
               compactFabRef.current = true;
-              setStripTargetBeforeClose(false);
             });
           });
         } else {
@@ -280,7 +279,6 @@ export const Sidebar = () => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         close();
-        setStripTargetBeforeClose(false);
       });
     });
   }, []);
@@ -289,6 +287,7 @@ export const Sidebar = () => {
     if (!showMainNav) {
       setStaggerEntrance(false);
       setDeferMenuActive(false);
+      setStripTargetBeforeClose(true);
       menuWasHiddenForTransitionRef.current = true;
       return;
     }
@@ -297,9 +296,11 @@ export const Sidebar = () => {
       setDeferMenuActive(true);
       const t = window.setTimeout(() => {
         setDeferMenuActive(false);
+        setStripTargetBeforeClose(false);
       }, MENU_ACTIVE_RETURN_MS);
       return () => window.clearTimeout(t);
     }
+    setStripTargetBeforeClose(false);
   }, [showMainNav]);
 
   useEffect(() => {

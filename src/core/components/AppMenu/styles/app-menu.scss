@@ -140,7 +140,7 @@
   }
 
   .app-menu__nav-shell--hidden .app-menu__arc-arrow-orbit {
-    animation: app-menu-highlight-out 0.26s cubic-bezier(0.52, 0.03, 0.77, 0.2) 0.08s both;
+    animation: app-menu-highlight-out 0.34s cubic-bezier(0.56, 0.03, 0.8, 0.22) 0s both;
   }
 
   .app-menu__arc-arrow-orbit {
@@ -282,14 +282,11 @@
   flex-direction: column;
   gap: 0.5rem;
   align-items: center;
-  opacity: 0;
-  transform: translateX(16px);
+  opacity: 1;
+  transform: none;
   pointer-events: none;
   visibility: hidden;
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s ease,
-    visibility 0.45s step-start;
+  transition: visibility 0s linear 0.55s;
 }
 
 @media (min-width: 1280px) {
@@ -297,24 +294,19 @@
     right: 1.5rem;
     bottom: auto;
     top: 50%;
-    transform: translateY(-50%) translateX(16px);
+    transform: translateY(-50%);
   }
 }
 
 .app-menu__fab-stack--visible {
-  opacity: 1;
   pointer-events: auto;
   visibility: visible;
-  transform: translateX(0);
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s ease,
-    visibility 0.45s step-end;
+  transition: visibility 0s linear 0s;
 }
 
 @media (min-width: 1280px) {
   .app-menu__fab-stack--visible {
-    transform: translateY(-50%) translateX(0);
+    transform: translateY(-50%);
   }
 }
 
@@ -351,24 +343,24 @@
 
 .app-menu__fab-stack .app-menu__fab-btn {
   opacity: 0;
-  transform: scale(0.78) translateY(-12px);
+  transform: scale(0.82) translateY(-14px);
   filter: blur(3px);
 }
 
 .app-menu__fab-stack--visible .app-menu__fab-btn {
-  animation: app-menu-fab-item-open 300ms cubic-bezier(0.2, 0.74, 0.24, 1) both;
+  animation: app-menu-fab-item-open 420ms cubic-bezier(0.22, 0.74, 0.2, 1) both;
 }
 
 .app-menu__fab-stack--visible .app-menu__fab-btn:nth-child(1) {
-  animation-delay: 0.06s;
+  animation-delay: 0.08s;
 }
 
 .app-menu__fab-stack--visible .app-menu__fab-btn:nth-child(2) {
-  animation-delay: 0.12s;
+  animation-delay: 0.2s;
 }
 
 .app-menu__fab-stack--visible .app-menu__fab-btn:nth-child(3) {
-  animation-delay: 0.18s;
+  animation-delay: 0.32s;
 }
 
 .app-menu__backdrop {
@@ -401,8 +393,8 @@
 @keyframes app-menu-fab-item-open {
   from {
     opacity: 0;
-    transform: scale(0.78) translateY(-12px);
-    filter: blur(3px);
+    transform: scale(0.82) translateY(-14px);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
@@ -429,15 +421,15 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 0 12px max(8px, env(safe-area-inset-bottom, 0px));
+  padding: 0 max(2px, env(safe-area-inset-left, 0px)) max(8px, env(safe-area-inset-bottom, 0px));
 }
 
 .app-menu__mobile-dock__icon--services {
-  transform: translateY(2px) rotate(-18deg);
+  transform: translateY(2px);
 }
 
 .app-menu__mobile-dock__icon--cases {
-  transform: translateY(2px) rotate(-11deg);
+  transform: translateY(2px);
 }
 
 .app-menu__mobile-dock__icon--home {
@@ -445,166 +437,89 @@
 }
 
 .app-menu__mobile-dock__icon--about {
-  transform: translateY(2px) rotate(11deg);
+  transform: translateY(2px);
 }
 
 .app-menu__mobile-dock__icon--contacts {
-  transform: translateY(2px) rotate(18deg);
+  transform: translateY(2px);
 }
 
 .app-menu__mobile-dock__inner {
   position: relative;
   width: 100%;
-  min-height: 176px;
-  max-width: 422px;
-  padding: 1rem 0.5rem 0.3rem;
-  border-radius: 200px 200px 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.58);
-  background:
-    radial-gradient(
-      ellipse 118% 92% at 50% 108%,
-      rgba(230, 238, 255, 0.92) 0%,
-      rgba(255, 255, 255, 0.52) 48%,
-      rgba(255, 255, 255, 0.38) 100%
-    );
-  backdrop-filter: blur(22px) saturate(1.12);
-  box-shadow:
-    0 -6px 36px rgba(88, 140, 245, 0.28),
-    0 -18px 56px rgba(120, 175, 255, 0.22),
-    0 -28px 72px rgba(98, 56, 209, 0.14),
-    0 -12px 48px rgba(98, 56, 209, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  min-height: 188px;
+  max-width: 390px;
+  padding: 1.08rem 0.5rem 0.34rem;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
   transition:
     transform 0.42s cubic-bezier(0.32, 0.72, 0, 1),
     opacity 0.35s ease,
     visibility 0.35s ease;
 }
 
+.app-menu__mobile-dock__glass-arc {
+  position: absolute;
+  z-index: 1;
+  width: 596px;
+  height: 310px;
+  left: -103px;
+  bottom: -97px;
+  border-radius: 2400px 2400px 0 0;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
 /* Подложка только для нижнего dock; в over-backdrop `::before` занят декоративной рамкой */
 .app-menu__mobile-dock:not(.app-menu__mobile-dock--over-backdrop)
-  .app-menu__mobile-dock__inner::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  bottom: 0;
-  width: 128%;
-  height: 78%;
-  transform: translateX(-50%);
-  border-radius: 50% 50% 0 0 / 72% 72% 0 0;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse 72% 64% at 50% 96%,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(186, 210, 255, 0.42) 28%,
-      rgba(120, 165, 255, 0.38) 52%,
-      transparent 72%
-    ),
-    radial-gradient(
-      ellipse 88% 70% at 48% 88%,
-      rgba(134, 195, 255, 0.45) 0%,
-      rgba(175, 155, 240, 0.28) 45%,
-      transparent 68%
-    );
-  filter: blur(10px);
-  opacity: 0.95;
+  .app-menu__mobile-dock__glass-arc::before {
+  content: none;
 }
 
 .app-menu__mobile-dock__glow {
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 18%;
-  width: 138%;
-  height: 96%;
+  bottom: 16%;
+  width: 144%;
+  height: 102%;
   transform: translateX(-50%);
   border-radius: 50%;
   pointer-events: none;
   isolation: isolate;
-  background:
-    radial-gradient(
-      ellipse 62% 54% at 50% 62%,
-      rgba(255, 255, 255, 0.42) 0%,
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse 68% 58% at 46% 66%,
-      rgba(175, 165, 235, 0.62) 0%,
-      transparent 62%
-    ),
-    radial-gradient(
-      ellipse 58% 52% at 59% 52%,
-      rgba(88, 145, 248, 0.62) 0%,
-      transparent 56%
-    ),
-    radial-gradient(
-      ellipse 64% 50% at 50% 74%,
-      rgba(134, 217, 250, 0.52) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse 58% 50% at 36% 56%,
-      rgba(190, 126, 255, 0.44) 0%,
-      transparent 59%
-    ),
-    radial-gradient(
-      ellipse 56% 48% at 68% 70%,
-      rgba(119, 232, 214, 0.34) 0%,
-      transparent 61%
-    );
-  filter: blur(22px);
-  animation: app-menu-mobile-glow 10.7s cubic-bezier(0.45, 0.08, 0.29, 0.98) infinite;
+  background: radial-gradient(
+    ellipse 62% 56% at 50% 64%,
+    rgba(255, 255, 255, 0.24) 0%,
+    transparent 72%
+  );
+  filter: blur(16px);
+  animation: none;
   will-change: transform, filter, opacity;
 
   &::before,
   &::after {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  &::before {
-    inset: -8% -6%;
-    background:
-      radial-gradient(circle at 24% 62%, rgba(255, 154, 219, 0.34) 0%, transparent 45%),
-      radial-gradient(circle at 72% 34%, rgba(123, 154, 255, 0.34) 0%, transparent 47%),
-      radial-gradient(circle at 54% 82%, rgba(120, 250, 230, 0.28) 0%, transparent 51%);
-    filter: blur(24px);
-    mix-blend-mode: screen;
-    opacity: 0.6;
-    animation: app-menu-mobile-glow-grain 7.9s ease-in-out infinite;
-  }
-
-  &::after {
-    inset: -5% -4%;
-    background:
-      radial-gradient(circle at 18% 30%, rgba(126, 235, 255, 0.3) 0%, transparent 42%),
-      radial-gradient(circle at 78% 66%, rgba(198, 135, 255, 0.3) 0%, transparent 46%),
-      radial-gradient(circle at 46% 44%, rgba(115, 128, 250, 0.26) 0%, transparent 52%);
-    filter: blur(18px);
-    opacity: 0.52;
-    animation: app-menu-mobile-glow-drift 13.2s linear infinite reverse;
+    content: none;
   }
 }
 
 .app-menu__mobile-dock__list {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 0.125rem;
+  gap: 0.2rem;
   list-style: none;
   margin: 0;
-  padding: 0.28rem 0.25rem 0;
+  padding: 0.64rem 0.2rem 0;
 }
 
 .app-menu__mobile-dock__item {
   flex: 1 1 0;
   min-width: 0;
-  max-width: 4.75rem;
+  max-width: 4.25rem;
   display: flex;
   justify-content: center;
 }
@@ -615,21 +530,22 @@
   align-items: center;
   justify-content: flex-start;
   gap: 0.1875rem;
-  width: 100%;
-  min-height: 46px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.45);
-  color: rgba(51, 51, 51, 0.45);
+  width: 68px;
+  height: 48px;
+  min-height: 48px;
+  padding: 5px 10px 6px;
+  border: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.48);
+  color: rgba(51, 51, 51, 0.32);
   font-family:
     "Vela Sans",
     ui-sans-serif,
     system-ui,
     sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  line-height: 1.1;
+  font-size: 0.64rem;
+  font-weight: 400;
+  line-height: 1.06;
   letter-spacing: 0.01em;
   cursor: pointer;
   transition:
@@ -637,6 +553,12 @@
     color 0.22s ease,
     border-color 0.22s ease,
     box-shadow 0.22s ease;
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    content: none;
+  }
 
   &:active {
     transform: scale(0.98);
@@ -649,17 +571,22 @@
 }
 
 .app-menu__mobile-dock__btn--active {
-  border-color: rgba(255, 255, 255, 0.55);
-  background: linear-gradient(145deg, #6b8cf0 0%, #5578e8 55%, #4a6ee3 100%);
+  border-color: rgba(196, 218, 255, 0.86);
+  background: linear-gradient(150deg, #5f84f1 0%, #4a78ea 52%, #4070e3 100%);
   color: #ffffff;
   box-shadow:
-    0 8px 28px rgba(86, 120, 232, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 10px 28px rgba(77, 117, 231, 0.5),
+    0 0 26px rgba(96, 150, 255, 0.45),
+    inset 0 1px 0 rgba(235, 246, 255, 0.5);
+
+  &::after {
+    content: none;
+  }
 }
 
 /* Неактивные пункты поверх тёмного backdrop (меню открыто из FAB) */
 .app-menu__mobile-dock__btn--on-dark {
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(51, 51, 51, 0.32);
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.38);
   box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
@@ -699,6 +626,10 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   pointer-events: auto;
+}
+
+.app-menu__mobile-dock--over-backdrop .app-menu__mobile-dock__glass-arc {
+  display: none;
 }
 
 .app-menu__mobile-dock--over-backdrop .app-menu__mobile-dock__inner::before,
@@ -814,18 +745,19 @@
 .app-menu__mobile-dock__label {
   text-align: center;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
   white-space: nowrap;
+  text-shadow: none;
 }
 
 .app-menu__mobile-dock__handle {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   width: 2.5rem;
   height: 0.25rem;
   border-radius: 999px;
-  background: rgba(51, 51, 51, 0.32);
+  background: rgba(77, 89, 124, 0.42);
   left: 50%;
   transform: translateX(-50%);
   bottom: 20px;
