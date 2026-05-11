@@ -1,8 +1,10 @@
-import { MainDirections, Partners } from "../../components"
+import { MainDirections, Partners } from "../../components";
 
 export const GeneralDirection = () => {
-    return (<>
-        <MainDirections />
-        <Partners />
-    </>)
-}
+  return (
+    <div className="general-direction">
+      <MainDirections />
+      <Partners />
+    </div>
+  );
+};

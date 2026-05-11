@@ -55,7 +55,7 @@ export const AboutUs = () => {
   return (
     <>
       <main
-        className="about-us px-4 pt-9 md:pt-20 pb-11 md:pb-16 relative"
+        className="about-us px-4 pt-[24px] pb-11 md:pb-16 relative"
         aria-labelledby="about-hero-heading"
       >
         <div className="about-us__headline mb-8 md:mb-16 max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-310">
@@ -135,40 +135,48 @@ export const AboutUs = () => {
       </main>
       {playerSource ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-5"
+          className="about-us__video-backdrop fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 px-4 py-6 sm:px-5 sm:py-12"
           onClick={() => setActiveVideo(null)}
           role="presentation"
         >
           <div
-            className="relative w-full max-w-5xl rounded-2xl bg-black p-4 md:p-6"
+            className="about-us__video-modal relative box-border w-full max-w-[min(92vw,640px)] rounded-2xl bg-black p-2 sm:p-3 md:p-4"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-label={activeVideoLabel || "Видео плеер"}
           >
-            <button
-              type="button"
-              onClick={() => setActiveVideo(null)}
-              className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-sm text-[#111111]"
-              aria-label="Закрыть плеер"
-            >
-              Close
-            </button>
-            <Plyr
-              source={playerSource}
-              options={{
-                autoplay: true,
-                controls: [
-                  "play-large",
-                  "play",
-                  "progress",
-                  "current-time",
-                  "mute",
-                  "volume",
-                  "fullscreen",
-                ],
-              }}
-            />
+            {/* Одна grid-ячейка = рамка видео; кнопка с padding внутри кадра, не у обводки модалки */}
+            <div className="about-us__video-modal-stack grid w-full overflow-hidden rounded-xl bg-black [&>*]:col-start-1 [&>*]:row-start-1">
+              <div className="about-us__video-player min-h-0 min-w-0 w-full">
+                <Plyr
+                  source={playerSource}
+                  options={{
+                    autoplay: true,
+                    ratio: "1:1",
+                    controls: [
+                      "play-large",
+                      "play",
+                      "progress",
+                      "current-time",
+                      "mute",
+                      "volume",
+                      "fullscreen",
+                    ],
+                  }}
+                />
+              </div>
+              <div className="pointer-events-none z-50 flex w-full justify-end self-start p-3 sm:p-4">
+                <button
+                  type="button"
+                  onClick={() => setActiveVideo(null)}
+                  className="pointer-events-auto rounded-full bg-white/90 px-3 py-1.5 text-sm text-[#111111] shadow-sm hover:bg-white transition-colors"
+                  aria-label="Закрыть плеер"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

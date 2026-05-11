@@ -56,16 +56,12 @@ function shouldUseCompactFab(): boolean {
   return window.scrollY >= thresholdPx;
 }
 
-/** Tailwind `xl` (1280px): уже планшеты в ландшафте остаются на FAB + нижней дуге. */
-const COMPACT_NAV_MAX_WIDTH_MEDIA = "(max-width: 1279px)";
-const COMPACT_NAV_TOUCH_MEDIA = "(pointer: coarse)";
+/** Tailwind `md` (768px): ниже — нижняя дуга + FAB; от 768 — готовое боковое меню как на десктопе. */
+const COMPACT_NAV_MAX_WIDTH_MEDIA = "(max-width: 767px)";
 
 function isCompactNavViewport(): boolean {
   if (typeof window === "undefined") return true;
-  return (
-    window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA).matches ||
-    window.matchMedia(COMPACT_NAV_TOUCH_MEDIA).matches
-  );
+  return window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA).matches;
 }
 
 export const Sidebar = () => {
@@ -133,22 +129,25 @@ export const Sidebar = () => {
   }, [clearHoverAfterLeaveMenuTimer]);
 
   useLayoutEffect(() => {
-    const mqWide = window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA);
-    const mqTouch = window.matchMedia(COMPACT_NAV_TOUCH_MEDIA);
-    const sync = () =>
-      setCompactNavViewport(mqWide.matches || mqTouch.matches);
+    const mq = window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA);
+    const sync = () => setCompactNavViewport(mq.matches);
     sync();
-    mqWide.addEventListener("change", sync);
-    mqTouch.addEventListener("change", sync);
-    return () => {
-      mqWide.removeEventListener("change", sync);
-      mqTouch.removeEventListener("change", sync);
-    };
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
+  /** Главная, узкий экран ≤1024: меню с дугой открыто по умолчанию (без нажатия FAB). */
+  useLayoutEffect(() => {
+    if (location.pathname !== "/") return;
+    if (typeof window.matchMedia !== "function") return;
+    if (!window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA).matches) return;
+    if (window.innerWidth > 1024) return;
+    setMenuExpandedFromFab(true);
+  }, [location.pathname]);
+
   /**
-   * Полное боковое меню только на широкой точной мыши (≥xl): главная до скролла.
-   * Планшеты, узкие окна и touch-primary — меню только по кнопке (FAB).
+   * Боковое меню с 768px (md) как на десктопе; ниже — нижняя дуга + FAB.
+   * На главной до скролла — полное меню; после порога скролла — FAB + раскрытие.
    * На остальных маршрутах — компактно независимо от ширины.
    */
   const isHomeRoute = location.pathname === "/";
@@ -316,8 +315,26 @@ export const Sidebar = () => {
   }, [showMainNav]);
 
   const showFabStack = menuInCompactStyle && !menuExpandedFromFab;
-  /** Меню открыто из FAB поверх затемнённого backdrop. */
-  const menuOverDarkBackdrop = menuInCompactStyle && menuExpandedFromFab;
+  /**
+   * Тёмный режим нижней дуги (мобильный FAB-шит): только узкий экран + после скролла на главной
+   * или не-главная (см. AppMenuMobileDock --over-backdrop).
+   */
+  const menuOverDarkBackdrop =
+    compactNavViewport &&
+    menuInCompactStyle &&
+    menuExpandedFromFab &&
+    (compactFab || !isHomeRoute);
+  /** Нижняя дуга — только при ширине <768; с планшета/десктопа всегда боковое меню. */
+  const showMobileDockSlot = compactNavViewport;
+  /** Стеклянная дуга справа: везде, кроме первого экрана главной (герой до скролла). */
+  const showDesktopArcGlassBg =
+    showMainNav && (!isHomeRoute || compactFab);
+  /** Закрытие по клику вне: мобильный шит или FAB-меню ≥768. */
+  const showFabDismissBackdrop =
+    menuOverDarkBackdrop ||
+    (menuInCompactStyle &&
+      menuExpandedFromFab &&
+      !compactNavViewport);
 
   const navigateToMenuItem = useCallback(
     (item: MenuLink) => {
@@ -340,7 +357,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      {menuInCompactStyle && menuExpandedFromFab ? (
+      {showFabDismissBackdrop ? (
         <button
           type="button"
           className="app-menu__backdrop app-menu__backdrop--fab-open pointer-events-auto"
@@ -353,7 +370,12 @@ export const Sidebar = () => {
         />
       ) : null}
 
-      <div className="app-menu__mobile-dock-slot pointer-events-none fixed inset-x-0 bottom-0 z-10 xl:hidden">
+      <div
+        className={
+          "app-menu__mobile-dock-slot pointer-events-none fixed inset-x-0 bottom-0 z-10 " +
+          (showMobileDockSlot ? "" : "hidden")
+        }
+      >
         <AppMenuMobileDock
           visible={showMainNav}
           targetId={targetId}
@@ -398,7 +420,7 @@ export const Sidebar = () => {
         </button>
       </div>
 
-      <aside className="app-menu__desktop-aside-slot pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center pr-6 xl:flex">
+      <aside className="app-menu__desktop-aside-slot pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center pr-6 md:flex">
       <div
         ref={shellRef}
         className={
@@ -412,7 +434,7 @@ export const Sidebar = () => {
         <div
           className={
             "app-menu__desktop-arc-bg pointer-events-none absolute top-1/2 -translate-y-1/2 " +
-            (menuOverDarkBackdrop ? "app-menu__desktop-arc-bg--visible" : "")
+            (showDesktopArcGlassBg ? "app-menu__desktop-arc-bg--visible" : "")
           }
           aria-hidden
         />

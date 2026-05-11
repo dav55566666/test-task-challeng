@@ -191,6 +191,11 @@
   }
 }
 
+/* /directions — отступ от хедера; на главной у `MainDirections` прежний верхний padding. */
+.general-direction .main-directions {
+  padding-top: 24px;
+}
+
 @keyframes main-directions-glow-drift {
   0% {
     transform: translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg);

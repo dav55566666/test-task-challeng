@@ -45,12 +45,21 @@ export const ROW_LAYOUT = [
 /**
  * Мобильный док: позиции пунктов (Услуги → Контакты).
  * Эталон под вьюпорт ~424–464px в DevTools; порядок: translate(x, y) затем rotate, origin center bottom.
- * Меньший y — выше по дуге (ближе к линии скругления верха dock).
+ * Меньший y — выше по дуге. Крайние ниже (глубже дуга), как в макете.
  */
 export const MOBILE_DOCK_ITEM_TRANSFORMS = [
-  { x: -3, y: 14, rotate: -24 },
-  { x: -1, y: 8, rotate: -12 },
-  { x: 0, y: 5, rotate: 0 },
-  { x: 1, y: 8, rotate: 12 },
-  { x: 3, y: 14, rotate: 24 },
+  { x: -4, y: 26, rotate: -26 },
+  { x: -2, y: 10, rotate: -13 },
+  { x: 0, y: 2, rotate: 0 },
+  { x: 2, y: 10, rotate: 13 },
+  { x: 4, y: 26, rotate: 26 },
 ] as const;
+
+/** Подстройка Y якоря стрелки на дуге (мобильный нижний dock). */
+export const MOBILE_ORBIT_Y_BIAS_PX_BY_ID = {
+  services: 10,
+  cases: 6,
+  home: 2,
+  about: 6,
+  contacts: 10,
+} as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;

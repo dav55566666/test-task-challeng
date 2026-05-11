@@ -1,3 +1,9 @@
+@property --tabs-indicator-shine {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 .tabs__indicator {
   background-image: linear-gradient(
     90deg,
@@ -8,21 +14,87 @@
   );
   background-size: 220% 100%;
   background-position: 0% 50%;
-  animation: tabs-indicator-gradient-shift 2.8s linear infinite;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: background-position;
+  animation: tabs-indicator-gradient-shift-legacy 2.8s linear infinite;
+}
+
+@supports (color: rgb(from red r g b)) {
+  .tabs__indicator {
+    --tabs-indicator-shine: 0%;
+    background-position: var(--tabs-indicator-shine) 50%;
+    animation-name: tabs-indicator-gradient-shift;
+  }
+}
+
+@keyframes tabs-indicator-gradient-shift-legacy {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 220% 50%;
+  }
 }
 
 @keyframes tabs-indicator-gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 220% 50%;
+  to {
+    --tabs-indicator-shine: 220%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .tabs__indicator {
     animation: none;
+    animation-name: none;
+    --tabs-indicator-shine: 50%;
     background-position: 50% 50%;
+    will-change: auto;
+  }
+}
+
+/* Mobile: row change — reveal in place (no diagonal “flight”), edge by direction */
+@media (max-width: 767px) {
+  .tabs__indicator--mobile-row-reveal {
+    transition: none !important;
+  }
+
+  .tabs__indicator--reveal-from-bottom {
+    animation: tabs-indicator-mobile-reveal-from-bottom 0.4s
+      cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .tabs__indicator--reveal-from-top {
+    animation: tabs-indicator-mobile-reveal-from-top 0.4s
+      cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@keyframes tabs-indicator-mobile-reveal-from-bottom {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes tabs-indicator-mobile-reveal-from-top {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs__indicator--reveal-from-bottom,
+  .tabs__indicator--reveal-from-top {
+    animation: none;
+    clip-path: inset(0 0 0 0);
   }
 }

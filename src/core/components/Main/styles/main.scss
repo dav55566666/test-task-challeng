@@ -8,7 +8,7 @@
   width: 100%;
   min-height: 100%;
   height: 100%;
-  padding: 24px 20px;
+  padding: 24px 20px 80px;
   box-sizing: border-box;
   overflow: hidden;
 
@@ -68,8 +68,36 @@
   }
 }
 
-@media (max-width: 420px) {
+/* Компактная навигация (как на макете Figma для телефона): поля и масштаб героя */
+@media (max-width: 1279px) {
+  .main {
+    padding: 18px max(16px, env(safe-area-inset-right, 0px))
+      max(52px, calc(12px + env(safe-area-inset-bottom, 0px)))
+      max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .main__text {
+    gap: 12px;
+    max-width: min(100%, 22.5rem);
+
+    p {
+      font-size: 15px;
+      line-height: 118%;
+      letter-spacing: 0.02em;
+    }
+  }
+
   .main__logo {
-    width: min(100%, clamp(180px, 70vmin, 440px));
+    width: min(100%, clamp(196px, 78vmin, 420px));
+  }
+}
+
+@media (max-width: 420px) {
+  .main {
+    padding-top: 16px;
+  }
+
+  .main__logo {
+    width: min(100%, clamp(188px, 80vmin, 400px));
   }
 }

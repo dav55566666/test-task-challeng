@@ -1,6 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./tabs.scss";
 
+const MD_MIN_PX = 768;
+const MOBILE_ROW_JUMP_MIN_PX = 6;
+
 export type TabItem = {
   label: string;
   value: string;
@@ -14,6 +17,20 @@ export type TabsProps = {
   "aria-label"?: string;
 };
 
+function useIsMobileViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MD_MIN_PX - 1}px)`);
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return isMobile;
+}
+
 export function Tabs({
   items,
   activeValue,
@@ -23,6 +40,8 @@ export function Tabs({
 }: TabsProps) {
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabsRootRef = useRef<HTMLDivElement>(null);
+  const prevIndicatorYRef = useRef<number | null>(null);
+  const revealClearTimerRef = useRef<number | null>(null);
   const [hoveredValue, setHoveredValue] = useState<string | null>(null);
   const [resizeTick, setResizeTick] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({
@@ -31,6 +50,10 @@ export function Tabs({
     width: 0,
     visible: false,
   });
+  const [mobileReveal, setMobileReveal] = useState<
+    null | "from-bottom" | "from-top"
+  >(null);
+  const isMobile = useIsMobileViewport();
 
   const targetValue = hoveredValue ?? activeValue;
 
@@ -38,6 +61,14 @@ export function Tabs({
     const onResize = () => setResizeTick((n) => n + 1);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (revealClearTimerRef.current != null) {
+        window.clearTimeout(revealClearTimerRef.current);
+      }
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -50,6 +81,7 @@ export function Tabs({
         setIndicatorStyle((prev) =>
           prev.visible ? { ...prev, visible: false } : prev
         );
+        setMobileReveal(null);
         return;
       }
       const tabRect = targetEl.getBoundingClientRect();
@@ -57,16 +89,47 @@ export function Tabs({
       const x = tabRect.left - rootRect.left + root.scrollLeft;
       const y =
         tabRect.bottom - rootRect.top + root.scrollTop - INDICATOR_HEIGHT_PX;
-      setIndicatorStyle({
+      const next = {
         x,
         y,
         width: tabRect.width,
-        visible: true,
-      });
+        visible: true as const,
+      };
+
+      const prefersReduced =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const prevY = prevIndicatorYRef.current;
+      const rowJump =
+        isMobile &&
+        !prefersReduced &&
+        prevY != null &&
+        Math.abs(y - prevY) >= MOBILE_ROW_JUMP_MIN_PX;
+
+      prevIndicatorYRef.current = y;
+
+      if (revealClearTimerRef.current != null) {
+        window.clearTimeout(revealClearTimerRef.current);
+        revealClearTimerRef.current = null;
+      }
+
+      if (rowJump) {
+        const down = y > prevY;
+        setIndicatorStyle(next);
+        setMobileReveal(down ? "from-bottom" : "from-top");
+        revealClearTimerRef.current = window.setTimeout(() => {
+          setMobileReveal(null);
+          revealClearTimerRef.current = null;
+        }, 420);
+      } else {
+        setMobileReveal(null);
+        setIndicatorStyle(next);
+      }
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [items, resizeTick, targetValue]);
+  }, [isMobile, items, resizeTick, targetValue]);
 
   return (
     <div
@@ -111,7 +174,15 @@ export function Tabs({
       <span
         className={
           "tabs__indicator pointer-events-none absolute left-0 top-0 h-0.5 rounded-full " +
-          "transition-[transform,width,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
+          (mobileReveal
+            ? "tabs__indicator--mobile-row-reveal "
+            : "transition-[transform,width,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ") +
+          (mobileReveal === "from-bottom"
+            ? "tabs__indicator--reveal-from-bottom "
+            : "") +
+          (mobileReveal === "from-top"
+            ? "tabs__indicator--reveal-from-top "
+            : "")
         }
         style={{
           transform: `translate(${indicatorStyle.x}px, ${indicatorStyle.y}px)`,

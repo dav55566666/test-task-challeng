@@ -1,6 +1,6 @@
 /**
  * Синхронно с `styles/app-menu.scss` (app-menu-nav-shell--stagger-open, app-menu-gradient-reveal,
- * закрытие desktop (≥1280px): пункты + дуга/highlight → glass → fade shell — см. `.app-menu__nav-shell--hidden`).
+ * закрытие desktop (≥768px): ступень пунктов (100ms шаг, как при открытии) → дуга/highlight → glass → fade shell — см. `.app-menu__nav-shell--hidden`).
  * Меняй селекторы и @keyframes в паре с этими числами.
  */
 export const MENU_GRADIENT_REVEAL_DELAY_MS = 1200;

@@ -1,3 +1,14 @@
+/*
+ * iOS/WebKit: keyframes на background-position + background-clip:text часто
+ * дают «ступеньки». Зарегистрированное свойство интерполируется как число.
+ * Ниже — fallback на прямую анимацию position для старых движков.
+ */
+@property --gradient-text-shine {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 .gradient-text {
   font-size: var(--gradient-title-mobile-size, inherit);
   font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
@@ -26,8 +37,28 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: background-position;
   /* Slow, constant drift — no back-and-forth, no jarring end-of-frame jump */
-  animation: gradient-text-drift 2.64s linear infinite;
+  animation: gradient-text-drift-legacy 2.64s linear infinite;
+}
+
+@supports (color: rgb(from red r g b)) {
+  .gradient-text {
+    --gradient-text-shine: 0%;
+    background-position: var(--gradient-text-shine) 50%;
+    animation-name: gradient-text-drift;
+  }
+}
+
+@media (max-width: 639px) {
+  .gradient-text {
+    line-height: 112%;
+    letter-spacing: -0.022em;
+  }
 }
 
 @media (min-width: 640px) {
@@ -36,18 +67,27 @@
   }
 }
 
-@keyframes gradient-text-drift {
-  0% {
+@keyframes gradient-text-drift-legacy {
+  from {
     background-position: 0% 50%;
   }
-  100% {
+
+  to {
     background-position: 100% 50%;
+  }
+}
+
+@keyframes gradient-text-drift {
+  to {
+    --gradient-text-shine: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .gradient-text {
     animation: none;
+    animation-name: none;
+    --gradient-text-shine: 0%;
     background-position: 0% 50%;
     background-size: 100% 100%;
     background-image: linear-gradient(
@@ -56,5 +96,6 @@
       #718df1 49.58%,
       #86d9fa 100%
     );
+    will-change: auto;
   }
 }

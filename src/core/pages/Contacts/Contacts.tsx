@@ -12,7 +12,7 @@ export const Contacts = () => {
   return (
     <>
       <main
-        className="contacts w-full min-w-0 max-w-full overflow-x-clip px-4 pt-3 pb-10 md:pb-32 mt-6 md:mt-23"
+        className="contacts w-full min-w-0 max-w-full overflow-x-clip px-4 pt-[24px] pb-10 md:pb-32"
         aria-labelledby="contacts-heading"
       >
         <ProjectSplitLayout
