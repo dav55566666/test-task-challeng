@@ -58,7 +58,7 @@ export const AboutUs = () => {
         className="about-us px-4 pt-[24px] pb-11 md:pb-16 relative"
         aria-labelledby="about-hero-heading"
       >
-        <div className="about-us__headline mb-8 md:mb-16 max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-310">
+        <div className="about-us__headline mb-[20px] max-w-xs sm:max-w-400 md:max-w-xl lg:max-w-2xl xl:max-w-310">
           <GradientTitle
             value={ABOUT_HERO_HEADLINE}
             currentSize={36}

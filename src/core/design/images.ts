@@ -4,14 +4,15 @@ import arrowRight from '../../assets/arrow-right.svg';
 import arrowUp from '../../assets/arrow-up.svg';
 import logoMask from '../../assets/logo-mask.png';
 import logoMaskGradient from '../../assets/logo-mask-gradient.png';
-import project1 from '../../assets/project1.png';
-import project2 from '../../assets/project2.png';
-import project3 from '../../assets/project3.png';
-import project1_1 from '../../assets/project1_1.png';
-import project1_2 from '../../assets/project1_2.png';
-import project1_3 from '../../assets/project1_3.png';
-import project1_4 from '../../assets/project1_4.png';
-import project1_5 from '../../assets/project1_5.png';
+/** WebP: `npm run assets:webp` (max 1680px). */
+import project1 from '../../assets/project1.webp';
+import project2 from '../../assets/project2.webp';
+import project3 from '../../assets/project3.webp';
+import project1_1 from '../../assets/project1_1.webp';
+import project1_2 from '../../assets/project1_2.webp';
+import project1_3 from '../../assets/project1_3.webp';
+import project1_4 from '../../assets/project1_4.webp';
+import project1_5 from '../../assets/project1_5.webp';
 import logoBgVideo from '../../assets/logo-bg-video.mp4';
 import logoVideoPoster from '../../assets/logo-video-poster.png';
 

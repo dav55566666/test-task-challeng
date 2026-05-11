@@ -157,7 +157,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
           <Link
             to={`/projects/${item.slug}`}
             className={
-              "block rounded-xl no-underline text-inherit outline-none " +
+              "block cursor-pointer rounded-xl no-underline text-inherit outline-none " +
               "focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 " +
               "md:rounded-[1.25rem]"
             }
