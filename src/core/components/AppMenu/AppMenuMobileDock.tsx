@@ -4,30 +4,17 @@ import {
   useRef,
   useState,
 } from "react";
+import { IMAGES } from "../../design";
 import { Icon } from "../../design/Icon";
+import { MENU_LINKS, MOBILE_DOCK_ARC, MOBILE_DOCK_ITEM_TRANSFORMS } from "./constants";
 import {
-  MENU_LINKS,
-  MOBILE_DOCK_ITEM_TRANSFORMS,
-  MOBILE_ORBIT_Y_BIAS_PX_BY_ID,
-} from "./constants";
-import { MenuArcArrowOrbit } from "./MenuArcArrowOrbit";
-import {
-  getArcCircle,
-  orbitRotationDegFromArcParam,
-  thetaFromViewportY,
+  mobileDockArcPointAndTangentAtViewBoxX,
   unwrapOrbitRotationDeg,
 } from "./menuArcArrow";
 
 const ARC_ICON_PX = 18;
 
 type MenuLink = (typeof MENU_LINKS)[number];
-
-type OrbitLayout = {
-  leftPx: number;
-  topPx: number;
-  diameterPx: number;
-  rotationDeg: number;
-};
 
 type AppMenuMobileDockProps = {
   visible: boolean;
@@ -47,15 +34,14 @@ export const AppMenuMobileDock = ({
   onDimmedBackdrop = false,
 }: AppMenuMobileDockProps) => {
   const shellRef = useRef<HTMLDivElement>(null);
-  const arcGeomRef = useRef<HTMLDivElement>(null);
   const itemBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const prevOrbitRotationDisplayRef = useRef<number | null>(null);
+  const prevArcArrowRotationRef = useRef<number | null>(null);
   const [resizeTick, setResizeTick] = useState(0);
-  const [orbitLayout, setOrbitLayout] = useState<OrbitLayout | null>(null);
-  const [pillStyle, setPillStyle] = useState<{
-    left: string;
+  const [arcArrow, setArcArrow] = useState<{
+    leftPx: number;
+    rotationDeg: number;
     opacity: number;
-  }>({ left: "50%", opacity: 0 });
+  }>({ leftPx: 0, rotationDeg: 0, opacity: 0 });
 
   useEffect(() => {
     const onResize = () => setResizeTick((n) => n + 1);
@@ -65,63 +51,37 @@ export const AppMenuMobileDock = ({
 
   useLayoutEffect(() => {
     if (!visible || onDimmedBackdrop) {
-      prevOrbitRotationDisplayRef.current = null;
-      setOrbitLayout(null);
-      setPillStyle({ left: "50%", opacity: 0 });
+      prevArcArrowRotationRef.current = null;
+      setArcArrow({ leftPx: 0, rotationDeg: 0, opacity: 0 });
       return;
     }
 
     const frame = window.requestAnimationFrame(() => {
       const shell = shellRef.current;
-      const arc = arcGeomRef.current;
       const btn = itemBtnRefs.current[targetId];
-      if (!shell || !arc || !btn) {
-        setOrbitLayout(null);
-        return;
-      }
-
-      const ac = getArcCircle(arc.getBoundingClientRect());
-      if (!ac) {
-        setOrbitLayout(null);
+      if (!shell || !btn) {
+        setArcArrow({ leftPx: 0, rotationDeg: 0, opacity: 0 });
         return;
       }
 
       const sr = shell.getBoundingClientRect();
-      const anchor =
-        btn.querySelector<HTMLElement>("[data-app-menu-mobile-arrow-anchor]");
-      const anchorRect = anchor?.getBoundingClientRect();
-      const biasPx =
-        MOBILE_ORBIT_Y_BIAS_PX_BY_ID[
-          targetId as keyof typeof MOBILE_ORBIT_Y_BIAS_PX_BY_ID
-        ] ?? 0;
-      let t: number;
-      if (anchorRect) {
-        const ay = anchorRect.top + anchorRect.height / 2 + biasPx;
-        t = thetaFromViewportY(ay, ac);
-      } else {
-        const br = btn.getBoundingClientRect();
-        const yMid = br.top + br.height / 2 + biasPx;
-        t = thetaFromViewportY(yMid, ac);
-      }
-      const canonical = orbitRotationDegFromArcParam(t);
-      const prev = prevOrbitRotationDisplayRef.current;
-      const rotationDeg =
-        prev === null
-          ? canonical
-          : unwrapOrbitRotationDeg(prev, canonical);
-      prevOrbitRotationDisplayRef.current = rotationDeg;
-
-      setOrbitLayout({
-        leftPx: ac.cx - ac.R - sr.left,
-        topPx: ac.cy - ac.R - sr.top,
-        diameterPx: 2 * ac.R,
-        rotationDeg,
-      });
-
       const br = btn.getBoundingClientRect();
-      const cx = br.left + br.width / 2 - sr.left;
-      setPillStyle({
-        left: `${cx}px`,
+
+      const btnCxVp = br.left + br.width / 2;
+      const leftPx = btnCxVp - sr.left;
+      const sw = Math.max(1, sr.width);
+      const xvb = (leftPx / sw) * MOBILE_DOCK_ARC.viewBoxW;
+      const { tangentDeg } = mobileDockArcPointAndTangentAtViewBoxX(xvb);
+
+      const canonical = tangentDeg;
+      const prev = prevArcArrowRotationRef.current;
+      const rotationDeg =
+        prev === null ? canonical : unwrapOrbitRotationDeg(prev, canonical);
+      prevArcArrowRotationRef.current = rotationDeg;
+
+      setArcArrow({
+        leftPx,
+        rotationDeg,
         opacity: 1,
       });
     });
@@ -143,13 +103,6 @@ export const AppMenuMobileDock = ({
       <div ref={shellRef} className="app-menu__mobile-dock__inner">
         <div className="app-menu__mobile-dock__glow" aria-hidden />
         <div className="app-menu__mobile-dock__glass-arc" aria-hidden />
-        {showArcDecor ? (
-          <div
-            ref={arcGeomRef}
-            className="app-menu__mobile-dock__arc-geom"
-            aria-hidden
-          />
-        ) : null}
         <ul className="app-menu__mobile-dock__list">
           {MENU_LINKS.map((item, index) => {
             const isActive = targetId === item.id;
@@ -197,49 +150,23 @@ export const AppMenuMobileDock = ({
                     />
                   </span>
                   <span className="app-menu__mobile-dock__label">{item.label}</span>
-                  <span
-                    data-app-menu-mobile-arrow-anchor=""
-                    className="pointer-events-none absolute left-1/2 bottom-0.5 h-px w-px -translate-x-1/2"
-                    aria-hidden
-                  />
                 </button>
               </li>
             );
           })}
         </ul>
         {showArcDecor ? (
-          <svg
-            className="app-menu__mobile-dock__arc-line"
-            viewBox="0 0 400 72"
-            preserveAspectRatio="none"
-            aria-hidden
-          >
-            <path
-              d="M 12 52 C 100 8, 300 8, 388 52"
-              fill="none"
-              stroke="rgba(120, 92, 196, 0.38)"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-            />
-          </svg>
-        ) : null}
-        {showArcDecor && orbitLayout ? (
-          <MenuArcArrowOrbit
-            leftPx={orbitLayout.leftPx}
-            topPx={orbitLayout.topPx}
-            diameterPx={orbitLayout.diameterPx}
-            rotationDeg={orbitLayout.rotationDeg}
-          />
-        ) : null}
-        {showArcDecor ? (
           <div
-            className="app-menu__mobile-dock__arc-pill"
+            className="app-menu__mobile-dock__arc-arrow"
             style={{
-              left: pillStyle.left,
-              opacity: pillStyle.opacity,
+              left: `${arcArrow.leftPx}px`,
+              opacity: arcArrow.opacity,
+              transform: `translateX(-50%) rotate(${arcArrow.rotationDeg}deg)`,
             }}
             aria-hidden
-          />
+          >
+            <img src={IMAGES.arrow} alt="" className="app-menu__mobile-dock__arc-arrow__img" />
+          </div>
         ) : null}
         {onDimmedBackdrop ? (
           <div className="app-menu__mobile-dock__handle" aria-hidden />

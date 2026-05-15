@@ -7,6 +7,14 @@
   color: transparent;
 }
 
+.about-us__headline {
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 2.375rem;
+  }
+}
+
 .about-us__headline .gradient-text {
   white-space: pre-line;
 }

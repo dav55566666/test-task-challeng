@@ -84,7 +84,9 @@ export const HomeWrapper = () => {
       />
       <Header />
       <AppMenu />
-      <Outlet />
+      <div className="flex min-h-0 w-full flex-1 flex-col">
+        <Outlet />
+      </div>
     </div>
   );
 };

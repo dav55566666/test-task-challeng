@@ -9,11 +9,10 @@
   align-items: center;
   min-height: calc(100svh - var(--site-header-sticky-height, 4.5rem));
   min-height: calc(100dvh - var(--site-header-sticky-height, 4.5rem));
-  height: calc(100dvh - var(--site-header-sticky-height, 4.5rem));
+  /* Без фиксированной height: иначе крупный логотип обрезается по нижнему краю hero. */
 
   @supports not (height: 100dvh) {
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
-    height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
 }
 

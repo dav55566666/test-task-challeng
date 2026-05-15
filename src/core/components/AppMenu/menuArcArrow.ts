@@ -1,8 +1,70 @@
+import { MOBILE_DOCK_ARC } from "./constants";
+
 export type ArcCircle = {
   cx: number;
   cy: number;
   R: number;
 };
+
+type BezierPt = { x: number; y: number };
+
+function cubicBezier(t: number, p0: BezierPt, p1: BezierPt, p2: BezierPt, p3: BezierPt): BezierPt {
+  const u = 1 - t;
+  return {
+    x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+    y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y,
+  };
+}
+
+function cubicBezierDeriv(
+  t: number,
+  p0: BezierPt,
+  p1: BezierPt,
+  p2: BezierPt,
+  p3: BezierPt,
+): BezierPt {
+  const u = 1 - t;
+  return {
+    x: 3 * u * u * (p1.x - p0.x) + 6 * u * t * (p2.x - p1.x) + 3 * t * t * (p3.x - p2.x),
+    y: 3 * u * u * (p1.y - p0.y) + 6 * u * t * (p2.y - p1.y) + 3 * t * t * (p3.y - p2.y),
+  };
+}
+
+/** t ∈ [0,1] такой, что X(t) ≈ xTarget (кривая монотонна по X у `MOBILE_DOCK_ARC`). */
+function bezierTAtX(
+  xTarget: number,
+  p0: BezierPt,
+  p1: BezierPt,
+  p2: BezierPt,
+  p3: BezierPt,
+): number {
+  let lo = 0;
+  let hi = 1;
+  for (let i = 0; i < 28; i++) {
+    const t = (lo + hi) / 2;
+    const pt = cubicBezier(t, p0, p1, p2, p3);
+    if (pt.x < xTarget) lo = t;
+    else hi = t;
+  }
+  return (lo + hi) / 2;
+}
+
+/**
+ * Точка на мобильной дуге и угол касательной (deg) в координатах viewBox SVG.
+ * `xViewBox` — по горизонтали 0…viewBoxW (как в path).
+ */
+export function mobileDockArcPointAndTangentAtViewBoxX(xViewBox: number): {
+  y: number;
+  tangentDeg: number;
+} {
+  const { p0, p1, p2, p3, viewBoxW } = MOBILE_DOCK_ARC;
+  const x = Math.min(viewBoxW, Math.max(0, xViewBox));
+  const t = bezierTAtX(x, p0, p1, p2, p3);
+  const pt = cubicBezier(t, p0, p1, p2, p3);
+  const d = cubicBezierDeriv(t, p0, p1, p2, p3);
+  const tangentDeg = (Math.atan2(d.y, d.x) * 180) / Math.PI;
+  return { y: pt.y, tangentDeg };
+}
 
 /** Левый «колпачок» `.app-menu__desktop-arc`: центр окружности и радиус дуги. */
 export function getArcCircle(arcRect: DOMRectReadOnly): ArcCircle | null {

@@ -10,9 +10,9 @@ const enterRtl =
 
 export const Contacts = () => {
   return (
-    <>
+    <div className="flex min-h-0 w-full flex-1 flex-col">
       <main
-        className="contacts w-full min-w-0 max-w-full overflow-x-clip px-4 pt-[24px] pb-10 md:pb-32"
+        className="contacts flex-1 w-full min-w-0 max-w-full overflow-x-clip px-4 pt-[24px] pb-10 md:pb-32"
         aria-labelledby="contacts-heading"
       >
         <ProjectSplitLayout
@@ -64,6 +64,6 @@ export const Contacts = () => {
         </ProjectSplitLayout>
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 };

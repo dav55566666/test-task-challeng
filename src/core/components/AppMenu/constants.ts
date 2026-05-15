@@ -43,23 +43,22 @@ export const ROW_LAYOUT = [
 ] as const;
 
 /**
- * Мобильный док: позиции пунктов (Услуги → Контакты).
- * Эталон под вьюпорт ~424–464px в DevTools; порядок: translate(x, y) затем rotate, origin center bottom.
- * Меньший y — выше по дуге. Крайние ниже (глубже дуга), как в макете.
+ * Мобильный док: дуга (Услуги → Контакты).
+ * Крайние пункты ниже по `y`, центральные три без изменений; rotate симметрично.
  */
 export const MOBILE_DOCK_ITEM_TRANSFORMS = [
-  { x: -4, y: 26, rotate: -26 },
-  { x: -2, y: 10, rotate: -13 },
-  { x: 0, y: 2, rotate: 0 },
-  { x: 2, y: 10, rotate: 13 },
-  { x: 4, y: 26, rotate: 26 },
+  { x: 0, y: 28, rotate: -24 },
+  { x: 0, y: 7, rotate: -12 },
+  { x: 0, y: 0, rotate: 0 },
+  { x: 0, y: 7, rotate: 12 },
+  { x: 0, y: 28, rotate: 24 },
 ] as const;
 
-/** Подстройка Y якоря стрелки на дуге (мобильный нижний dock). */
-export const MOBILE_ORBIT_Y_BIAS_PX_BY_ID = {
-  services: 10,
-  cases: 6,
-  home: 2,
-  about: 6,
-  contacts: 10,
-} as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;
+/** Виртуальная кубическая дуга (стрелка поворачивается по её касательной; без SVG на экране). */
+export const MOBILE_DOCK_ARC = {
+  viewBoxW: 400,
+  p0: { x: 0, y: 58 },
+  p1: { x: 100, y: 10 },
+  p2: { x: 300, y: 10 },
+  p3: { x: 400, y: 58 },
+} as const;

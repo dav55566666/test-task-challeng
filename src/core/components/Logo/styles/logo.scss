@@ -1,7 +1,7 @@
 .logo-animation {
   position: relative;
-  width: min(100%, 650px);
-  max-width: 650px;
+  width: min(100%, 780px);
+  max-width: 780px;
   aspect-ratio: 1 / 1;
   height: auto;
   overflow: hidden;
@@ -14,7 +14,7 @@
     pointer-events: auto;
   }
 
-  /* Слот 650×650 в потоке не меняется; масштаб только визуальный — центр на месте относительно соседних блоков */
+  /* Слот 780×780 в потоке не меняется; масштаб только визуальный — центр на месте относительно соседних блоков */
   .logo-animation__scale {
     position: absolute;
     inset: 0;
