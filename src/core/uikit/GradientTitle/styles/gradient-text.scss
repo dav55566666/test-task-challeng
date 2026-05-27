@@ -1,15 +1,25 @@
-@use "sass:math";
-
 /*
- * iOS/WebKit: keyframes на background-position + background-clip:text часто
- * дают «ступеньки»; @property + rgb(from …) на iOS тоже может прыгать 0→100%.
- * Desktop: зарегистрированное свойство. iOS: плотные keyframes + transform там, где можно.
+ * Переливание: широкий слой градиента + transform (GPU, в т.ч. iOS).
+ * Текст режет слой через mix-blend-mode: destination-in — без анимации
+ * background-position на background-clip:text (на iOS даёт «ступеньки»).
  */
-@property --gradient-text-shine {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
+$gradient-text-stops: linear-gradient(
+  90deg,
+  #c7c4f0 0%,
+  #718df1 16.66%,
+  #86d9fa 33.33%,
+  #c7c4f0 50%,
+  #718df1 66.66%,
+  #86d9fa 83.33%,
+  #c7c4f0 100%
+);
+
+$gradient-text-static: linear-gradient(
+  82.53deg,
+  #c7c4f0 2.9%,
+  #718df1 49.58%,
+  #86d9fa 100%
+);
 
 .gradient-text {
   font-size: var(--gradient-title-mobile-size, inherit);
@@ -18,50 +28,57 @@
   font-weight: 500;
   line-height: 110%;
   letter-spacing: -0.02em;
-  /*
-   * Two identical halves in one image (0–50% = 50–100%): with size 200% the
-   * 0% and 100% keyframe positions look the same, so the loop is seamless
-   * (right → left of the *pattern* = the shine moves to the right).
-   */
-  background-image: linear-gradient(
-    90deg,
-    #c7c4f0 0%,
-    #718df1 16.66%,
-    #86d9fa 33.33%,
-    #c7c4f0 50%,
-    #718df1 66.66%,
-    #86d9fa 83.33%,
-    #c7c4f0 100%
-  );
-  background-size: 200% 100%;
-  background-position: 0% 50%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0;
+}
+
+.gradient-text__inner {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  isolation: isolate;
+  white-space: inherit;
+}
+
+.gradient-text__beam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  pointer-events: none;
+  background-image: $gradient-text-stops;
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: background-position;
-  animation: gradient-text-drift-legacy 2.64s linear infinite;
+  will-change: transform;
+  animation: gradient-text-beam-slide 2.64s linear infinite;
 }
 
-/* Desktop / движки с плавной интерполяцией @property (не iOS Safari) */
-@supports (color: rgb(from red r g b)) {
-  @supports not (-webkit-touch-callout: none) {
-    .gradient-text {
-      --gradient-text-shine: 0%;
-      background-position: var(--gradient-text-shine) 50%;
-      animation-name: gradient-text-drift;
-    }
+.gradient-text__label {
+  position: relative;
+  z-index: 1;
+  color: #000;
+  mix-blend-mode: destination-in;
+  white-space: inherit;
+}
+
+/* Fallback без mix-blend: background-clip на тексте (десктоп ок, iOS — legacy) */
+@supports not (mix-blend-mode: destination-in) {
+  .gradient-text__beam {
+    display: none;
   }
-}
 
-/* iOS / touch WebKit: background-position по шагам (~50 кадров) */
-@supports (-webkit-touch-callout: none) {
-  .gradient-text {
-    animation-name: gradient-text-drift-webkit;
+  .gradient-text__label {
+    mix-blend-mode: normal;
+    color: transparent;
+    background-image: $gradient-text-stops;
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text-drift-fallback 2.64s linear infinite;
   }
 }
 
@@ -78,7 +95,17 @@
   }
 }
 
-@keyframes gradient-text-drift-legacy {
+@keyframes gradient-text-beam-slide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes gradient-text-drift-fallback {
   from {
     background-position: 0% 50%;
   }
@@ -88,38 +115,22 @@
   }
 }
 
-@keyframes gradient-text-drift {
-  from {
-    --gradient-text-shine: 0%;
-  }
-
-  to {
-    --gradient-text-shine: 100%;
-  }
-}
-
-@keyframes gradient-text-drift-webkit {
-  @for $step from 0 through 50 {
-    $pos: math.percentage(math.div($step, 50));
-    #{$pos} {
-      background-position: #{$pos} 50%;
-    }
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .gradient-text {
+  .gradient-text__beam {
     animation: none;
-    animation-name: none;
-    --gradient-text-shine: 0%;
-    background-position: 0% 50%;
+    transform: translate3d(0, 0, 0);
+    display: none;
+  }
+
+  .gradient-text__label {
+    mix-blend-mode: normal;
+    color: transparent;
+    background-image: $gradient-text-static;
     background-size: 100% 100%;
-    background-image: linear-gradient(
-      82.53deg,
-      #c7c4f0 2.9%,
-      #718df1 49.58%,
-      #86d9fa 100%
-    );
-    will-change: auto;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: none;
   }
 }
