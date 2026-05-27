@@ -4,6 +4,9 @@ import { GradientTitle, TextTag } from "../../uikit";
 import { Logo } from "../Logo";
 import './styles/main.scss';
 
+/** TEMP: false — лого скрыто для теста нагрузки на телефоне. Верни true после деплоя. */
+const SHOW_HERO_LOGO = false;
+
 /** Минимальный зазор между низом текстового блока и «верхом» зоны логотипа при укороченном экране. */
 const MAIN_LOGO_TEXT_GAP_PX = 16;
 
@@ -14,6 +17,8 @@ export const Main = () => {
     const [logoTopPx, setLogoTopPx] = useState<number | null>(null);
 
     useLayoutEffect(() => {
+        if (!SHOW_HERO_LOGO) return;
+
         const root = rootRef.current;
         const text = textRef.current;
         const logo = logoRef.current;
@@ -84,13 +89,15 @@ export const Main = () => {
                 <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={24} tag={TextTag.H1} />
                 <p>поддерживаемых ИИ-системой операционных процессов</p>
             </div>
-            <div
-                className={"main__logo" + logoModifier}
-                ref={logoRef}
-                style={logoStyle}
-            >
-                <Logo />
-            </div>
+            {SHOW_HERO_LOGO ? (
+                <div
+                    className={"main__logo" + logoModifier}
+                    ref={logoRef}
+                    style={logoStyle}
+                >
+                    <Logo />
+                </div>
+            ) : null}
         </section>
     );
 };
