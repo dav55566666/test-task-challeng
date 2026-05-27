@@ -1,85 +1,37 @@
-@property --tabs-indicator-shine {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
+.tabs__indicator-host {
+  width: 1px;
+  transform-origin: left center;
+  will-change: transform, opacity;
 }
 
 .tabs__indicator {
   position: relative;
   overflow: hidden;
-  background-image: linear-gradient(
-    90deg,
-    #c5b4e3 0%,
-    #9fbce6 34%,
-    #82c9e7 66%,
-    #c5b4e3 100%
-  );
-  background-size: 220% 100%;
-  background-position: 0% 50%;
+  background: transparent;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
-  will-change: background-position;
-  animation: tabs-indicator-gradient-shift-legacy 2.8s linear infinite;
-}
+  will-change: transform;
 
-@supports (color: rgb(from red r g b)) {
-  @supports not (-webkit-touch-callout: none) {
-    .tabs__indicator {
-      --tabs-indicator-shine: 0%;
-      background-position: var(--tabs-indicator-shine) 50%;
-      animation-name: tabs-indicator-gradient-shift;
-    }
-  }
-}
-
-/* iOS: сдвиг слоя через transform (композитор), без анимации background-position */
-@supports (-webkit-touch-callout: none) {
-  .tabs__indicator {
-    background-image: none;
-    animation: none;
-    will-change: auto;
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 220%;
-      height: 100%;
-      background-image: linear-gradient(
-        90deg,
-        #c5b4e3 0%,
-        #9fbce6 34%,
-        #82c9e7 66%,
-        #c5b4e3 100%
-      );
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      transform: translate3d(0, 0, 0);
-      -webkit-transform: translate3d(0, 0, 0);
-      will-change: transform;
-      animation: tabs-indicator-gradient-gpu-drift 2.8s linear infinite;
-    }
-  }
-}
-
-@keyframes tabs-indicator-gradient-shift-legacy {
-  from {
-    background-position: 0% 50%;
-  }
-
-  to {
-    background-position: 220% 50%;
-  }
-}
-
-@keyframes tabs-indicator-gradient-shift {
-  from {
-    --tabs-indicator-shine: 0%;
-  }
-
-  to {
-    --tabs-indicator-shine: 220%;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 220%;
+    height: 100%;
+    background-image: linear-gradient(
+      90deg,
+      #c5b4e3 0%,
+      #9fbce6 34%,
+      #82c9e7 66%,
+      #c5b4e3 100%
+    );
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
+    animation: tabs-indicator-gradient-gpu-drift 2.8s linear infinite;
   }
 }
 
@@ -89,81 +41,64 @@
   }
 
   to {
-  /* один период паттерна при ширине слоя 220% */
     transform: translate3d(-54.5455%, 0, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tabs__indicator {
+  .tabs__indicator::after {
     animation: none;
-    animation-name: none;
-    --tabs-indicator-shine: 50%;
-    background-image: linear-gradient(
-      90deg,
-      #c5b4e3 0%,
-      #9fbce6 34%,
-      #82c9e7 66%,
-      #c5b4e3 100%
-    );
-    background-position: 50% 50%;
-    will-change: auto;
-
-    &::after {
-      animation: none;
-      display: none;
-    }
+    transform: translate3d(-27.27275%, 0, 0);
   }
 }
 
-/* Mobile: row change — reveal in place (no diagonal “flight”), edge by direction */
 @media (max-width: 767px) {
-  .tabs__indicator--mobile-row-reveal {
+  .tabs__indicator-host--mobile-row-reveal {
     transition: none !important;
   }
 
-  .tabs__indicator--reveal-from-bottom {
+  .tabs__indicator-reveal--from-bottom {
+    transform-origin: bottom center;
     animation: tabs-indicator-mobile-reveal-from-bottom 0.4s
       cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  .tabs__indicator--reveal-from-top {
+  .tabs__indicator-reveal--from-top {
+    transform-origin: top center;
     animation: tabs-indicator-mobile-reveal-from-top 0.4s
       cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
-  @supports (-webkit-touch-callout: none) {
-    .tabs__indicator--reveal-from-bottom::after,
-    .tabs__indicator--reveal-from-top::after {
-      animation: none;
-    }
+  .tabs__indicator-reveal--from-bottom .tabs__indicator::after,
+  .tabs__indicator-reveal--from-top .tabs__indicator::after {
+    animation: none;
   }
 }
 
 @keyframes tabs-indicator-mobile-reveal-from-bottom {
   from {
-    clip-path: inset(100% 0 0 0);
+    transform: scaleY(0);
   }
 
   to {
-    clip-path: inset(0 0 0 0);
+    transform: scaleY(1);
   }
 }
 
 @keyframes tabs-indicator-mobile-reveal-from-top {
   from {
-    clip-path: inset(0 0 100% 0);
+    transform: scaleY(0);
   }
 
   to {
-    clip-path: inset(0 0 0 0);
+    transform: scaleY(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tabs__indicator--reveal-from-bottom,
-  .tabs__indicator--reveal-from-top {
+  .tabs__indicator-reveal--from-bottom,
+  .tabs__indicator-reveal--from-top {
     animation: none;
-    clip-path: inset(0 0 0 0);
+    transform: scaleY(1);
   }
 }

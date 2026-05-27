@@ -1,26 +1,32 @@
 /*
- * iOS/WebKit: keyframes на background-position + background-clip:text не интерполируются.
- * На touch-WebKit движение — через rAF в GradientTitle (класс gradient-text--js-drift).
- * Desktop: @property или legacy keyframes, те же 2.64s linear, 0→100%.
+ * Переливание: движущийся градиент (transform) + текст-маска (mix-blend-mode).
+ * Без background-position / @property / rAF — один путь на всех платформах.
  */
-@property --gradient-text-shine {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-
 .gradient-text {
+  position: relative;
+  isolation: isolate;
+  display: block;
   font-size: var(--gradient-title-mobile-size, inherit);
   font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
   font-style: normal;
   font-weight: 500;
   line-height: 110%;
   letter-spacing: -0.02em;
-  /*
-   * Two identical halves in one image (0–50% = 50–100%): with size 200% the
-   * 0% and 100% keyframe positions look the same, so the loop is seamless
-   * (right → left of the *pattern* = the shine moves to the right).
-   */
+}
+
+.gradient-text__bed {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gradient-text__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
   background-image: linear-gradient(
     90deg,
     #c7c4f0 0%,
@@ -31,37 +37,41 @@
     #86d9fa 83.33%,
     #c7c4f0 100%
   );
-  background-size: 200% 100%;
-  background-position: 0% 50%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: background-position;
-  animation: gradient-text-drift-legacy 2.64s linear infinite;
+  will-change: transform;
+  animation: gradient-text-gpu-drift 2.64s linear infinite;
 }
 
-@supports (color: rgb(from red r g b)) {
-  @supports not (-webkit-touch-callout: none) {
-    .gradient-text {
-      --gradient-text-shine: 0%;
-      background-position: var(--gradient-text-shine) 50%;
-      animation-name: gradient-text-drift;
-    }
-  }
+.gradient-text__knockout {
+  position: relative;
+  z-index: 1;
+  display: block;
+  color: #000;
+  white-space: inherit;
+  mix-blend-mode: destination-in;
 }
 
-@supports (-webkit-touch-callout: none) {
-  .gradient-text {
-    animation: none;
+@supports not (mix-blend-mode: destination-in) {
+  .gradient-text__bed {
+    display: none;
   }
 
-  .gradient-text--js-drift {
-    will-change: background-position;
+  .gradient-text__knockout {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      82.53deg,
+      #c7c4f0 2.9%,
+      #718df1 49.58%,
+      #86d9fa 100%
+    );
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    mix-blend-mode: normal;
   }
 }
 
@@ -78,39 +88,28 @@
   }
 }
 
-@keyframes gradient-text-drift-legacy {
+@keyframes gradient-text-gpu-drift {
   from {
-    background-position: 0% 50%;
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes gradient-text-drift {
-  from {
-    --gradient-text-shine: 0%;
-  }
-
-  to {
-    --gradient-text-shine: 100%;
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gradient-text {
+  .gradient-text__track {
     animation: none;
-    animation-name: none;
-    --gradient-text-shine: 0%;
-    background-position: 0% 50%;
-    background-size: 100% 100%;
+    transform: translate3d(0, 0, 0);
     background-image: linear-gradient(
       82.53deg,
       #c7c4f0 2.9%,
       #718df1 49.58%,
       #86d9fa 100%
     );
+    background-size: 100% 100%;
+    width: 100%;
     will-change: auto;
   }
 }
