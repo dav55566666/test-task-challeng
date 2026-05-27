@@ -44,6 +44,7 @@ export const HomeLogosAbout = () => {
             currentSize={36}
             mobileSize={30}
             tag={TextTag.H2}
+            animated={false}
           />
           <Link to="/about" className="home-logos-about__more">
             Команда
@@ -59,6 +60,7 @@ export const HomeLogosAbout = () => {
                 currentSize={36}
                 mobileSize={30}
                 tag={TextTag.H3}
+                animated={false}
               />
               <p className="home-logos-about__stat-label">{stat.label}</p>
             </div>

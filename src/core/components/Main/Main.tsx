@@ -19,7 +19,9 @@ export const Main = () => {
         const logo = logoRef.current;
         if (!root || !text || !logo) return;
 
-        const update = () => {
+        let rafId = 0;
+
+        const measure = () => {
             const mainRect = root.getBoundingClientRect();
             const textRect = text.getBoundingClientRect();
             const logoRect = logo.getBoundingClientRect();
@@ -46,20 +48,29 @@ export const Main = () => {
                 ? Math.max(idealLogoTop, clearanceLogoTop)
                 : null;
 
-            setLogoTopPx(nextTop);
+            setLogoTopPx((prev) => (prev === nextTop ? prev : nextTop));
         };
 
-        update();
+        const schedule = () => {
+            if (rafId !== 0) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = 0;
+                measure();
+            });
+        };
 
-        const ro = new ResizeObserver(update);
+        schedule();
+
+        const ro = new ResizeObserver(schedule);
         ro.observe(root);
         ro.observe(text);
         ro.observe(logo);
-        window.addEventListener("resize", update);
+        window.addEventListener("resize", schedule);
 
         return () => {
+            if (rafId !== 0) cancelAnimationFrame(rafId);
             ro.disconnect();
-            window.removeEventListener("resize", update);
+            window.removeEventListener("resize", schedule);
         };
     }, []);
 

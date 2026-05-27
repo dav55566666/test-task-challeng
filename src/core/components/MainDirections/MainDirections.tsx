@@ -77,6 +77,7 @@ export const MainDirections = () => {
             currentSize={36}
             mobileSize={30}
             tag={TextTag.H2}
+            animated={false}
           />
         </div>
         <div className="main-direction__text">

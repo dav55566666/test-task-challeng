@@ -37,7 +37,7 @@ export const HomeWrapper = () => {
     };
   }, []);
 
-  const useWanderingGlow = isMobileViewport || isCoarsePointer;
+  const showCursorGlow = !isMobileViewport && !isCoarsePointer;
 
   const [cursorPosition, setCursorPosition] = useState<{
     x: number;
@@ -46,7 +46,7 @@ export const HomeWrapper = () => {
   const [suppressCursorGlow, setSuppressCursorGlow] = useState(false);
 
   useEffect(() => {
-    if (useWanderingGlow) return;
+    if (!showCursorGlow) return;
 
     const handleMouseMove = (event: MouseEvent) => {
       setCursorPosition({ x: event.clientX, y: event.clientY });
@@ -65,23 +65,25 @@ export const HomeWrapper = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseout", handleMouseLeave);
     };
-  }, [useWanderingGlow]);
+  }, [showCursorGlow]);
 
   return (
     <div className="app-shell flex min-h-svh w-full flex-1 flex-col">
-      <div
-        aria-hidden
-        className={`app-shell__cursor-glow ${useWanderingGlow ? "app-shell__cursor-glow--wander" : ""} ${
-          useWanderingGlow || cursorPosition ? "app-shell__cursor-glow--visible" : ""
-        } ${suppressCursorGlow ? "app-shell__cursor-glow--hidden-on-menu" : ""}`}
-        style={
-          !useWanderingGlow && cursorPosition
-            ? {
-                transform: `translate3d(${cursorPosition.x - 12}px, ${cursorPosition.y - 12}px, 0)`,
-              }
-            : undefined
-        }
-      />
+      {showCursorGlow ? (
+        <div
+          aria-hidden
+          className={`app-shell__cursor-glow ${
+            cursorPosition ? "app-shell__cursor-glow--visible" : ""
+          } ${suppressCursorGlow ? "app-shell__cursor-glow--hidden-on-menu" : ""}`}
+          style={
+            cursorPosition
+              ? {
+                  transform: `translate3d(${cursorPosition.x - 12}px, ${cursorPosition.y - 12}px, 0)`,
+                }
+              : undefined
+          }
+        />
+      ) : null}
       <Header />
       <AppMenu />
       <div className="flex min-h-0 w-full flex-1 flex-col">

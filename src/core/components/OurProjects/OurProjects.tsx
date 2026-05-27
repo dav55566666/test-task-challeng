@@ -104,6 +104,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
                 currentSize={36}
                 mobileSize={30}
                 tag={TextTag.H2}
+                animated={false}
               />
               <Tabs
                 items={PROJECT_TABS}
@@ -121,7 +122,13 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
       sidebar={() => (
         <>
           <div className="flex flex-col">
-            <GradientTitle value="Наши кейсы" currentSize={36} mobileSize={24} tag={TextTag.H2} />
+            <GradientTitle
+              value="Наши кейсы"
+              currentSize={36}
+              mobileSize={24}
+              tag={TextTag.H2}
+              animated={false}
+            />
             <div
               className="our-projects__active-copy hidden md:block"
               aria-live="polite"

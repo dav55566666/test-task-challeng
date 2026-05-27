@@ -63,6 +63,20 @@
     }
   }
 
+  .logo-animation__mask-wave-host {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &--out-of-view {
+    .logo-animation__mask,
+    .logo-animation__mask-img--wave {
+      will-change: auto;
+    }
+  }
+
   /* На всю площадь слота под маской — иначе под лопастями блоба проступает фон страницы */
   .logo-animation__video {
     position: absolute;
@@ -209,6 +223,25 @@
 @media (max-width: 1024px) and (min-width: 769px) {
   .logo-animation .logo-animation__scale {
     transform: scale(1.02);
+  }
+}
+
+/* Mobile: волна на меньшей площади + scale(2) — тот же вид, дешевле для GPU. */
+@media (max-width: 768px) {
+  .logo-animation__mask-wave-host {
+    inset: auto;
+    left: 25%;
+    top: 25%;
+    width: 50%;
+    height: 50%;
+    transform: scale(2);
+    transform-origin: center center;
+  }
+
+  .logo-animation__mask-wave-host .logo-animation__mask-img--wave {
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 

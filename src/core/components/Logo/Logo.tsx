@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
 import type { APITypes } from "plyr-react";
@@ -7,6 +7,9 @@ import { IMAGES } from '../../design';
 import { LOGO_INNER_HOLE } from './logoShape';
 import './styles/logo.scss';
 import "plyr-react/plyr.css";
+
+const LOGO_MOBILE_MEDIA = "(max-width: 768px)";
+const LOGO_VIEW_ROOT_MARGIN = "120px";
 
 export const Logo = () => {
   const uid = useId().replace(/:/g, "");
@@ -16,8 +19,16 @@ export const Logo = () => {
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [isPreviewMediaReady, setIsPreviewMediaReady] = useState(false);
   const [previewMediaSession, setPreviewMediaSession] = useState(0);
+  const [isMobileViewport, setIsMobileViewport] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia(LOGO_MOBILE_MEDIA).matches;
+  });
+  const [isInView, setIsInView] = useState(true);
+  const logoRootRef = useRef<HTMLDivElement>(null);
+  const svgFiltersRef = useRef<SVGSVGElement>(null);
   const previewVideoRef = useRef<HTMLVideoElement>(null);
   const modalPlyrRef = useRef<APITypes | null>(null);
+  const useHeroPreviewVideo = !isMobileViewport;
 
   const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
@@ -72,8 +83,44 @@ export const Logo = () => {
     };
   }, [isPlayerOpen]);
 
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(LOGO_MOBILE_MEDIA);
+    const sync = () => setIsMobileViewport(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  /** На mobile превью — только poster, без загрузки ~24MB mp4. */
+  useEffect(() => {
+    if (useHeroPreviewVideo) return;
+    setIsPreviewMediaReady(true);
+  }, [useHeroPreviewVideo]);
+
+  /** Волна (SVG SMIL): пауза вне viewport — фильтр не считается при скролле. */
+  useEffect(() => {
+    const root = logoRootRef.current;
+    if (!root) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry?.isIntersecting ?? false;
+        setIsInView(visible);
+        const svg = svgFiltersRef.current;
+        if (!svg) return;
+        if (visible) svg.unpauseAnimations();
+        else svg.pauseAnimations();
+      },
+      { root: null, rootMargin: LOGO_VIEW_ROOT_MARGIN, threshold: 0 },
+    );
+
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
   /** Превью в hero: не показываем блок (opacity 0) пока ролик не готов к проигрыванию без срыва. */
   useEffect(() => {
+    if (!useHeroPreviewVideo) return;
     const v = previewVideoRef.current;
     if (!v) return;
 
@@ -98,10 +145,11 @@ export const Logo = () => {
       v.removeEventListener("loadeddata", onReady);
       v.removeEventListener("error", onReady);
     };
-  }, [previewMediaSession]);
+  }, [previewMediaSession, useHeroPreviewVideo]);
 
   /** Возврат из bfcache (назад в браузере): Safari иногда сбрасывает размеры видео до «квадрата». */
   useEffect(() => {
+    if (!useHeroPreviewVideo) return;
     const v = previewVideoRef.current;
     if (!v) return;
 
@@ -115,15 +163,15 @@ export const Logo = () => {
 
     window.addEventListener("pageshow", onPageShow);
     return () => window.removeEventListener("pageshow", onPageShow);
-  }, []);
+  }, [useHeroPreviewVideo]);
 
   /** После закрытия модалки снова запускаем превью (некоторые браузеры ставят фон на паузу). */
   useEffect(() => {
-    if (isPlayerOpen) return;
+    if (!useHeroPreviewVideo || isPlayerOpen) return;
     const v = previewVideoRef.current;
     if (!v) return;
     void v.play().catch(() => { });
-  }, [isPlayerOpen]);
+  }, [isPlayerOpen, useHeroPreviewVideo]);
 
   /** Открытие модалки по клику — пытаемся сразу запустить ролик со звуком из user-gesture. */
   useEffect(() => {
@@ -141,14 +189,21 @@ export const Logo = () => {
   return (
     <>
       <div
+        ref={logoRootRef}
         className={
           "logo-animation" +
-          (isPreviewMediaReady ? " logo-animation--media-ready" : "")
+          (isPreviewMediaReady ? " logo-animation--media-ready" : "") +
+          (isInView ? " logo-animation--in-view" : " logo-animation--out-of-view")
         }
       >
         <div className="logo-animation__scale">
           <div className="logo-animation__mask">
-            <svg className="logo-animation__svg-filters" aria-hidden focusable="false">
+            <svg
+              ref={svgFiltersRef}
+              className="logo-animation__svg-filters"
+              aria-hidden
+              focusable="false"
+            >
               <defs>
                 {/* Размытие только по альфа-маске: мягкий переход стабильного центра ↔ волна (без среза) */}
                 <filter
@@ -288,18 +343,22 @@ export const Logo = () => {
               src={IMAGES.logoMaskGradient}
               alt=""
             />
-            <img
-              className="logo-animation__mask-img logo-animation__mask-img--wave"
-              src={IMAGES.logoMaskGradient}
-              alt=""
-              style={
-                {
-                  filter: `url(#${filterId})`,
-                  mask: `url(#${innerMaskId})`,
-                  WebkitMask: `url(#${innerMaskId})`,
-                } as CSSProperties
-              }
-            />
+            <span className="logo-animation__mask-wave-host">
+              <img
+                className="logo-animation__mask-img logo-animation__mask-img--wave"
+                src={IMAGES.logoMaskGradient}
+                alt=""
+                style={
+                  isInView
+                    ? ({
+                        filter: `url(#${filterId})`,
+                        mask: `url(#${innerMaskId})`,
+                        WebkitMask: `url(#${innerMaskId})`,
+                      } as CSSProperties)
+                    : undefined
+                }
+              />
+            </span>
           </div>
           <button
             type="button"
@@ -316,16 +375,18 @@ export const Logo = () => {
               alt=""
               aria-hidden
             />
-            <video
-              ref={previewVideoRef}
-              src={IMAGES.logoVideo}
-              poster={IMAGES.logoVideoPoster}
-              preload="auto"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
+            {useHeroPreviewVideo ? (
+              <video
+                ref={previewVideoRef}
+                src={IMAGES.logoVideo}
+                poster={IMAGES.logoVideoPoster}
+                preload="auto"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            ) : null}
           </button>
         </div>
       </div>
