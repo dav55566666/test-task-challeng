@@ -1,18 +1,10 @@
+import { createElement } from "react";
 import { TextTag } from "./enums";
 import { getClassNames } from "./helpers";
+import { useGradientTextDrift } from "./hooks";
 import type { IGradientTitleProps } from "./interfaces";
 import type { CSSProperties } from "react";
-import './styles/gradient-text.scss';
-
-const titleProps = (id: string | undefined, className: string, styles: CSSProperties) =>
-  ({ className, style: styles, ...(id !== undefined ? { id } : {}) } as const);
-
-const GradientTitleContent = ({ value }: { value: string }) => (
-  <span className="gradient-text__inner">
-    <span className="gradient-text__beam" aria-hidden="true" />
-    <span className="gradient-text__label">{value}</span>
-  </span>
-);
+import "./styles/gradient-text.scss";
 
 export const GradientTitle = ({
   value,
@@ -22,28 +14,20 @@ export const GradientTitle = ({
   id,
 }: IGradientTitleProps) => {
   const classNames = getClassNames();
+  const driftRef = useGradientTextDrift();
   const styles = {
     "--gradient-title-mobile-size": `${mobileSize}px`,
     "--gradient-title-desktop-size": `${currentSize}px`,
   } as CSSProperties;
-  const common = titleProps(id, classNames, styles);
-  const content = <GradientTitleContent value={value} />;
-  switch (tag) {
-    case TextTag.H1:
-      return <h1 {...common}>{content}</h1>;
-    case TextTag.H2:
-      return <h2 {...common}>{content}</h2>;
-    case TextTag.H3:
-      return <h3 {...common}>{content}</h3>;
-    case TextTag.H4:
-      return <h4 {...common}>{content}</h4>;
-    case TextTag.H5:
-      return <h5 {...common}>{content}</h5>;
-    case TextTag.H6:
-      return <h6 {...common}>{content}</h6>;
-    case TextTag.p:
-      return <p {...common}>{content}</p>;
-    default:
-      return <h1 {...common}>{content}</h1>;
-  }
+
+  return createElement(
+    tag ?? TextTag.H1,
+    {
+      ref: driftRef,
+      className: classNames,
+      style: styles,
+      ...(id !== undefined ? { id } : {}),
+    },
+    value,
+  );
 };
