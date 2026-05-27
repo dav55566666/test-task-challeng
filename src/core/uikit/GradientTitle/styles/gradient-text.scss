@@ -1,7 +1,9 @@
+@use "sass:math";
+
 /*
  * iOS/WebKit: keyframes на background-position + background-clip:text часто
- * дают «ступеньки». Зарегистрированное свойство интерполируется как число.
- * Ниже — fallback на прямую анимацию position для старых движков.
+ * дают «ступеньки»; @property + rgb(from …) на iOS тоже может прыгать 0→100%.
+ * Desktop: зарегистрированное свойство. iOS: плотные keyframes + transform там, где можно.
  */
 @property --gradient-text-shine {
   syntax: "<percentage>";
@@ -42,15 +44,24 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   will-change: background-position;
-  /* Slow, constant drift — no back-and-forth, no jarring end-of-frame jump */
   animation: gradient-text-drift-legacy 2.64s linear infinite;
 }
 
+/* Desktop / движки с плавной интерполяцией @property (не iOS Safari) */
 @supports (color: rgb(from red r g b)) {
+  @supports not (-webkit-touch-callout: none) {
+    .gradient-text {
+      --gradient-text-shine: 0%;
+      background-position: var(--gradient-text-shine) 50%;
+      animation-name: gradient-text-drift;
+    }
+  }
+}
+
+/* iOS / touch WebKit: background-position по шагам (~50 кадров) */
+@supports (-webkit-touch-callout: none) {
   .gradient-text {
-    --gradient-text-shine: 0%;
-    background-position: var(--gradient-text-shine) 50%;
-    animation-name: gradient-text-drift;
+    animation-name: gradient-text-drift-webkit;
   }
 }
 
@@ -78,8 +89,21 @@
 }
 
 @keyframes gradient-text-drift {
+  from {
+    --gradient-text-shine: 0%;
+  }
+
   to {
     --gradient-text-shine: 100%;
+  }
+}
+
+@keyframes gradient-text-drift-webkit {
+  @for $step from 0 through 50 {
+    $pos: math.percentage(math.div($step, 50));
+    #{$pos} {
+      background-position: #{$pos} 50%;
+    }
   }
 }
 

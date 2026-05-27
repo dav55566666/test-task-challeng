@@ -52,6 +52,21 @@
   animation: menu-liquid-surface 2.8s ease-in-out infinite;
 }
 
+@supports (-webkit-touch-callout: none) {
+  .menu-highlight__blob-unified {
+    background-size:
+      140% 140%,
+      130% 130%,
+      220% 220%;
+    background-position:
+      0% 50%,
+      100% 0%,
+      0% 50%;
+    will-change: transform, filter;
+    animation: menu-liquid-surface-webkit 2.8s ease-in-out infinite;
+  }
+}
+
 .menu-highlight__blobs-outer {
   position: absolute;
   inset: 0;
@@ -89,6 +104,19 @@
       28% 32%,
       72% 12%,
       100% 60%;
+  }
+}
+
+@keyframes menu-liquid-surface-webkit {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(16px) saturate(1.15);
+  }
+
+  50% {
+    transform: translate3d(6%, -4%, 0) scale(1.1);
+    filter: blur(18px) saturate(1.28);
   }
 }
 
