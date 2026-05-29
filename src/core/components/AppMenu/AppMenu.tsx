@@ -136,15 +136,6 @@ export const Sidebar = () => {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  /** Главная, узкий экран ≤1024: меню с дугой открыто по умолчанию (без нажатия FAB). */
-  useLayoutEffect(() => {
-    if (location.pathname !== "/") return;
-    if (typeof window.matchMedia !== "function") return;
-    if (!window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA).matches) return;
-    if (window.innerWidth > 1024) return;
-    setMenuExpandedFromFab(true);
-  }, [location.pathname]);
-
   /**
    * Боковое меню с 768px (md) как на десктопе; ниже — нижняя дуга + FAB.
    * На главной до скролла — полное меню; после порога скролла — FAB + раскрытие.
