@@ -23,7 +23,9 @@
     opacity: 0;
     will-change: transform;
     box-shadow: 0 0 18px rgba(128, 145, 255, 0.7);
-    animation: app-shell-cursor-palette 3.6s linear infinite;
+    animation:
+      app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate;
     transition: transform 0.08s linear, opacity 0.2s ease;
   }
 
@@ -41,6 +43,7 @@
     transition: opacity 0.2s ease;
     animation:
       app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate,
       app-shell-cursor-wander 56s ease-in-out infinite;
   }
 }
@@ -74,7 +77,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .app-shell__cursor-glow--wander {
-    animation: app-shell-cursor-palette 3.6s linear infinite;
+    animation:
+      app-shell-cursor-palette 3.6s linear infinite,
+      app-shell-cursor-shape 2.4s ease-in-out infinite alternate;
     transform: translate3d(calc(50vw - 12px), calc(45vh - 12px), 0);
   }
 }
@@ -95,5 +100,17 @@
   100% {
     background: #8091ff;
     box-shadow: 0 0 18px rgba(128, 145, 255, 0.7);
+  }
+}
+
+@keyframes app-shell-cursor-shape {
+  0% {
+    border-radius: 50% 45% 60% 40%;
+  }
+  50% {
+    border-radius: 38% 62% 42% 58%;
+  }
+  100% {
+    border-radius: 55% 40% 52% 48%;
   }
 }

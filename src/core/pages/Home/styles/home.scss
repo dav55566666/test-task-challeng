@@ -1,10 +1,5 @@
 .home-page {
   min-height: 100%;
-
-  > :not(.home-page__hero) {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 720px;
-  }
 }
 
 .home-page__hero {

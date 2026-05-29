@@ -1,36 +1,19 @@
-import type { CSSProperties } from "react";
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plyr } from "plyr-react";
 import type { APITypes } from "plyr-react";
 import { IMAGES } from '../../design';
-import { LOGO_INNER_HOLE } from './logoShape';
 import './styles/logo.scss';
 import "plyr-react/plyr.css";
 
-const LOGO_MOBILE_MEDIA = "(max-width: 768px)";
-const LOGO_VIEW_ROOT_MARGIN = "120px";
-
 export const Logo = () => {
-  const uid = useId().replace(/:/g, "");
-  const filterId = `logo-mask-wave-${uid}`;
-  const innerMaskId = `logo-mask-inner-${uid}`;
-  const innerHoleMaskFeatherId = `logo-inner-mask-feather-${uid}`;
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [isPreviewMediaReady, setIsPreviewMediaReady] = useState(false);
   const [previewMediaSession, setPreviewMediaSession] = useState(0);
-  const [isMobileViewport, setIsMobileViewport] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.matchMedia(LOGO_MOBILE_MEDIA).matches;
-  });
-  const [isInView, setIsInView] = useState(true);
-  const logoRootRef = useRef<HTMLDivElement>(null);
-  const svgFiltersRef = useRef<SVGSVGElement>(null);
+  const maskVideoRef = useRef<HTMLVideoElement>(null);
   const previewVideoRef = useRef<HTMLVideoElement>(null);
   const modalPlyrRef = useRef<APITypes | null>(null);
-  const useHeroPreviewVideo = !isMobileViewport;
 
-  const { cx, cy, r } = LOGO_INNER_HOLE;
   const playerSource = useMemo(
     () => ({
       type: "video" as const,
@@ -83,45 +66,9 @@ export const Logo = () => {
     };
   }, [isPlayerOpen]);
 
-  useLayoutEffect(() => {
-    const mq = window.matchMedia(LOGO_MOBILE_MEDIA);
-    const sync = () => setIsMobileViewport(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  /** На mobile превью — только poster, без загрузки ~24MB mp4. */
+  /** Hero: не показываем блок пока анимация логотипа не готова к проигрыванию. */
   useEffect(() => {
-    if (useHeroPreviewVideo) return;
-    setIsPreviewMediaReady(true);
-  }, [useHeroPreviewVideo]);
-
-  /** Волна (SVG SMIL): пауза вне viewport — фильтр не считается при скролле. */
-  useEffect(() => {
-    const root = logoRootRef.current;
-    if (!root) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const visible = entry?.isIntersecting ?? false;
-        setIsInView(visible);
-        const svg = svgFiltersRef.current;
-        if (!svg) return;
-        if (visible) svg.unpauseAnimations();
-        else svg.pauseAnimations();
-      },
-      { root: null, rootMargin: LOGO_VIEW_ROOT_MARGIN, threshold: 0 },
-    );
-
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, []);
-
-  /** Превью в hero: не показываем блок (opacity 0) пока ролик не готов к проигрыванию без срыва. */
-  useEffect(() => {
-    if (!useHeroPreviewVideo) return;
-    const v = previewVideoRef.current;
+    const v = maskVideoRef.current;
     if (!v) return;
 
     let settled = false;
@@ -145,33 +92,34 @@ export const Logo = () => {
       v.removeEventListener("loadeddata", onReady);
       v.removeEventListener("error", onReady);
     };
-  }, [previewMediaSession, useHeroPreviewVideo]);
+  }, [previewMediaSession]);
 
-  /** Возврат из bfcache (назад в браузере): Safari иногда сбрасывает размеры видео до «квадрата». */
+  /** Возврат из bfcache: Safari иногда сбрасывает размеры видео до «квадрата». */
   useEffect(() => {
-    if (!useHeroPreviewVideo) return;
-    const v = previewVideoRef.current;
-    if (!v) return;
+    const maskV = maskVideoRef.current;
+    const previewV = previewVideoRef.current;
+    if (!maskV && !previewV) return;
 
     const onPageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return;
       setIsPreviewMediaReady(false);
       setPreviewMediaSession((n) => n + 1);
-      v.load();
-      void v.play().catch(() => { });
+      maskV?.load();
+      previewV?.load();
+      void maskV?.play().catch(() => { });
+      void previewV?.play().catch(() => { });
     };
 
     window.addEventListener("pageshow", onPageShow);
     return () => window.removeEventListener("pageshow", onPageShow);
-  }, [useHeroPreviewVideo]);
+  }, []);
 
   /** После закрытия модалки снова запускаем превью (некоторые браузеры ставят фон на паузу). */
   useEffect(() => {
-    if (!useHeroPreviewVideo || isPlayerOpen) return;
-    const v = previewVideoRef.current;
-    if (!v) return;
-    void v.play().catch(() => { });
-  }, [isPlayerOpen, useHeroPreviewVideo]);
+    if (isPlayerOpen) return;
+    void maskVideoRef.current?.play().catch(() => { });
+    void previewVideoRef.current?.play().catch(() => { });
+  }, [isPlayerOpen]);
 
   /** Открытие модалки по клику — пытаемся сразу запустить ролик со звуком из user-gesture. */
   useEffect(() => {
@@ -189,176 +137,23 @@ export const Logo = () => {
   return (
     <>
       <div
-        ref={logoRootRef}
         className={
           "logo-animation" +
-          (isPreviewMediaReady ? " logo-animation--media-ready" : "") +
-          (isInView ? " logo-animation--in-view" : " logo-animation--out-of-view")
+          (isPreviewMediaReady ? " logo-animation--media-ready" : "")
         }
       >
         <div className="logo-animation__scale">
           <div className="logo-animation__mask">
-            <svg
-              ref={svgFiltersRef}
-              className="logo-animation__svg-filters"
-              aria-hidden
-              focusable="false"
-            >
-              <defs>
-                {/* Размытие только по альфа-маске: мягкий переход стабильного центра ↔ волна (без среза) */}
-                <filter
-                  id={innerHoleMaskFeatherId}
-                  filterUnits="objectBoundingBox"
-                  primitiveUnits="objectBoundingBox"
-                  x="-0.25"
-                  y="-0.25"
-                  width="1.5"
-                  height="1.5"
-                  colorInterpolationFilters="sRGB"
-                >
-                  <feGaussianBlur in="SourceGraphic" stdDeviation="0.014" />
-                </filter>
-                <mask
-                  id={innerMaskId}
-                  maskUnits="objectBoundingBox"
-                  maskContentUnits="objectBoundingBox"
-                >
-                  <rect width="1" height="1" fill="white" />
-                  <circle
-                    cx={cx}
-                    cy={cy}
-                    r={r}
-                    fill="black"
-                    filter={`url(#${innerHoleMaskFeatherId})`}
-                  />
-                </mask>
-                <filter
-                  id={filterId}
-                  x="-120%"
-                  y="-120%"
-                  width="340%"
-                  height="340%"
-                  colorInterpolationFilters="sRGB"
-                >
-                  {/* Статичный шум: анимация baseFrequency даёт скачки текстуры между ключами (как дроп кадров). Движение только через feOffset + scale. */}
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.0095 0.0026"
-                    numOctaves="1"
-                    seed="7"
-                    stitchTiles="stitch"
-                    result="noise"
-                  />
-                  <feOffset in="noise" result="noiseScrollX" dx="0" dy="0">
-                    <animate
-                      attributeName="dx"
-                      dur="5s"
-                      values="0;280;0"
-                      keyTimes="0;0.5;1"
-                      repeatCount="indefinite"
-                      calcMode="spline"
-                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
-                    />
-                  </feOffset>
-                  <feOffset in="noiseScrollX" result="noiseSmooth" dx="0" dy="0">
-                    {/* Сдвиг по фазе через ключи — без отрицательного begin (нет рывка на первом кадре) */}
-                    <animate
-                      attributeName="dy"
-                      dur="5s"
-                      values="21;0;-21;0;21"
-                      keyTimes="0;0.25;0.5;0.75;1"
-                      repeatCount="indefinite"
-                      calcMode="spline"
-                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1"
-                    />
-                  </feOffset>
-                  {/* R=G=B=alpha: волнуем только там, где есть непрозрачный градиент; в прозрачности — нейтраль 0.5 → сдвиг 0 (дырка/фон не «ползут») */}
-                  <feColorMatrix
-                    in="SourceGraphic"
-                    type="matrix"
-                    values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 1 0"
-                    result="alphaRGB"
-                  />
-                  <feFlood floodColor="#808080" floodOpacity="1" result="half" />
-                  <feComposite
-                    in="noiseSmooth"
-                    in2="alphaRGB"
-                    operator="arithmetic"
-                    k1="1"
-                    k2="0"
-                    k3="0"
-                    k4="0"
-                    result="noiseScaled"
-                  />
-                  <feComposite
-                    in="half"
-                    in2="alphaRGB"
-                    operator="arithmetic"
-                    k1="-1"
-                    k2="1"
-                    k3="0"
-                    k4="0"
-                    result="biasScaled"
-                  />
-                  <feComposite
-                    in="noiseScaled"
-                    in2="biasScaled"
-                    operator="arithmetic"
-                    k1="0"
-                    k2="1"
-                    k3="1"
-                    k4="0"
-                    result="noiseForDisplacement"
-                  />
-                  {/* Сглаживание карты смещения: меньше «ступенек» на стыке зон с разной волной */}
-                  <feGaussianBlur
-                    in="noiseForDisplacement"
-                    stdDeviation="0.85"
-                    result="noiseDispMapSoft"
-                  />
-                  <feDisplacementMap
-                    in="SourceGraphic"
-                    in2="noiseDispMapSoft"
-                    scale="9.2"
-                    xChannelSelector="R"
-                    yChannelSelector="G"
-                    edgeMode="duplicate"
-                    result="dist"
-                  >
-                    <animate
-                      attributeName="scale"
-                      dur="5s"
-                      values="8.4;9.1;8.4"
-                      keyTimes="0;0.5;1"
-                      repeatCount="indefinite"
-                      calcMode="spline"
-                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
-                    />
-                  </feDisplacementMap>
-                </filter>
-              </defs>
-            </svg>
-            <img
-              className="logo-animation__mask-img logo-animation__mask-img--stable"
-              src={IMAGES.logoMaskGradient}
-              alt=""
+            <video
+              ref={maskVideoRef}
+              className="logo-animation__mask-video"
+              src={IMAGES.logoAnimation}
+              preload="auto"
+              autoPlay
+              muted
+              loop
+              playsInline
             />
-            <span className="logo-animation__mask-wave-host">
-              <img
-                className="logo-animation__mask-img logo-animation__mask-img--wave"
-                src={IMAGES.logoMaskGradient}
-                alt=""
-                style={
-                  isInView
-                    ? ({
-                        filter: `url(#${filterId})`,
-                        mask: `url(#${innerMaskId})`,
-                        WebkitMask: `url(#${innerMaskId})`,
-                      } as CSSProperties)
-                    : undefined
-                }
-              />
-            </span>
           </div>
           <button
             type="button"
@@ -375,18 +170,16 @@ export const Logo = () => {
               alt=""
               aria-hidden
             />
-            {useHeroPreviewVideo ? (
-              <video
-                ref={previewVideoRef}
-                src={IMAGES.logoVideo}
-                poster={IMAGES.logoVideoPoster}
-                preload="auto"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            ) : null}
+            <video
+              ref={previewVideoRef}
+              src={IMAGES.logoVideo}
+              poster={IMAGES.logoVideoPoster}
+              preload="auto"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
           </button>
         </div>
       </div>

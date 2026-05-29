@@ -16,7 +16,6 @@ export const Partners = () => {
             currentSize={36}
             mobileSize={30}
             tag={TextTag.H2}
-            animated={false}
           />
           <Link to="/about" className="partners__more">
             Все кейсы
@@ -45,7 +44,6 @@ export const Partners = () => {
               currentSize={36}
               mobileSize={30}
               tag={TextTag.H3}
-              animated={false}
             />
           </div>
         </div>

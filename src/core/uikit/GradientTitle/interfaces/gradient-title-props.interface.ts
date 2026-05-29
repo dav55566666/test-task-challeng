@@ -6,6 +6,4 @@ export interface IGradientTitleProps {
   mobileSize: number;
   tag: TextTag;
   id?: string;
-  /** false — статичный градиент без регистрации в GradientShineProvider */
-  animated?: boolean;
 }

@@ -3,8 +3,6 @@ import "./tabs.scss";
 
 const MD_MIN_PX = 768;
 const MOBILE_ROW_JUMP_MIN_PX = 6;
-/** Ширина индикатора в px; визуальная ширина = scaleX(width) через transform. */
-const TABS_INDICATOR_UNIT_PX = 1;
 
 export type TabItem = {
   label: string;
@@ -81,7 +79,7 @@ export function Tabs({
       const root = tabsRootRef.current;
       if (!targetEl || !root) {
         setIndicatorStyle((prev) =>
-          prev.visible ? { ...prev, visible: false } : prev,
+          prev.visible ? { ...prev, visible: false } : prev
         );
         setMobileReveal(null);
         return;
@@ -165,47 +163,34 @@ export function Tabs({
             onMouseEnter={() => setHoveredValue(item.value)}
             onClick={() => onChange(item.value)}
           >
-            <span className="text-sm text-[#a0a0a0]">{item.label}</span>
+            <span
+              className='text-sm text-[#a0a0a0]'
+            >
+              {item.label}
+            </span>
           </button>
         );
       })}
       <span
         className={
-          "tabs__indicator-host pointer-events-none absolute left-0 top-0 h-0.5 " +
+          "tabs__indicator pointer-events-none absolute left-0 top-0 h-0.5 rounded-full " +
           (mobileReveal
-            ? "tabs__indicator-host--mobile-row-reveal "
-            : "transition-[transform,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ")
+            ? "tabs__indicator--mobile-row-reveal "
+            : "transition-[transform,width,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ") +
+          (mobileReveal === "from-bottom"
+            ? "tabs__indicator--reveal-from-bottom "
+            : "") +
+          (mobileReveal === "from-top"
+            ? "tabs__indicator--reveal-from-top "
+            : "")
         }
         style={{
-          transform: `translate3d(${indicatorStyle.x}px, ${indicatorStyle.y}px, 0)`,
+          transform: `translate(${indicatorStyle.x}px, ${indicatorStyle.y}px)`,
+          width: `${indicatorStyle.width}px`,
           opacity: indicatorStyle.visible ? 1 : 0,
         }}
         aria-hidden
-      >
-        <span
-          className={
-            "tabs__indicator-reveal block h-full w-px origin-left " +
-            (mobileReveal === "from-bottom"
-              ? "tabs__indicator-reveal--from-bottom "
-              : "") +
-            (mobileReveal === "from-top"
-              ? "tabs__indicator-reveal--from-top "
-              : "")
-          }
-        >
-          <span
-            className={
-              "tabs__indicator block h-full w-full rounded-full " +
-              (mobileReveal
-                ? ""
-                : "transition-transform duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ")
-            }
-            style={{
-              transform: `scaleX(${indicatorStyle.width / TABS_INDICATOR_UNIT_PX})`,
-            }}
-          />
-        </span>
-      </span>
+      />
     </div>
   );
 }

@@ -1,17 +1,5 @@
 svg {
-  path,
-  rect,
-  circle,
-  ellipse,
-  polygon,
-  polyline,
-  g {
-    transition:
-      fill 0.5s ease,
-      fill-opacity 0.5s ease,
-      stroke 0.5s ease,
-      stroke-opacity 0.5s ease,
-      opacity 0.5s ease,
-      transform 0.5s ease;
-  }
+    path,rect, circle, ellipse, polygon, polyline, path, g {
+        transition: all 0.5s;
+    }
 }

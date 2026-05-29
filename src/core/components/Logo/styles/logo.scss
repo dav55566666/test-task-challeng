@@ -27,62 +27,30 @@
     will-change: transform;
   }
 
-  .logo-animation__svg-filters {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
   .logo-animation__mask {
     position: absolute;
     inset: 0;
     z-index: 3;
     pointer-events: none;
-    will-change: filter;
+    overflow: hidden;
   }
 
-  .logo-animation__mask-img {
+  .logo-animation__mask-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-
-    &--stable {
-      z-index: 0;
-    }
-
-    &--wave {
-      z-index: 1;
-      mask-mode: alpha;
-      -webkit-mask-mode: alpha;
-      will-change: filter;
-    }
-  }
-
-  .logo-animation__mask-wave-host {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  &--out-of-view {
-    .logo-animation__mask,
-    .logo-animation__mask-img--wave {
-      will-change: auto;
-    }
+    display: block;
   }
 
   /* На всю площадь слота под маской — иначе под лопастями блоба проступает фон страницы */
   .logo-animation__video {
     position: absolute;
     inset: 0;
-    left: 28px;
-    top: 36px;
+    left: 34px;
+    top: 40px;
     border: 0;
     padding: 0;
     margin: 0;
@@ -226,25 +194,6 @@
   }
 }
 
-/* Mobile: волна на меньшей площади + scale(2) — тот же вид, дешевле для GPU. */
-@media (max-width: 768px) {
-  .logo-animation__mask-wave-host {
-    inset: auto;
-    left: 25%;
-    top: 25%;
-    width: 50%;
-    height: 50%;
-    transform: scale(2);
-    transform-origin: center center;
-  }
-
-  .logo-animation__mask-wave-host .logo-animation__mask-img--wave {
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
-
 /* Узкие планшеты и крупные телефоны. */
 @media (max-width: 768px) and (min-width: 421px) {
   .logo-animation .logo-animation__scale {
@@ -279,13 +228,8 @@
     transition-duration: 0.01ms;
   }
 
-  .logo-animation .logo-animation__mask {
-    animation: none;
-    filter: none;
-  }
-
-  .logo-animation .logo-animation__mask-img--wave {
-    opacity: 0;
+  .logo-animation .logo-animation__mask-video {
+    display: none;
   }
 }
 

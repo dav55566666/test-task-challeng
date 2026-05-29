@@ -8,7 +8,7 @@
   opacity: 1;
 }
 
-/* Градиент под активной кнопкой: движение через transform (композитор), без background-size/position */
+/* Градиент под активной кнопкой: фиксированный овальный холст, движение — через сдвиг/масштаб фона */
 .menu-highlight__blob-unified {
   --menu-blob-w: 160px;
   --menu-blob-h: 82px;
@@ -20,6 +20,7 @@
   margin-left: calc(var(--menu-blob-w) / -2);
   margin-top: calc(var(--menu-blob-h) / -2);
   backface-visibility: hidden;
+  /* овал (эллипс) от прямоугольника 160×82 */
   border-radius: 50%;
   opacity: 0.66;
   background-color: transparent;
@@ -47,8 +48,8 @@
     0% 50%;
   background-repeat: no-repeat;
   filter: blur(16px) saturate(1.15);
-  will-change: transform, filter;
-  animation: menu-liquid-surface-gpu 2.8s ease-in-out infinite;
+  will-change: background-position, background-size;
+  animation: menu-liquid-surface 2.8s ease-in-out infinite;
 }
 
 .menu-highlight__blobs-outer {
@@ -67,16 +68,27 @@
   will-change: transform;
 }
 
-@keyframes menu-liquid-surface-gpu {
+@keyframes menu-liquid-surface {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(16px) saturate(1.15);
+    background-size:
+      140% 140%,
+      130% 130%,
+      220% 220%;
+    background-position:
+      0% 50%,
+      100% 0%,
+      0% 50%;
   }
-
   50% {
-    transform: translate3d(6%, -4%, 0) scale(1.1);
-    filter: blur(18px) saturate(1.28);
+    background-size:
+      178% 168%,
+      110% 118%,
+      300% 230%;
+    background-position:
+      28% 32%,
+      72% 12%,
+      100% 60%;
   }
 }
 
@@ -108,7 +120,8 @@
 
   .menu-highlight__blob-unified {
     animation: none;
-    transform: none;
+    background-size: 130% 130%, 120% 120%, 200% 200%;
+    background-position: 0% 50%, 100% 0%, 0% 50%;
     filter: blur(10px) saturate(1.05);
   }
 }

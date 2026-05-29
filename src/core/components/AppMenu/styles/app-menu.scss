@@ -62,8 +62,6 @@
     backdrop-filter: none;
     box-shadow: none;
     overflow: visible;
-    transform-origin: bottom center;
-    will-change: transform, opacity;
   }
 
   /* Невидимая hot zone: nav gap 2.5rem — по вертикали ~половина gap, слева больше к дуге */
@@ -203,22 +201,22 @@
 @keyframes app-menu-desktop-arc-open {
   from {
     opacity: 0;
-    transform: scaleY(0);
+    clip-path: inset(100% 0 0 0);
   }
   to {
     opacity: 1;
-    transform: scaleY(1);
+    clip-path: inset(0 0 0 0);
   }
 }
 
 @keyframes app-menu-desktop-arc-close {
   from {
     opacity: 1;
-    transform: scaleY(1);
+    clip-path: inset(0 0 0 0);
   }
   to {
     opacity: 0;
-    transform: scaleY(0);
+    clip-path: inset(100% 0 0 0);
   }
 }
 
@@ -544,9 +542,9 @@
   height: 0;
   transform-origin: center center;
   transition:
+    left 0.58s cubic-bezier(0.2, 0.74, 0.24, 1),
     transform 0.58s cubic-bezier(0.2, 0.74, 0.24, 1),
     opacity 0.22s ease;
-  will-change: transform, opacity;
   pointer-events: none;
 }
 

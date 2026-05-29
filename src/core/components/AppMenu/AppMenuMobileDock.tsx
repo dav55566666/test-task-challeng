@@ -159,8 +159,9 @@ export const AppMenuMobileDock = ({
           <div
             className="app-menu__mobile-dock__arc-arrow"
             style={{
+              left: `${arcArrow.leftPx}px`,
               opacity: arcArrow.opacity,
-              transform: `translate3d(${arcArrow.leftPx}px, 0, 0) translateX(-50%) rotate(${arcArrow.rotationDeg}deg)`,
+              transform: `translateX(-50%) rotate(${arcArrow.rotationDeg}deg)`,
             }}
             aria-hidden
           >

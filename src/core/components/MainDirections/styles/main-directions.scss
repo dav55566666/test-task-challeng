@@ -200,25 +200,30 @@
   0% {
     transform: translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg);
     filter: blur(12px) hue-rotate(0deg) saturate(1.15);
+    border-radius: 50%;
   }
   25% {
     transform: translate(-50%, -50%) translate(12px, -10px) scale(1.2)
       rotate(16deg);
     filter: blur(20px) hue-rotate(32deg) saturate(1.4);
+    border-radius: 45% 55% 48% 52% / 52% 48% 55% 45%;
   }
   50% {
     transform: translate(-50%, -50%) translate(-10px, 14px) scale(0.85)
       rotate(-12deg);
     filter: blur(16px) hue-rotate(-22deg) saturate(1.25);
+    border-radius: 55% 45% 52% 48% / 45% 55% 48% 52%;
   }
   75% {
     transform: translate(-50%, -50%) translate(8px, 6px) scale(1.12)
       rotate(10deg);
     filter: blur(22px) hue-rotate(40deg) saturate(1.38);
+    border-radius: 48% 52% 55% 45% / 55% 45% 52% 48%;
   }
   100% {
     transform: translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg);
     filter: blur(12px) hue-rotate(0deg) saturate(1.15);
+    border-radius: 50%;
   }
 }
 
