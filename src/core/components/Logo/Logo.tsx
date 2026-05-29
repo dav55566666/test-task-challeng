@@ -11,7 +11,6 @@ export const Logo = () => {
   const [isPreviewMediaReady, setIsPreviewMediaReady] = useState(false);
   const [previewMediaSession, setPreviewMediaSession] = useState(0);
   const maskVideoRef = useRef<HTMLVideoElement>(null);
-  const previewVideoRef = useRef<HTMLVideoElement>(null);
   const modalPlyrRef = useRef<APITypes | null>(null);
 
   const playerSource = useMemo(
@@ -97,28 +96,24 @@ export const Logo = () => {
   /** Возврат из bfcache: Safari иногда сбрасывает размеры видео до «квадрата». */
   useEffect(() => {
     const maskV = maskVideoRef.current;
-    const previewV = previewVideoRef.current;
-    if (!maskV && !previewV) return;
+    if (!maskV) return;
 
     const onPageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return;
       setIsPreviewMediaReady(false);
       setPreviewMediaSession((n) => n + 1);
-      maskV?.load();
-      previewV?.load();
-      void maskV?.play().catch(() => { });
-      void previewV?.play().catch(() => { });
+      maskV.load();
+      void maskV.play().catch(() => { });
     };
 
     window.addEventListener("pageshow", onPageShow);
     return () => window.removeEventListener("pageshow", onPageShow);
   }, []);
 
-  /** После закрытия модалки снова запускаем превью (некоторые браузеры ставят фон на паузу). */
+  /** После закрытия модалки снова запускаем анимацию (некоторые браузеры ставят видео на паузу). */
   useEffect(() => {
     if (isPlayerOpen) return;
     void maskVideoRef.current?.play().catch(() => { });
-    void previewVideoRef.current?.play().catch(() => { });
   }, [isPlayerOpen]);
 
   /** Открытие модалки по клику — пытаемся сразу запустить ролик со звуком из user-gesture. */
@@ -164,22 +159,6 @@ export const Logo = () => {
             <span className="logo-animation__cta" aria-hidden>
               ↗
             </span>
-            <img
-              className="logo-animation__video-poster"
-              src={IMAGES.logoVideoPoster}
-              alt=""
-              aria-hidden
-            />
-            <video
-              ref={previewVideoRef}
-              src={IMAGES.logoVideo}
-              poster={IMAGES.logoVideoPoster}
-              preload="auto"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
           </button>
         </div>
       </div>

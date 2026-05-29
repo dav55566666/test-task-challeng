@@ -15,12 +15,9 @@ import project1_4 from '../../assets/project1_4.webp';
 import project1_5 from '../../assets/project1_5.webp';
 import logoAnimation from '../../assets/logo-animation.mp4';
 import logoBgVideo from '../../assets/logo-bg-video.mp4';
-import logoVideoPoster from '../../assets/logo-video-poster.png';
-
 export const IMAGES = {
   logoAnimation,
   logoVideo: logoBgVideo,
-  logoVideoPoster,
   logoMask,
   logoMaskGradient,
   arrow,
