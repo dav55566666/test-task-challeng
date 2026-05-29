@@ -6,6 +6,8 @@ import './styles/main.scss';
 
 /** Минимальный зазор между низом текстового блока и «верхом» зоны логотипа при укороченном экране. */
 const MAIN_LOGO_TEXT_GAP_PX = 16;
+/** Совпадает с mobile-колонкой в `main.scss` — там позиция логотипа только в CSS. */
+const MOBILE_HERO_LAYOUT_MAX_WIDTH_PX = 480;
 
 export const Main = () => {
     const rootRef = useRef<HTMLElement>(null);
@@ -20,6 +22,11 @@ export const Main = () => {
         if (!root || !text || !logo) return;
 
         const update = () => {
+            if (window.innerWidth <= MOBILE_HERO_LAYOUT_MAX_WIDTH_PX) {
+                setLogoTopPx(null);
+                return;
+            }
+
             const mainRect = root.getBoundingClientRect();
             const textRect = text.getBoundingClientRect();
             const logoRect = logo.getBoundingClientRect();
@@ -70,7 +77,7 @@ export const Main = () => {
     return (
         <section className="main" ref={rootRef}>
             <div className="main__text" ref={textRef}>
-                <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={24} tag={TextTag.H1} />
+                <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={28} tag={TextTag.H1} />
                 <p>поддерживаемых ИИ-системой операционных процессов</p>
             </div>
             <div

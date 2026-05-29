@@ -383,7 +383,7 @@ export const Sidebar = () => {
         aria-hidden={!showFabStack}
       >
         <a
-          className="app-menu__fab-btn"
+          className="app-menu__fab-btn app-menu__fab-btn--social"
           href={SOCIAL_LINKS.telegram}
           target="_blank"
           rel="noopener noreferrer"
@@ -392,7 +392,7 @@ export const Sidebar = () => {
           <TgIcon style={{ width: 24, height: 24 }} />
         </a>
         <a
-          className="app-menu__fab-btn"
+          className="app-menu__fab-btn app-menu__fab-btn--social"
           href={SOCIAL_LINKS.linkedin}
           target="_blank"
           rel="noopener noreferrer"
@@ -402,12 +402,12 @@ export const Sidebar = () => {
         </a>
         <button
           type="button"
-          className="app-menu__fab-btn"
+          className="app-menu__fab-btn app-menu__fab-btn--menu"
           aria-label="Открыть меню"
           aria-expanded={showMainNav && menuInCompactStyle}
           onClick={() => setMenuExpandedFromFab(true)}
         >
-          <BurgerIcon style={{ width: 20, height: 14 }} />
+          <BurgerIcon />
         </button>
       </div>
 

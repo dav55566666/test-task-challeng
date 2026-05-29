@@ -172,21 +172,20 @@
 }
 
 /* Узкие планшеты и крупные телефоны. */
-@media (max-width: 768px) and (min-width: 421px) {
+@media (max-width: 768px) and (min-width: 481px) {
   .logo-animation .logo-animation__scale {
     transform: scale(1);
   }
 }
 
-@media (max-width: 420px) {
-  .logo-animation .logo-animation__scale {
-    transform: scale(0.93);
+@media (max-width: 480px) {
+  .logo-animation {
+    width: 100%;
+    max-width: none;
   }
-}
 
-@media (max-width: 360px) {
   .logo-animation .logo-animation__scale {
-    transform: scale(0.86);
+    transform: scale(1.04);
   }
 }
 

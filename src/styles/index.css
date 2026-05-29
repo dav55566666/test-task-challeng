@@ -10,6 +10,13 @@
   --site-header-sticky-height: 4.5rem;
 }
 
+@media (max-width: 480px) {
+  :root {
+    /* 20px + 16px padding + 24px logo */
+    --site-header-sticky-height: 3.75rem;
+  }
+}
+
 html {
   overflow-x: clip;
 }

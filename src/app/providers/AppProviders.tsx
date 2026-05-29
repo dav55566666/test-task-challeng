@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { BrowserRouter, useLocation } from "react-router-dom";
 
+import { GradientShineProvider } from "../../core/uikit/GradientTitle/providers";
 import type { IAppProvidersProps } from "./interfaces";
 import { ScrollProvider } from "./ScrollProvider";
 
@@ -17,7 +18,9 @@ const RouteScrollTop = () => {
 export const AppProviders = ({ children }: IAppProvidersProps) => {
   return (
     <BrowserRouter>
-      <ScrollProvider>{children}</ScrollProvider>
+      <GradientShineProvider>
+        <ScrollProvider>{children}</ScrollProvider>
+      </GradientShineProvider>
       <RouteScrollTop />
     </BrowserRouter>
   );

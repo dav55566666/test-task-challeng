@@ -70,8 +70,8 @@
   }
 }
 
-/* Крупный телефон / узкий планшет ≤768px (не узкий мобильный ≤420px) */
-@media (max-width: 768px) and (min-width: 421px) {
+/* Крупный телефон / узкий планшет ≤768px (не колонка ≤480px) */
+@media (max-width: 768px) and (min-width: 481px) {
   .main__logo {
     width: min(100%, clamp(228px, 77vmin, 600px));
   }
@@ -80,9 +80,9 @@
 /* Компактная навигация (как на макете Figma для телефона): поля и масштаб героя */
 @media (max-width: 1279px) {
   .main {
-    padding: 18px max(16px, env(safe-area-inset-right, 0px))
+    padding: 18px max(20px, env(safe-area-inset-right, 0px))
       max(52px, calc(12px + env(safe-area-inset-bottom, 0px)))
-      max(16px, env(safe-area-inset-left, 0px));
+      max(20px, env(safe-area-inset-left, 0px));
   }
 
   .main__text {
@@ -101,12 +101,50 @@
   }
 }
 
-@media (max-width: 420px) {
+/* Телефон ≤480px: колонка, логотип в потоке (без grid-overlay и без JS-сдвига). */
+@media (max-width: 480px) {
   .main {
-    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 20px max(40px, calc(20px + env(safe-area-inset-bottom, 0px)));
+    min-height: calc(100svh - var(--site-header-sticky-height, 3.75rem));
+    min-height: calc(100dvh - var(--site-header-sticky-height, 3.75rem));
+  }
+
+  .main__text {
+    flex: 0 0 auto;
+    gap: 10px;
+    max-width: none;
+    width: 100%;
+
+    p {
+      font-size: 16px;
+      line-height: 120%;
+      letter-spacing: 0.03em;
+    }
   }
 
   .main__logo {
-    width: min(100%, clamp(226px, 96vmin, 480px));
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    margin: clamp(20px, 5vh, 36px) auto 0;
+    padding: 0;
+    place-self: auto;
+
+    &.main__logo--layout-clearance {
+      margin-top: clamp(20px, 5vh, 36px);
+    }
+
+    .logo-animation {
+      width: 100%;
+      max-width: none;
+    }
   }
 }
