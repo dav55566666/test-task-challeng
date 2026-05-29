@@ -52,7 +52,6 @@ export const AppMenuMobileDock = ({
   useLayoutEffect(() => {
     if (!visible || onDimmedBackdrop) {
       prevArcArrowRotationRef.current = null;
-      setArcArrow({ leftPx: 0, rotationDeg: 0, opacity: 0 });
       return;
     }
 
