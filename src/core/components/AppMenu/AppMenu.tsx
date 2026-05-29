@@ -77,6 +77,7 @@ export const Sidebar = () => {
   const [menuExpandedFromFab, setMenuExpandedFromFab] = useState(false);
   /** Ступенчатое «последний градиент» / отмена задержек после первого кадра открытия меню. */
   const [staggerEntrance, setStaggerEntrance] = useState(false);
+  const [staggerRunId, setStaggerRunId] = useState(0);
   /** На один кадр+ перед закрытием: снять активный класс/блоб с кнопки до старта анимации. */
   const [stripTargetBeforeClose, setStripTargetBeforeClose] = useState(false);
   /** После открытия из «закрытого» сначала true — не вешаем --active, через DEFER ms последним. */
@@ -209,24 +210,29 @@ export const Sidebar = () => {
   }, []);
 
   const showMainNav = !menuInCompactStyle || menuExpandedFromFab;
+  const stripTarget = stripTargetBeforeClose || !showMainNav;
+  const deferActive = deferMenuActive && showMainNav;
+
+  const scheduleOrbitLayout = useCallback((next: OrbitLayout | null) => {
+    queueMicrotask(() => setOrbitLayout(next));
+  }, []);
 
   useLayoutEffect(() => {
     void layoutTick;
     if (!showMainNav) {
       prevOrbitRotationDisplayRef.current = null;
-      setOrbitLayout(null);
       return;
     }
     const shell = shellRef.current;
     const arc = arcRef.current;
     const row = rowRefs.current[targetId];
     if (!shell || !arc || !row) {
-      setOrbitLayout(null);
+      scheduleOrbitLayout(null);
       return;
     }
     const ac = getArcCircle(arc.getBoundingClientRect());
     if (!ac) {
-      setOrbitLayout(null);
+      scheduleOrbitLayout(null);
       return;
     }
     const sr = shell.getBoundingClientRect();
@@ -253,13 +259,13 @@ export const Sidebar = () => {
         ? canonical
         : unwrapOrbitRotationDeg(prev, canonical);
     prevOrbitRotationDisplayRef.current = rotationDeg;
-    setOrbitLayout({
+    scheduleOrbitLayout({
       leftPx: ac.cx - ac.R - sr.left,
       topPx: ac.cy - ac.R - sr.top,
       diameterPx: 2 * ac.R,
       rotationDeg,
     });
-  }, [targetId, layoutTick, showMainNav]);
+  }, [targetId, layoutTick, showMainNav, scheduleOrbitLayout]);
 
   /** Синхронно снимаем active/glow (flushSync), затем 2×rAF — и только потом анимация закрытия. */
   const queueMenuCloseChoreography = useCallback((close: () => void) => {
@@ -275,35 +281,41 @@ export const Sidebar = () => {
 
   useEffect(() => {
     if (!showMainNav) {
-      setStaggerEntrance(false);
-      setDeferMenuActive(false);
-      setStripTargetBeforeClose(true);
-      menuWasHiddenForTransitionRef.current = true;
+      queueMicrotask(() => {
+        menuWasHiddenForTransitionRef.current = true;
+      });
       return;
     }
-    if (menuWasHiddenForTransitionRef.current) {
-      menuWasHiddenForTransitionRef.current = false;
-      setDeferMenuActive(true);
-      const t = window.setTimeout(() => {
-        setDeferMenuActive(false);
+    queueMicrotask(() => {
+      if (menuWasHiddenForTransitionRef.current) {
+        menuWasHiddenForTransitionRef.current = false;
+        setDeferMenuActive(true);
+        setStaggerEntrance(true);
+        setStaggerRunId((id) => id + 1);
+      } else {
         setStripTargetBeforeClose(false);
-      }, MENU_ACTIVE_RETURN_MS);
-      return () => window.clearTimeout(t);
-    }
-    setStripTargetBeforeClose(false);
+        setStaggerEntrance(true);
+        setStaggerRunId((id) => id + 1);
+      }
+    });
   }, [showMainNav]);
 
   useEffect(() => {
-    if (!showMainNav) {
-      setStaggerEntrance(false);
-      return;
-    }
-    setStaggerEntrance(true);
+    if (!deferMenuActive) return;
+    const t = window.setTimeout(() => {
+      setDeferMenuActive(false);
+      setStripTargetBeforeClose(false);
+    }, MENU_ACTIVE_RETURN_MS);
+    return () => window.clearTimeout(t);
+  }, [deferMenuActive]);
+
+  useEffect(() => {
+    if (!showMainNav || !staggerEntrance) return;
     const t = window.setTimeout(() => {
       setStaggerEntrance(false);
     }, 2200);
     return () => window.clearTimeout(t);
-  }, [showMainNav]);
+  }, [showMainNav, staggerEntrance, staggerRunId]);
 
   const showFabStack = menuInCompactStyle && !menuExpandedFromFab;
   /**
@@ -453,11 +465,9 @@ export const Sidebar = () => {
                 orderIndex={index}
                 label={item.label}
                 icon={item.icon}
-                glowTarget={targetId === item.id && !stripTargetBeforeClose}
+                glowTarget={targetId === item.id && !stripTarget}
                 isTarget={
-                  targetId === item.id &&
-                  !stripTargetBeforeClose &&
-                  !deferMenuActive
+                  targetId === item.id && !stripTarget && !deferActive
                 }
                 translateXRem={rowLayout.translateXRem}
                 rotateDeg={rowLayout.rotateDeg}
@@ -468,7 +478,7 @@ export const Sidebar = () => {
             );
           })}
         </nav>
-        {orbitLayout ? (
+        {showMainNav && orbitLayout ? (
           <MenuArcArrowOrbit
             leftPx={orbitLayout.leftPx}
             topPx={orbitLayout.topPx}
