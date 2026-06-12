@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 const SHELL =
-  "flex flex-col gap-6 px-4 pt-3 md:grid md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] md:items-start";
+  "flex flex-col gap-6 px-4 pt-0 md:grid md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] md:items-start md:pt-3";
 
 const MOBILE_STICKY_DEFAULT =
   "sticky top-[var(--site-header-sticky-height)] z-10 -mx-5 bg-white px-5 py-3 md:hidden";

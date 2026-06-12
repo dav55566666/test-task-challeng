@@ -1,3 +1,4 @@
+export * from "./projectGalleryTypes";
 export * from "./aboutManifesto";
 export * from "./contacts";
 export * from "./aboutTeam";

@@ -88,6 +88,7 @@ export const Sidebar = () => {
   if (location.pathname !== pathnameSnapshot) {
     setPathnameSnapshot(location.pathname);
     setMenuExpandedFromFab(false);
+    setCompactFab(shouldUseCompactFab());
   }
 
   const navRef = useRef<HTMLElement>(null);
@@ -138,13 +139,14 @@ export const Sidebar = () => {
   }, []);
 
   /**
-   * Боковое меню с 768px (md) как на десктопе; ниже — нижняя дуга + FAB.
-   * На главной до скролла — полное меню; после порога скролла — FAB + раскрытие.
-   * На остальных маршрутах — компактно независимо от ширины.
+   * <768 — FAB, меню только по кнопке.
+   * ≥768 — боковое меню авто только на главной до порога скролла (первый блок);
+   * на остальных страницах и после скролла на главной — FAB, открытие по кнопке.
    */
   const isHomeRoute = location.pathname === "/";
-  const menuInCompactStyle =
-    compactNavViewport || !isHomeRoute || compactFab;
+  const menuInCompactStyle = compactNavViewport
+    ? true
+    : !isHomeRoute || compactFab;
 
   const routeActiveId =
     MENU_LINKS.find(
@@ -470,6 +472,8 @@ export const Sidebar = () => {
                   targetId === item.id && !stripTarget && !deferActive
                 }
                 translateXRem={rowLayout.translateXRem}
+                translateXPx={rowLayout.translateXPx}
+                translateYPx={rowLayout.translateYPx}
                 rotateDeg={rowLayout.rotateDeg}
                 overDarkBackdrop={menuOverDarkBackdrop}
                 onClick={() => navigateToMenuItem(item)}

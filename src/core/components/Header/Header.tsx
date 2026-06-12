@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useProjectsUiStore } from "../../../store";
 import { PROJECT_TABS } from "../../data";
@@ -8,20 +8,30 @@ import { Tabs } from "../Tabs";
 
 import "./styles/header.scss";
 
+function isProjectsRoute(pathname: string): boolean {
+  return pathname === "/projects" || pathname.startsWith("/projects/");
+}
+
 export const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
   const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
   const scrollToCaseByTab = useProjectsUiStore((s) => s.scrollToCaseByTab);
 
-  const showProjectsTabs = location.pathname === "/projects";
+  const onProjectsList = location.pathname === "/projects";
+  const showProjectsTabs = isProjectsRoute(location.pathname);
 
   const handleProjectsTabChange = useCallback(
     (value: string) => {
       setCasesActiveTab(value);
-      scrollToCaseByTab(value);
+      if (onProjectsList) {
+        scrollToCaseByTab(value);
+      } else {
+        navigate("/projects");
+      }
     },
-    [scrollToCaseByTab, setCasesActiveTab]
+    [navigate, onProjectsList, scrollToCaseByTab, setCasesActiveTab]
   );
 
   return (

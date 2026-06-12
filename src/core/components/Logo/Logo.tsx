@@ -8,6 +8,7 @@ import "plyr-react/plyr.css";
 
 export const Logo = () => {
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [isPlayerFullscreen, setIsPlayerFullscreen] = useState(false);
   const [isPreviewMediaReady, setIsPreviewMediaReady] = useState(false);
   const [previewMediaSession, setPreviewMediaSession] = useState(0);
   const maskVideoRef = useRef<HTMLVideoElement>(null);
@@ -17,6 +18,28 @@ export const Logo = () => {
     () => ({
       type: "video" as const,
       sources: [{ src: IMAGES.logoVideo, type: "video/mp4" }],
+    }),
+    []
+  );
+
+  const modalPlayerOptions = useMemo(
+    () => ({
+      autoplay: true,
+      muted: false,
+      hideControls: false,
+      fullscreen: {
+        enabled: true,
+        fallback: true,
+      },
+      controls: [
+        "play-large",
+        "play",
+        "progress",
+        "current-time",
+        "mute",
+        "volume",
+        "fullscreen",
+      ],
     }),
     []
   );
@@ -47,7 +70,13 @@ export const Logo = () => {
     body.style.width = "100%";
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsPlayerOpen(false);
+      if (event.key !== "Escape") return;
+      const player = modalPlyrRef.current?.plyr;
+      if (player?.fullscreen.active) {
+        player.fullscreen.exit();
+        return;
+      }
+      setIsPlayerOpen(false);
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -129,6 +158,36 @@ export const Logo = () => {
     return () => window.clearTimeout(timer);
   }, [isPlayerOpen]);
 
+  /** Снимаем overflow у модалки, иначе Plyr fallback fullscreen обрезается контейнером. */
+  useEffect(() => {
+    if (!isPlayerOpen) {
+      setIsPlayerFullscreen(false);
+      return;
+    }
+
+    let detach: (() => void) | undefined;
+    const timer = window.setTimeout(() => {
+      const player = modalPlyrRef.current?.plyr;
+      if (!player) return;
+
+      const onEnter = () => setIsPlayerFullscreen(true);
+      const onExit = () => setIsPlayerFullscreen(false);
+
+      player.on("enterfullscreen", onEnter);
+      player.on("exitfullscreen", onExit);
+      detach = () => {
+        player.off("enterfullscreen", onEnter);
+        player.off("exitfullscreen", onExit);
+      };
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+      detach?.();
+      setIsPlayerFullscreen(false);
+    };
+  }, [isPlayerOpen]);
+
   return (
     <>
       <div
@@ -166,7 +225,10 @@ export const Logo = () => {
       {isPlayerOpen
         ? createPortal(
           <div
-            className="logo-video-modal fixed inset-0 flex items-center justify-center px-5"
+            className={
+              "logo-video-modal fixed inset-0 flex items-center justify-center px-5" +
+              (isPlayerFullscreen ? " logo-video-modal--player-fullscreen" : "")
+            }
             onClick={() => setIsPlayerOpen(false)}
             role="presentation"
           >
@@ -189,19 +251,7 @@ export const Logo = () => {
                 <Plyr
                   ref={modalPlyrRef}
                   source={playerSource}
-                  options={{
-                    autoplay: true,
-                    muted: false,
-                    controls: [
-                      "play-large",
-                      "play",
-                      "progress",
-                      "current-time",
-                      "mute",
-                      "volume",
-                      "fullscreen",
-                    ],
-                  }}
+                  options={modalPlayerOptions}
                 />
               </div>
             </div>

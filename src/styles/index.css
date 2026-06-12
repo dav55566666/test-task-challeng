@@ -6,8 +6,15 @@
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;
   --ring: 222.2 84% 4.9%;
-  /* Header block: 24px + 24px padding + ~24px logo — used by sticky section bars */
+  /* Header: 24px + 24px padding + 24px logo — sticky bars snap flush below */
   --site-header-sticky-height: 4.5rem;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    /* 16px + 18px padding + 24px logo */
+    --site-header-sticky-height: 3.625rem;
+  }
 }
 
 @media (max-width: 480px) {

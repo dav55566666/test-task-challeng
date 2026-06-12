@@ -13,7 +13,9 @@ type MenuItemProps = {
   glowTarget: boolean;
   /** 0 = верх (Услуги) … 4 = низ (Контакты), для ступенчатых анимаций десктоп-меню. */
   orderIndex: number;
-  translateXRem: number;
+  translateXRem?: number;
+  translateXPx?: number;
+  translateYPx?: number;
   rotateDeg: number;
   /** Открыто из FAB поверх тёмного backdrop — неактивные пункты светлые. */
   overDarkBackdrop?: boolean;
@@ -33,6 +35,8 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
       glowTarget,
       orderIndex,
       translateXRem,
+      translateXPx,
+      translateYPx,
       rotateDeg,
       onClick,
       onMouseEnter,
@@ -50,7 +54,13 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
           " relative z-10 overflow-visible transition-transform duration-[600ms] ease-out"
         }
         style={{
-          transform: `translateX(${translateXRem}rem) rotate(${rotateDeg}deg)`,
+          transform: [
+            `translateX(${translateXPx != null ? `${translateXPx}px` : `${translateXRem ?? 0}rem`})`,
+            translateYPx != null ? `translateY(${translateYPx}px)` : null,
+            `rotate(${rotateDeg}deg)`,
+          ]
+            .filter(Boolean)
+            .join(" "),
           transformOrigin: "right center",
         }}
       >

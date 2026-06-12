@@ -1,34 +1,99 @@
-const FIGURE_CLASS =
-    "relative m-0 overflow-hidden rounded-xl md:rounded-[1.25rem]";
+import type { CSSProperties } from "react";
 
+import {
+  PROJECT_GALLERY_MAX_WIDTH,
+  type ProjectGalleryLayout,
+} from "../../data/projectGalleryTypes";
+
+const FIGURE_CLASS =
+  "relative m-0 min-w-0 overflow-hidden rounded-xl md:rounded-[1.25rem]";
+
+const IMG_CLASS = "block h-full w-full bg-[#f7f7f7] object-cover";
+
+type ProjectGalleryProps = {
+  images: readonly string[];
+  layout: ProjectGalleryLayout;
+  primaryAlt: string;
+  title: string;
+};
+
+function getFlexBasis(width: number): string {
+  return `${(width / PROJECT_GALLERY_MAX_WIDTH) * 100}%`;
+}
 
 export function ProjectGallery({
-    images,
-    primaryAlt,
-    title,
-}: {
-    images: readonly string[];
-    primaryAlt: string;
-    title: string;
-}) {
-    return (
-        <div className="flex min-w-0 flex-col gap-5 md:gap-5">
-            {images.map((src, index) => (
-                <figure key={`${src}-${index}`} className={FIGURE_CLASS}>
-                    <img
-                        src={src}
-                        alt={
-                            index === 0
-                                ? primaryAlt
-                                : `${title} — изображение ${index + 1}`
-                        }
-                        width={1200}
-                        height={1200}
-                        loading={index < 2 ? "eager" : "lazy"}
-                        className="block h-auto w-full bg-[#f7f7f7] object-contain"
-                    />
+  images,
+  layout,
+  primaryAlt,
+  title,
+}: ProjectGalleryProps) {
+  let imageCounter = 0;
+
+  return (
+    <div className="flex min-w-0 flex-col gap-5 md:gap-5">
+      {layout.map((row, rowIndex) => {
+        const isMultiColumn = row.images.length > 1;
+
+        return (
+          <div
+            key={`row-${rowIndex}`}
+            className={
+              isMultiColumn
+                ? "flex min-w-0 flex-col gap-5 md:flex-row md:gap-5"
+                : "flex min-w-0"
+            }
+          >
+            {row.images.map((item) => {
+              const src = images[item.index];
+              const altIndex = imageCounter;
+              imageCounter += 1;
+
+              const isPartialWidth =
+                !isMultiColumn && item.width < PROJECT_GALLERY_MAX_WIDTH;
+
+              const figureStyle: CSSProperties = {
+                aspectRatio: `${item.width} / ${item.height}`,
+              };
+
+              const styleVars: Record<string, string> = {};
+
+              if (isMultiColumn) {
+                styleVars["--gallery-flex"] = `${item.width} 1 0`;
+              }
+
+              if (isPartialWidth) {
+                styleVars["--gallery-width"] = getFlexBasis(item.width);
+              }
+
+              return (
+                <figure
+                  key={`${src}-${item.index}`}
+                  className={
+                    FIGURE_CLASS +
+                    " w-full" +
+                    (isMultiColumn ? " md:[flex:var(--gallery-flex)]" : "") +
+                    (isPartialWidth ? " md:w-[var(--gallery-width)]" : "")
+                  }
+                  style={{ ...figureStyle, ...styleVars }}
+                >
+                  <img
+                    src={src}
+                    alt={
+                      altIndex === 0
+                        ? primaryAlt
+                        : `${title} — изображение ${altIndex + 1}`
+                    }
+                    width={item.width}
+                    height={item.height}
+                    loading={altIndex < 2 ? "eager" : "lazy"}
+                    className={IMG_CLASS}
+                  />
                 </figure>
-            ))}
-        </div>
-    );
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
 }

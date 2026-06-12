@@ -31,10 +31,10 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
     href: "https://yandex.ru/maps/?text=Москва%2C%20ул.%20Ладо%20Кецховели%2022а",
   },
   {
-    id: "instagram",
-    label: "Instagram",
+    id: "max",
+    label: "Max",
     value: "@fabula",
-    href: "https://instagram.com/fabula",
+    href: "https://max.ru/fabula",
   },
   {
     id: "telegram-2",

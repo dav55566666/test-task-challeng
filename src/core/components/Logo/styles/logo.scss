@@ -125,12 +125,32 @@
   background: transparent;
 }
 
-.logo-video-modal__player-wrap :is(.plyr, .plyr--video) {
+.logo-video-modal__player-wrap :is(.plyr, .plyr--video):not(:fullscreen):not(.plyr--fullscreen-fallback) {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   max-height: 100%;
+}
+
+.logo-video-modal--player-fullscreen {
+  overflow: visible;
+
+  .logo-video-modal__content,
+  .logo-video-modal__player-wrap {
+    overflow: visible;
+    max-height: none;
+  }
+}
+
+.logo-video-modal__player-wrap :is(.plyr--fullscreen-fallback, .plyr:fullscreen) {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  z-index: 10000001 !important;
 }
 
 .logo-video-modal__player-wrap :is(.plyr__video-wrapper, .plyr__video-embed) {

@@ -16,7 +16,9 @@
   @supports not (height: 100dvh) {
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
-
+  @media (max-width: 768px) {
+    min-height: calc(100svh - var(--site-header-sticky-height, 3.75rem));
+  }
   &__text {
     grid-area: hero;
     position: relative;

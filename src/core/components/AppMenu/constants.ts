@@ -34,13 +34,20 @@ export const SOCIAL_LINKS = {
   linkedin: "https://www.linkedin.com/",
 } as const;
 
-export const ROW_LAYOUT = [
-  { rotateDeg: 20, translateXRem: SHIFT_OUT_REM },
+export type DesktopRowLayout = {
+  rotateDeg: number;
+  translateXRem?: number;
+  translateXPx?: number;
+  translateYPx?: number;
+};
+
+export const ROW_LAYOUT: readonly DesktopRowLayout[] = [
+  { rotateDeg: 22, translateXPx: 41, translateYPx: -10 },
   { rotateDeg: 15, translateXRem: SHIFT_MID_REM },
   { rotateDeg: 0, translateXRem: 0 },
   { rotateDeg: -15, translateXRem: SHIFT_MID_REM },
   { rotateDeg: -20, translateXRem: SHIFT_OUT_REM },
-] as const;
+];
 
 /**
  * Мобильный док: дуга (Услуги → Контакты).

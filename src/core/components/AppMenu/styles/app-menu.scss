@@ -80,8 +80,14 @@
     cursor: pointer;
   }
 
+  /* Услуги: позиция и наклон по дуге (Figma / tangent guide) */
+  .app-menu__desktop-item--i0 {
+    transform: translateX(41px) translateY(-10px) rotate(22deg);
+    transform-origin: right center;
+  }
+
   .app-menu__desktop-item-icon--services {
-    transform: rotate(-20deg);
+    transform: rotate(-22deg);
   }
 
   /* Row tilt +15deg; straighten icon like siblings + slight optical nudge vs caps */
@@ -547,11 +553,11 @@
 }
 
 .app-menu__mobile-dock__icon--services {
-  transform: translateY(2px);
+  transform: translateY(2px) rotate(-22deg);
 }
 
 .app-menu__mobile-dock__icon--cases {
-  transform: translateY(2px);
+  transform: translateY(2px) rotate(-10deg);
 }
 
 .app-menu__mobile-dock__icon--home {
@@ -559,11 +565,11 @@
 }
 
 .app-menu__mobile-dock__icon--about {
-  transform: translateY(2px);
+  transform: translateY(2px) rotate(10deg);
 }
 
 .app-menu__mobile-dock__icon--contacts {
-  transform: translateY(2px);
+  transform: translateY(2px) rotate(22deg);
 }
 
 .app-menu__mobile-dock__inner {
@@ -586,8 +592,8 @@
 .app-menu__mobile-dock__line-arc {
   position: absolute;
   z-index: 1;
-  width: 838px;
-  height: 838px;
+  width: 1000px;
+  height: 1000px;
   left: 50%;
   transform: translateX(-50%);
   top: 112px;
@@ -607,10 +613,10 @@
   z-index: 1;
   left: 50%;
   top: -34px;
-  width: 596px;
-  height: 507px;
+  width: 800px;
+  height: 800px;
   transform: translateX(-50%);
-  border-radius: 2400px 2400px 0px 0px;
+  border-radius: 3400px 3400px 0px 0px;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.62) 0%,
@@ -693,6 +699,7 @@
   list-style: none;
   margin: 0.65rem 0 0;
   padding: 0.64rem 0.28rem 2.35rem;
+  top: -20px;
 }
 
 .app-menu__mobile-dock__item {
@@ -701,6 +708,10 @@
   max-width: 4.25rem;
   display: flex;
   justify-content: center;
+}
+
+.app-menu__mobile-dock__item:nth-child(1) {
+  transform: rotate(-22deg);
 }
 
 .app-menu__mobile-dock__btn {
