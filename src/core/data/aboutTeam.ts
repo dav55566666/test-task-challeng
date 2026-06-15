@@ -37,4 +37,4 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
 ];
 
 export const ABOUT_HERO_HEADLINE =
-  "Мы не довольствуемся привычным,\nвот за что нас любят";
+  "Креативное коммьюнити и продюсерский контент-центр ";

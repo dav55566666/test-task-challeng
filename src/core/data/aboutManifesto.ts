@@ -7,14 +7,9 @@ export type AboutManifestoParagraph = readonly AboutManifestoLine[];
 
 export const ABOUT_MANIFESTO_PARAGRAPHS: readonly AboutManifestoParagraph[] = [
   [
-    { text: "Мы верим, что современные маркетинговые", maxRem: 70 },
-    { text: "и коммуникационные вызовы нужно решать единой", maxRem: 90 },
-    { text: "командой, обогащённой профильными талантами.", maxRem: 80 },
   ],
   [
-    { text: "Для большей эффективности, мы оставили творческое", maxRem: 80 },
-    { text: "людям и передали операционные процессы разработанной", maxRem: 80 },
-    { text: "ИИ-инфраструктуре.", maxRem: 40 },
+    { text: "Креативное коммьюнити и продюсерский контент-центр ", maxRem: 80 }
   ],
 ];
 

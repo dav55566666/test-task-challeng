@@ -8,6 +8,8 @@ import './styles/main.scss';
 const MAIN_LOGO_TEXT_GAP_PX = 16;
 /** Совпадает с mobile-колонкой в `main.scss` — там позиция логотипа только в CSS. */
 const MOBILE_HERO_LAYOUT_MAX_WIDTH_PX = 480;
+/** Планшет: логотип в зоне под заголовком, не по центру всего hero. */
+const TABLET_HERO_LAYOUT_MAX_WIDTH_PX = 1279;
 
 export const Main = () => {
     const rootRef = useRef<HTMLElement>(null);
@@ -34,11 +36,24 @@ export const Main = () => {
             if (mainRect.height < 1 || logoRect.height < 1) return;
 
             const textBottomInMain = textRect.bottom - mainRect.top;
-            const idealLogoTop = mainRect.height / 2 - logoRect.height / 2;
+            const isTabletHeroLayout =
+                window.innerWidth > MOBILE_HERO_LAYOUT_MAX_WIDTH_PX &&
+                window.innerWidth <= TABLET_HERO_LAYOUT_MAX_WIDTH_PX;
+
+            const centeredLogoTopInMain = mainRect.height / 2 - logoRect.height / 2;
+            const spaceBelowText = mainRect.height - textBottomInMain - MAIN_LOGO_TEXT_GAP_PX;
+            const tabletLogoTopInMain =
+                textBottomInMain +
+                MAIN_LOGO_TEXT_GAP_PX +
+                Math.max(0, (spaceBelowText - logoRect.height) / 2);
+
+            const idealLogoTop = isTabletHeroLayout
+                ? tabletLogoTopInMain
+                : centeredLogoTopInMain;
             const clearanceLogoTop = textBottomInMain + MAIN_LOGO_TEXT_GAP_PX;
 
             /** Позиция логотипа при «идеальном» вертикальном центре внутри .main (в координатах вьюпорта). */
-            const centeredLogoTop = mainRect.top + idealLogoTop;
+            const centeredLogoTop = mainRect.top + centeredLogoTopInMain;
             const centeredLogoBottom = centeredLogoTop + logoRect.height;
             const logoLeft = logoRect.left;
             const logoRight = logoRect.right;
@@ -49,9 +64,11 @@ export const Main = () => {
                 textRect.bottom > centeredLogoTop && textRect.top < centeredLogoBottom;
             const wouldOverlapIfCentered = overlapsHorizontally && overlapsVerticallyWhenCentered;
 
-            const nextTop: number | null = wouldOverlapIfCentered
-                ? Math.max(idealLogoTop, clearanceLogoTop)
-                : null;
+            const nextTop: number | null = isTabletHeroLayout
+                ? idealLogoTop
+                : wouldOverlapIfCentered
+                  ? Math.max(idealLogoTop, clearanceLogoTop)
+                  : null;
 
             setLogoTopPx(nextTop);
         };

@@ -15,7 +15,7 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   {
     id: "telegram",
     label: "Телеграм",
-    value: "@fabula",
+    value: "helloT@Fabula @fabula_creativecommunity ",
     href: "https://t.me/fabula",
   },
   {

@@ -11,11 +11,11 @@ const STATS: { value: string; label: string; underline?: boolean }[] = [
     label: "международных и российских брендов",
   },
   {
-    value: "7+ лет",
+    value: "10+ лет",
     label: "на рынке",
   },
   {
-    value: "900+",
+    value: "600+",
     label: "реализованных стратегий и активаций",
     underline: true,
   },
@@ -28,7 +28,7 @@ const STATS: { value: string; label: string; underline?: boolean }[] = [
     label: "членов интегрированной команды",
   },
   {
-    value: "50+",
+    value: "33+",
     label: "успешных запусков и кампаний",
   },
 ];
