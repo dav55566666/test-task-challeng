@@ -5,7 +5,10 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import { GRADIENT_SHINE_DURATION_MS } from "../constants/gradient-shine.constants";
+import {
+  GRADIENT_SHINE_DURATION_MS,
+  GRADIENT_SHINE_ENABLED,
+} from "../constants/gradient-shine.constants";
 import {
   GradientShineContext,
   type GradientShineContextValue,
@@ -102,8 +105,9 @@ export const GradientShineProvider = ({ children }: { children: ReactNode }) => 
 
   useEffect(() => {
     reducedMotionRef.current =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      !GRADIENT_SHINE_ENABLED ||
+      (typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
     if (reducedMotionRef.current) {
       setShinePosition(0);

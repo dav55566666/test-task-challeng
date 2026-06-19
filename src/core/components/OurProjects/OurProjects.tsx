@@ -26,7 +26,6 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
   const showTabs = typeof limit !== "number";
   const figureRefs = useRef<(HTMLElement | null)[]>([]);
   const articleRefs = useRef<(HTMLElement | null)[]>([]);
-  const programmaticScrollTabRef = useRef<string | null>(null);
   const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
   const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
   const setScrollToCaseByTab = useProjectsUiStore((s) => s.setScrollToCaseByTab);
@@ -46,23 +45,9 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
       ? (projects[projectIndex] ?? projects[0])
       : undefined;
 
-  const scrollSyncedTab =
-    projects[activeIndex ?? 0]?.tabValue ?? PROJECT_TABS[0].value;
-
-  useLayoutEffect(() => {
-    if (!showTabs) return;
-    const pending = programmaticScrollTabRef.current;
-    if (pending !== null && scrollSyncedTab !== pending) return;
-    if (pending !== null && scrollSyncedTab === pending) {
-      programmaticScrollTabRef.current = null;
-    }
-    setCasesActiveTab(scrollSyncedTab);
-  }, [showTabs, scrollSyncedTab, setCasesActiveTab]);
-
   const scrollListToTab = useCallback((value: string) => {
     const idx = projects.findIndex((p) => p.tabValue === value);
     if (idx < 0) return;
-    programmaticScrollTabRef.current = value;
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;

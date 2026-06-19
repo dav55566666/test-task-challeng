@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { GRADIENT_SHINE_ENABLED } from "./constants/gradient-shine.constants";
 import { TextTag } from "./enums";
 import { getClassNames } from "./helpers";
 import { useGradientShineRegistration } from "./hooks";
@@ -15,9 +16,10 @@ export const GradientTitle = ({
   animated = true,
 }: IGradientTitleProps) => {
   const classNames = getClassNames();
+  const shineEnabled = animated && GRADIENT_SHINE_ENABLED;
   const { rootRef, isShineActive, hasProvider } =
-    useGradientShineRegistration(animated);
-  const useStaticGradient = !animated || !hasProvider;
+    useGradientShineRegistration(shineEnabled);
+  const useStaticGradient = !shineEnabled || !hasProvider;
 
   const styles = {
     "--gradient-title-mobile-size": `${mobileSize}px`,

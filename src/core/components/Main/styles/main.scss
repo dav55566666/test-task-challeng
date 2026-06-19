@@ -39,7 +39,7 @@
     }
   }
 
-  /* F-логотип: по центру hero; при нехватке высоты — без наезда на текст (см. Main.tsx). */
+  /* F-логотип: по центру hero; на ≤480 — колонка в потоке. */
   &__logo {
     grid-area: hero;
     place-self: center;
@@ -52,7 +52,7 @@
     pointer-events: none;
     overflow: visible;
 
-    &--layout-clearance {
+    &--positioned {
       place-self: start center;
     }
 
@@ -79,7 +79,7 @@
   }
 }
 
-/* Компактная навигация (как на макете Figma для телефона): поля и масштаб героя */
+/* Компактная навигация: только поля, без смены ширины текста/логотипа (иначе скачок на 1280px). */
 @media (max-width: 1279px) {
   .main {
     padding: 18px max(20px, env(safe-area-inset-right, 0px))
@@ -89,17 +89,12 @@
 
   .main__text {
     gap: 12px;
-    max-width: min(100%, 22.5rem);
 
     p {
       font-size: 15px;
       line-height: 118%;
       letter-spacing: 0.02em;
     }
-  }
-
-  .main__logo {
-    width: min(100%, clamp(235px, 94vmin, 504px));
   }
 }
 
@@ -139,10 +134,6 @@
     margin: clamp(20px, 5vh, 36px) auto 0;
     padding: 0;
     place-self: auto;
-
-    &.main__logo--layout-clearance {
-      margin-top: clamp(20px, 5vh, 36px);
-    }
 
     .logo-animation {
       width: 100%;

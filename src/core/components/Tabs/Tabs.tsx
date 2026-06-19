@@ -42,7 +42,6 @@ export function Tabs({
   const tabsRootRef = useRef<HTMLDivElement>(null);
   const prevIndicatorYRef = useRef<number | null>(null);
   const revealClearTimerRef = useRef<number | null>(null);
-  const [hoveredValue, setHoveredValue] = useState<string | null>(null);
   const [resizeTick, setResizeTick] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({
     x: 0,
@@ -54,8 +53,6 @@ export function Tabs({
     null | "from-bottom" | "from-top"
   >(null);
   const isMobile = useIsMobileViewport();
-
-  const targetValue = hoveredValue ?? activeValue;
 
   useEffect(() => {
     const onResize = () => setResizeTick((n) => n + 1);
@@ -75,7 +72,7 @@ export function Tabs({
     const INDICATOR_HEIGHT_PX = 2;
 
     const frame = window.requestAnimationFrame(() => {
-      const targetEl = tabRefs.current[targetValue];
+      const targetEl = tabRefs.current[activeValue];
       const root = tabsRootRef.current;
       if (!targetEl || !root) {
         setIndicatorStyle((prev) =>
@@ -129,7 +126,7 @@ export function Tabs({
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [isMobile, items, resizeTick, targetValue]);
+  }, [activeValue, isMobile, items, resizeTick]);
 
   return (
     <div
@@ -140,7 +137,6 @@ export function Tabs({
       }
       role="tablist"
       aria-label={ariaLabel}
-      onMouseLeave={() => setHoveredValue(null)}
     >
       {items.map((item) => {
         const isActive = item.value === activeValue;
@@ -160,7 +156,6 @@ export function Tabs({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 " +
               "focus-visible:ring-offset-2"
             }
-            onMouseEnter={() => setHoveredValue(item.value)}
             onClick={() => onChange(item.value)}
           >
             <span

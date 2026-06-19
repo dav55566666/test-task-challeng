@@ -4,12 +4,12 @@ import { GradientTitle, TextTag } from "../../uikit";
 import { Logo } from "../Logo";
 import './styles/main.scss';
 
-/** Минимальный зазор между низом текстового блока и «верхом» зоны логотипа при укороченном экране. */
+/** Чуть ниже геометрического центра hero. */
+const MAIN_LOGO_NUDGE_DOWN_PX = 28;
+/** Минимальный зазор между низом текста и верхом F при горизонтальном пересечении. */
 const MAIN_LOGO_TEXT_GAP_PX = 16;
-/** Совпадает с mobile-колонкой в `main.scss` — там позиция логотипа только в CSS. */
+/** Совпадает с mobile-колонкой в `main.scss`. */
 const MOBILE_HERO_LAYOUT_MAX_WIDTH_PX = 480;
-/** Планшет: логотип в зоне под заголовком, не по центру всего hero. */
-const TABLET_HERO_LAYOUT_MAX_WIDTH_PX = 1279;
 
 export const Main = () => {
     const rootRef = useRef<HTMLElement>(null);
@@ -36,39 +36,22 @@ export const Main = () => {
             if (mainRect.height < 1 || logoRect.height < 1) return;
 
             const textBottomInMain = textRect.bottom - mainRect.top;
-            const isTabletHeroLayout =
-                window.innerWidth > MOBILE_HERO_LAYOUT_MAX_WIDTH_PX &&
-                window.innerWidth <= TABLET_HERO_LAYOUT_MAX_WIDTH_PX;
-
+            const textLeftInMain = textRect.left - mainRect.left;
+            const textRightInMain = textRect.right - mainRect.left;
             const centeredLogoTopInMain = mainRect.height / 2 - logoRect.height / 2;
-            const spaceBelowText = mainRect.height - textBottomInMain - MAIN_LOGO_TEXT_GAP_PX;
-            const tabletLogoTopInMain =
-                textBottomInMain +
-                MAIN_LOGO_TEXT_GAP_PX +
-                Math.max(0, (spaceBelowText - logoRect.height) / 2);
+            const nudgedLogoTopInMain = centeredLogoTopInMain + MAIN_LOGO_NUDGE_DOWN_PX;
+            const clearanceLogoTopInMain = textBottomInMain + MAIN_LOGO_TEXT_GAP_PX;
 
-            const idealLogoTop = isTabletHeroLayout
-                ? tabletLogoTopInMain
-                : centeredLogoTopInMain;
-            const clearanceLogoTop = textBottomInMain + MAIN_LOGO_TEXT_GAP_PX;
-
-            /** Позиция логотипа при «идеальном» вертикальном центре внутри .main (в координатах вьюпорта). */
-            const centeredLogoTop = mainRect.top + centeredLogoTopInMain;
-            const centeredLogoBottom = centeredLogoTop + logoRect.height;
-            const logoLeft = logoRect.left;
-            const logoRight = logoRect.right;
-
+            const logoWidth = logoRect.width;
+            const logoLeftWhenCentered = (mainRect.width - logoWidth) / 2;
+            const logoRightWhenCentered = logoLeftWhenCentered + logoWidth;
             const overlapsHorizontally =
-                textRect.right > logoLeft && textRect.left < logoRight;
-            const overlapsVerticallyWhenCentered =
-                textRect.bottom > centeredLogoTop && textRect.top < centeredLogoBottom;
-            const wouldOverlapIfCentered = overlapsHorizontally && overlapsVerticallyWhenCentered;
+                textRightInMain > logoLeftWhenCentered &&
+                textLeftInMain < logoRightWhenCentered;
 
-            const nextTop: number | null = isTabletHeroLayout
-                ? idealLogoTop
-                : wouldOverlapIfCentered
-                  ? Math.max(idealLogoTop, clearanceLogoTop)
-                  : null;
+            const nextTop = overlapsHorizontally
+                ? Math.max(nudgedLogoTopInMain, clearanceLogoTopInMain)
+                : nudgedLogoTopInMain;
 
             setLogoTopPx(nextTop);
         };
@@ -87,7 +70,6 @@ export const Main = () => {
         };
     }, []);
 
-    const logoModifier = logoTopPx != null ? " main__logo--layout-clearance" : "";
     const logoStyle: CSSProperties | undefined =
         logoTopPx != null ? { marginTop: logoTopPx } : undefined;
 
@@ -97,11 +79,7 @@ export const Main = () => {
                 <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={28} tag={TextTag.H1} />
                 <p>поддерживаемых ИИ-системой операционных процессов</p>
             </div>
-            <div
-                className={"main__logo" + logoModifier}
-                ref={logoRef}
-                style={logoStyle}
-            >
+            <div className="main__logo main__logo--positioned" ref={logoRef} style={logoStyle}>
                 <Logo />
             </div>
         </section>
