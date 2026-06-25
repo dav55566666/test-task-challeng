@@ -10,6 +10,7 @@ import {
   caseStudyBodyCopyClass,
 } from "../ProjectSplitLayout";
 import { Tabs } from "../Tabs";
+import { ProjectMedia } from "../ProjectMedia";
 import { useMaxIntersectionIndex } from "../../hooks";
 
 import "./styles/our-projects.scss";
@@ -31,11 +32,15 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
   const setScrollToCaseByTab = useProjectsUiStore((s) => s.setScrollToCaseByTab);
 
   const projects = useMemo(() => {
-    if (typeof limit === "number") {
-      return OUR_PROJECTS.slice(0, limit);
+    const base =
+      typeof limit === "number"
+        ? OUR_PROJECTS.slice(0, limit)
+        : OUR_PROJECTS;
+    if (!showTabs) {
+      return base;
     }
-    return OUR_PROJECTS;
-  }, [limit]);
+    return base.filter((p) => p.tabValue === casesActiveTab);
+  }, [casesActiveTab, limit, showTabs]);
 
   const count = projects.length;
   const { activeIndex, registerItemRef } = useMaxIntersectionIndex(count);
@@ -155,13 +160,13 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
               }}
               className="relative m-0 overflow-hidden rounded-xl md:rounded-[1.25rem]"
             >
-              <img
+              <ProjectMedia
                 src={item.image}
                 alt={item.imageAlt}
                 width={1200}
                 height={675}
                 loading={i < 2 ? "eager" : "lazy"}
-                className="block h-auto w-full"
+                className="block h-auto w-full border-0 outline-none"
               />
               <div
                 className={`our-projects__figure-wash pointer-events-none absolute inset-0 z-1 hidden rounded-xl md:block md:rounded-[1.25rem]${activeIndex === i ? " is-clear" : ""}`}

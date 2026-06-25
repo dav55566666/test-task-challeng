@@ -32,15 +32,15 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   },
   {
     id: "max",
-    label: "Max",
+    label: "МАКС",
     value: "@fabula",
-    href: "https://max.ru/fabula",
+    href: "https://max.ru/join/2XhSuW9rfm9sYjvSLilehiVnC8PGwGaSdD9pFE_2lMQ",
   },
   {
     id: "telegram-2",
     label: "Телеграм",
     value: "@fabula",
-    href: "https://t.me/fabula",
+    href: "https://t.me/fabulacommunity",
   },
   {
     id: "linkedin",

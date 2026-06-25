@@ -23,14 +23,14 @@ export const SHIFT_MID_REM = 0.625;
 export const DESKTOP_ORBIT_Y_BIAS_PX_BY_ID = {
   services: 28,
   cases: 18,
-  home: 5,
+  home: 10,
   about: -14,
   contacts: -32,
 } as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;
 
 /** Замени на реальные ссылки проекта. */
 export const SOCIAL_LINKS = {
-  telegram: "https://t.me/",
+  telegram: "https://t.me/fabulacommunity",
   linkedin: "https://www.linkedin.com/",
 } as const;
 
@@ -45,7 +45,7 @@ export const ROW_LAYOUT: readonly DesktopRowLayout[] = [
   { rotateDeg: 22, translateXPx: 41, translateYPx: 0 },
   { rotateDeg: 10, translateXRem: SHIFT_MID_REM },
   { rotateDeg: 0, translateXRem: 0 },
-  { rotateDeg: -15, translateXRem: SHIFT_MID_REM },
+  { rotateDeg: -10, translateXRem: SHIFT_MID_REM },
   { rotateDeg: -20, translateXRem: SHIFT_OUT_REM },
 ];
 

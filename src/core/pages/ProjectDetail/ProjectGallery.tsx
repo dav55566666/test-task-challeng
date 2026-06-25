@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import { ProjectMedia } from "../../components/ProjectMedia";
 import {
   PROJECT_GALLERY_MAX_WIDTH,
   type ProjectGalleryLayout,
@@ -8,7 +9,8 @@ import {
 const FIGURE_CLASS =
   "relative m-0 min-w-0 overflow-hidden rounded-xl md:rounded-[1.25rem]";
 
-const IMG_CLASS = "block h-full w-full bg-[#f7f7f7] object-cover";
+const MEDIA_CLASS =
+  "block h-full w-full border-0 bg-[#f7f7f7] object-cover outline-none";
 
 type ProjectGalleryProps = {
   images: readonly string[];
@@ -76,7 +78,7 @@ export function ProjectGallery({
                   }
                   style={{ ...figureStyle, ...styleVars }}
                 >
-                  <img
+                  <ProjectMedia
                     src={src}
                     alt={
                       altIndex === 0
@@ -86,7 +88,7 @@ export function ProjectGallery({
                     width={item.width}
                     height={item.height}
                     loading={altIndex < 2 ? "eager" : "lazy"}
-                    className={IMG_CLASS}
+                    className={MEDIA_CLASS}
                   />
                 </figure>
               );
