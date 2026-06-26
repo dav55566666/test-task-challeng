@@ -65,6 +65,12 @@
   }
 }
 
+.main__logo {
+  position: absolute;
+  top: 55%;
+  transform: translateY(-50%);
+}
+
 /* На брейкпоинтах меняем только размер, без вертикального сдвига. */
 @media (max-width: 1024px) and (min-width: 769px) {
   .main__logo {

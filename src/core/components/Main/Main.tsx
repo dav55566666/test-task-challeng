@@ -70,16 +70,13 @@ export const Main = () => {
         };
     }, []);
 
-    const logoStyle: CSSProperties | undefined =
-        logoTopPx != null ? { marginTop: logoTopPx } : undefined;
-
     return (
         <section className="main" ref={rootRef}>
             <div className="main__text" ref={textRef}>
                 <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={28} tag={TextTag.H1} />
                 <p>поддерживаемых ИИ-системой операционных процессов</p>
             </div>
-            <div className="main__logo main__logo--positioned" ref={logoRef} style={logoStyle}>
+            <div className="main__logo main__logo--positioned" ref={logoRef}>
                 <Logo />
             </div>
         </section>
