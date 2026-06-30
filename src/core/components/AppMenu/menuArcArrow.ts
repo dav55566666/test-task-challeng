@@ -107,7 +107,6 @@ export function mobileDockButtonArcXAtIndex(
 ): number {
   const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
   const cx = shellWidthPx / 2;
-  const cy = MOBILE_DOCK_ARC_TOP_PX + R;
   const last = itemCount - 1;
   const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
   const thetaMax = Math.asin(Math.min(1, chordHalf / R));

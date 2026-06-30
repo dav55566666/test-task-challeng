@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { useLayoutEffect, useRef, useState } from "react";
 import { GradientTitle, TextTag } from "../../uikit";
 import { Logo } from "../Logo";
@@ -76,7 +75,11 @@ export const Main = () => {
                 <GradientTitle value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" currentSize={32} mobileSize={28} tag={TextTag.H1} />
                 <p>поддерживаемых ИИ-системой операционных процессов</p>
             </div>
-            <div className="main__logo main__logo--positioned" ref={logoRef}>
+            <div
+                className="main__logo main__logo--positioned"
+                ref={logoRef}
+                style={logoTopPx !== null ? { top: logoTopPx, transform: "none" } : undefined}
+            >
                 <Logo />
             </div>
         </section>
