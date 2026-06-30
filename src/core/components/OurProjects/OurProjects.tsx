@@ -1,8 +1,7 @@
-import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useMemo, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useProjectsUiStore } from "../../../store";
-import { OUR_PROJECTS, PROJECT_TABS } from "../../data";
+import { OUR_PROJECTS, PROJECT_TABS, projectCategoryPath } from "../../data";
 import { IMAGES } from "../../design";
 import {
   ProjectSplitLayout,
@@ -21,15 +20,14 @@ const MOBILE_TABS_STICKY_CLASS =
 
 export type OurProjectsProps = {
   limit?: number;
+  category?: string;
 };
 
-export const OurProjects = ({ limit }: OurProjectsProps) => {
+export const OurProjects = ({ limit, category }: OurProjectsProps) => {
+  const navigate = useNavigate();
   const showTabs = typeof limit !== "number";
   const figureRefs = useRef<(HTMLElement | null)[]>([]);
-  const articleRefs = useRef<(HTMLElement | null)[]>([]);
-  const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
-  const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
-  const setScrollToCaseByTab = useProjectsUiStore((s) => s.setScrollToCaseByTab);
+  const activeCategory = category ?? PROJECT_TABS[0].value;
 
   const projects = useMemo(() => {
     const base =
@@ -39,8 +37,8 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
     if (!showTabs) {
       return base;
     }
-    return base.filter((p) => p.tabValue === casesActiveTab);
-  }, [casesActiveTab, limit, showTabs]);
+    return base.filter((p) => p.tabValue === activeCategory);
+  }, [activeCategory, limit, showTabs]);
 
   const count = projects.length;
   const { activeIndex, registerItemRef } = useMaxIntersectionIndex(count);
@@ -50,33 +48,11 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
       ? (projects[projectIndex] ?? projects[0])
       : undefined;
 
-  const scrollListToTab = useCallback((value: string) => {
-    const idx = projects.findIndex((p) => p.tabValue === value);
-    if (idx < 0) return;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    articleRefs.current[idx]?.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "center",
-    });
-  }, [projects]);
-
-  useLayoutEffect(() => {
-    if (!showTabs) {
-      setScrollToCaseByTab(null);
-      return;
-    }
-    setScrollToCaseByTab(scrollListToTab);
-    return () => setScrollToCaseByTab(null);
-  }, [scrollListToTab, setScrollToCaseByTab, showTabs]);
-
   const handleTabChange = useCallback(
     (value: string) => {
-      setCasesActiveTab(value);
-      scrollListToTab(value);
+      navigate(projectCategoryPath(value));
     },
-    [scrollListToTab, setCasesActiveTab]
+    [navigate]
   );
 
   return (
@@ -97,7 +73,7 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
               />
               <Tabs
                 items={PROJECT_TABS}
-                activeValue={casesActiveTab}
+                activeValue={activeCategory}
                 onChange={handleTabChange}
                 aria-label="Категории проектов"
               />
@@ -139,9 +115,6 @@ export const OurProjects = ({ limit }: OurProjectsProps) => {
         <article
           key={`${item.title}-${i}`}
           id={`project-${item.slug}`}
-          ref={(el) => {
-            articleRefs.current[i] = el;
-          }}
           className="our-projects__scroll-target m-0"
         >
           <Link

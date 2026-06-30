@@ -4,13 +4,12 @@ import "animate.css";
 
 import { useMainDirectionsStore } from "../../../store";
 import "./styles/main-directions.scss";
-import { OUR_PROJECTS } from "../../data";
+import { projectCategoryPath } from "../../data";
 import { Icon, IconsName } from "../../design/Icon";
 import { GradientTitle, TextTag } from "../../uikit";
 
 function casePathForMainDirection(directionId: string): string {
-  const match = OUR_PROJECTS.find((p) => p.tabValue === directionId);
-  return match ? `/projects/${match.slug}` : "/projects";
+  return projectCategoryPath(directionId);
 }
 
 const HEADLINE =

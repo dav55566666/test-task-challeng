@@ -262,6 +262,63 @@ const aliexpressLayout: ProjectGalleryLayout = [
   },
 ];
 
+const axeAnarchyLayout: ProjectGalleryLayout = [
+  { images: [{ index: 0, width: 1398, height: 786 }] },
+  { images: [{ index: 1, width: 1398, height: 786 }] },
+  {
+    images: [
+      { index: 2, width: 698, height: 476 },
+      { index: 3, width: 698, height: 476 },
+    ],
+  },
+  {
+    images: [
+      { index: 4, width: 698, height: 476 },
+      { index: 5, width: 698, height: 476 },
+    ],
+  },
+  { images: [{ index: 6, width: 1398, height: 908 }] },
+  { images: [{ index: 7, width: 1398, height: 908 }] },
+];
+
+const latteriaSanMarinoLayout: ProjectGalleryLayout = [
+  {
+    images: [
+      { index: 0, width: 463, height: 786 },
+      { index: 1, width: 463, height: 786 },
+      { index: 2, width: 463, height: 786 },
+    ],
+  },
+  {
+    images: [
+      { index: 3, width: 463, height: 786 },
+      { index: 4, width: 463, height: 786 },
+      { index: 5, width: 463, height: 786 },
+    ],
+  },
+  { images: [{ index: 6, width: 1398, height: 1000 }] },
+  { images: [{ index: 7, width: 1398, height: 804 }] },
+  { images: [{ index: 8, width: 1398, height: 804 }] },
+];
+
+const goldnApothekaLineLayout: ProjectGalleryLayout = [
+  { images: [{ index: 0, width: 1398, height: 786 }] },
+  { images: [{ index: 1, width: 1398, height: 786 }] },
+  {
+    images: [
+      { index: 2, width: 698, height: 476 },
+      { index: 3, width: 698, height: 476 },
+    ],
+  },
+  {
+    images: [
+      { index: 4, width: 698, height: 476 },
+      { index: 5, width: 698, height: 476 },
+    ],
+  },
+  { images: [{ index: 6, width: 1398, height: 908 }] },
+];
+
 const unileverAxeLayout: ProjectGalleryLayout = [
   {
     images: [
@@ -374,5 +431,35 @@ export const OUR_PROJECTS: readonly OurProjectCase[] = [
     tabValue: "branding",
     galleryImages: PROJECT_ASSETS.project8.gallery,
     galleryLayout: unileverAxeLayout,
+  },
+  {
+    slug: "axe-anarchy",
+    title: "AXE Anarchy",
+    description: CASE_DESCRIPTION,
+    imageAlt: "AXE Anarchy",
+    image: PROJECT_ASSETS.project9.cover,
+    tabValue: "campaigns",
+    galleryImages: PROJECT_ASSETS.project9.gallery,
+    galleryLayout: axeAnarchyLayout,
+  },
+  {
+    slug: "latteria-san-marino",
+    title: "Latteria di San Marino",
+    description: CASE_DESCRIPTION,
+    imageAlt: "Latteria di San Marino",
+    image: PROJECT_ASSETS.project10.cover,
+    tabValue: "social",
+    galleryImages: PROJECT_ASSETS.project10.gallery,
+    galleryLayout: latteriaSanMarinoLayout,
+  },
+  {
+    slug: "goldn-apotheka-line",
+    title: "Gold'n Apotheka: линейка",
+    description: CASE_DESCRIPTION,
+    imageAlt: "Gold'n Apotheka: линейка",
+    image: PROJECT_ASSETS.project11.cover,
+    tabValue: "branding",
+    galleryImages: PROJECT_ASSETS.project11.gallery,
+    galleryLayout: goldnApothekaLineLayout,
   },
 ];

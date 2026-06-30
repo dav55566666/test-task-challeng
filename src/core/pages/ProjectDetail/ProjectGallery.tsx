@@ -1,6 +1,7 @@
-import type { CSSProperties } from "react";
+import { useCallback, useState, type CSSProperties } from "react";
 
 import { ProjectMedia } from "../../components/ProjectMedia";
+import { VideoPlayerModal } from "../../components/VideoPlayerModal";
 import {
   PROJECT_GALLERY_MAX_WIDTH,
   type ProjectGalleryLayout,
@@ -29,9 +30,24 @@ export function ProjectGallery({
   primaryAlt,
   title,
 }: ProjectGalleryProps) {
+  const [activeVideo, setActiveVideo] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+  const handleVideoClick = useCallback(
+    (payload: { src: string; alt: string }) => {
+      setActiveVideo(payload);
+    },
+    []
+  );
+  const handleCloseVideo = useCallback(() => {
+    setActiveVideo(null);
+  }, []);
+
   let imageCounter = 0;
 
   return (
+    <>
     <div className="flex min-w-0 flex-col gap-5 md:gap-5">
       {layout.map((row, rowIndex) => {
         const isMultiColumn = row.images.length > 1;
@@ -89,6 +105,7 @@ export function ProjectGallery({
                     height={item.height}
                     loading={altIndex < 2 ? "eager" : "lazy"}
                     className={MEDIA_CLASS}
+                    onVideoClick={handleVideoClick}
                   />
                 </figure>
               );
@@ -97,5 +114,12 @@ export function ProjectGallery({
         );
       })}
     </div>
+    <VideoPlayerModal
+      isOpen={activeVideo !== null}
+      onClose={handleCloseVideo}
+      src={activeVideo?.src ?? ""}
+      ariaLabel={activeVideo?.alt ?? "Видео проекта"}
+    />
+    </>
   );
 }

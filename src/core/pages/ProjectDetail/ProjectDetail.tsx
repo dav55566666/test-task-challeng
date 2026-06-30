@@ -1,7 +1,6 @@
-import { useCallback, useLayoutEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { useProjectsUiStore } from "../../../store";
 import {
   ProjectSplitLayout,
   ProjectSplitPrompt,
@@ -9,7 +8,7 @@ import {
   caseStudyBodyCopyClass,
 } from "../../components";
 import { Tabs } from "../../components/Tabs";
-import { OUR_PROJECTS, PROJECT_TABS } from "../../data";
+import { OUR_PROJECTS, PROJECT_TABS, projectCategoryPath } from "../../data";
 import { ProjectGallery } from "./ProjectGallery";
 import { GradientTitle, TextTag } from "../../uikit";
 
@@ -19,25 +18,16 @@ const MOBILE_TABS_STICKY_CLASS =
 export const ProjectDetail = () => {
   const { projectSlug } = useParams<{ projectSlug: string }>();
   const navigate = useNavigate();
-  const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
-  const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
   const project = useMemo(
     () => OUR_PROJECTS.find((p) => p.slug === projectSlug),
     [projectSlug]
   );
 
-  useLayoutEffect(() => {
-    if (project) {
-      setCasesActiveTab(project.tabValue);
-    }
-  }, [project, setCasesActiveTab]);
-
   const handleTabChange = useCallback(
     (value: string) => {
-      setCasesActiveTab(value);
-      navigate("/projects");
+      navigate(projectCategoryPath(value));
     },
-    [navigate, setCasesActiveTab]
+    [navigate]
   );
 
   if (!projectSlug || !project) {
@@ -61,7 +51,7 @@ export const ProjectDetail = () => {
             <p className={caseStudyBodyCopyClass}>{project.description}</p>
             <Tabs
               items={PROJECT_TABS}
-              activeValue={casesActiveTab}
+              activeValue={project.tabValue}
               onChange={handleTabChange}
               aria-label="Категории проектов"
             />

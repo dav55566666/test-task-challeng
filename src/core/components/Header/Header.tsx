@@ -1,8 +1,11 @@
 import { useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useProjectsUiStore } from "../../../store";
-import { PROJECT_TABS } from "../../data";
+import {
+  getActiveProjectCategory,
+  PROJECT_TABS,
+  projectCategoryPath,
+} from "../../data";
 import { Icon, IconsName } from "../../design/Icon";
 import { Tabs } from "../Tabs";
 
@@ -15,23 +18,14 @@ function isProjectsRoute(pathname: string): boolean {
 export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const casesActiveTab = useProjectsUiStore((s) => s.casesActiveTab);
-  const setCasesActiveTab = useProjectsUiStore((s) => s.setCasesActiveTab);
-  const scrollToCaseByTab = useProjectsUiStore((s) => s.scrollToCaseByTab);
-
-  const onProjectsList = location.pathname === "/projects";
+  const activeCategory = getActiveProjectCategory(location.pathname);
   const showProjectsTabs = isProjectsRoute(location.pathname);
 
   const handleProjectsTabChange = useCallback(
     (value: string) => {
-      setCasesActiveTab(value);
-      if (onProjectsList) {
-        scrollToCaseByTab(value);
-      } else {
-        navigate("/projects");
-      }
+      navigate(projectCategoryPath(value));
     },
-    [navigate, onProjectsList, scrollToCaseByTab, setCasesActiveTab]
+    [navigate]
   );
 
   return (
@@ -51,7 +45,7 @@ export const Header = () => {
           <div className="header__projects-tabs hidden min-w-0 md:flex md:items-center md:justify-start md:overflow-x-auto md:overscroll-x-contain">
             <Tabs
               items={PROJECT_TABS}
-              activeValue={casesActiveTab}
+              activeValue={activeCategory}
               onChange={handleProjectsTabChange}
               aria-label="Категории проектов"
             />

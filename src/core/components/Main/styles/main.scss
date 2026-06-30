@@ -74,14 +74,14 @@
 /* На брейкпоинтах меняем только размер, без вертикального сдвига. */
 @media (max-width: 1024px) and (min-width: 769px) {
   .main__logo {
-    width: min(100%, clamp(240px, 82vmin, 624px));
+    width: min(100%, clamp(240px, 82vmin, 524px));
   }
 }
 
 /* Крупный телефон / узкий планшет ≤768px (не колонка ≤480px) */
 @media (max-width: 768px) and (min-width: 481px) {
   .main__logo {
-    width: min(100%, clamp(228px, 77vmin, 600px));
+    width: min(100%, clamp(228px, 77vmin, 500px));
   }
 }
 

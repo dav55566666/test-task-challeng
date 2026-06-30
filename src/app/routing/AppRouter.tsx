@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import {
   AboutUs,
   Contacts,
@@ -6,10 +6,12 @@ import {
   GeneralDirection,
   Home,
   HomeWrapper,
-  OurProjects,
-  SiteFooter,
 } from "../../core";
-import { ProjectDetail } from "../../core/pages/ProjectDetail/ProjectDetail";
+import { ProjectsSegment } from "../../core/pages/ProjectsSegment/ProjectsSegment";
+import {
+  DEFAULT_PROJECT_CATEGORY,
+  projectCategoryPath,
+} from "../../core/data";
 
 export const AppRouter = () => {
   return (
@@ -18,14 +20,14 @@ export const AppRouter = () => {
         <Route index element={<Home />} />
         <Route path="about" element={<AboutUs />} />
         <Route path="contacts" element={<Contacts />} />
-        <Route path="projects/:projectSlug" element={<ProjectDetail />} />
+        <Route path="projects/:projectSlug" element={<ProjectsSegment />} />
         <Route
           path="projects"
           element={
-            <>
-              <OurProjects />
-              <SiteFooter />
-            </>
+            <Navigate
+              to={projectCategoryPath(DEFAULT_PROJECT_CATEGORY)}
+              replace
+            />
           }
         />
         <Route path="directions/:directionSlug" element={<DirectionDetail />} />

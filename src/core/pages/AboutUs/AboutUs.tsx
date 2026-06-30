@@ -66,15 +66,15 @@ export const AboutUs = () => {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <div className="flex flex-wrap flex-col justify-flex-start gap-x-3 gap-y-1">
                   <span className="text-xl md:text-2xl text-[#1a1a1a]">
                     {member.name}
                   </span>
-                  <span className="text-sm font-light text-[#33333366]">
+                  <span className="text-sm font-bold text-[#33333366]">
                     {member.role}
                   </span>
                 </div>
-                <p className="text-lg font-light text-[#333333A3]">
+                <p className="text-sm font-light text-[#333333A3]">
                   {member.bio}
                 </p>
               </article>

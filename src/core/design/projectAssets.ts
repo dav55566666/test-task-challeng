@@ -125,6 +125,36 @@ import project8_11 from "../../assets/projects/project8/image copy 11.png";
 import project8_12 from "../../assets/projects/project8/image copy 12.png";
 import project8_13 from "../../assets/projects/project8/image copy 13.png";
 
+import project9Cover from "../../assets/projects/project9/image.png";
+import project9_1 from "../../assets/projects/project9/image copy 1.png";
+import project9_2 from "../../assets/projects/project9/image copy 2.png";
+import project9_3 from "../../assets/projects/project9/image copy 3.png";
+import project9_4 from "../../assets/projects/project9/image copy 4.png";
+import project9_5 from "../../assets/projects/project9/image copy 5.png";
+import project9_6 from "../../assets/projects/project9/image copy 6.png";
+import project9_7 from "../../assets/projects/project9/image copy 7.png";
+import project9_8 from "../../assets/projects/project9/image copy 8.png";
+
+import project10Cover from "../../assets/projects/project10/image.png";
+import project10_1 from "../../assets/projects/project10/image copy 1.png";
+import project10_2 from "../../assets/projects/project10/image copy 2.png";
+import project10_3 from "../../assets/projects/project10/image copy 3.png";
+import project10_4 from "../../assets/projects/project10/image copy 4.png";
+import project10_5 from "../../assets/projects/project10/image copy 5.png";
+import project10_6 from "../../assets/projects/project10/image copy 6.png";
+import project10_7 from "../../assets/projects/project10/image copy 7.png";
+import project10_8 from "../../assets/projects/project10/image copy 8.png";
+import project10_9 from "../../assets/projects/project10/image copy 9.png";
+
+import project11Cover from "../../assets/projects/project11/image.png";
+import project11_1 from "../../assets/projects/project11/image copy 1.png";
+import project11_2 from "../../assets/projects/project11/image copy 2.png";
+import project11_3 from "../../assets/projects/project11/image copy 3.png";
+import project11_4 from "../../assets/projects/project11/image copy 4.png";
+import project11_5 from "../../assets/projects/project11/image copy 5.png";
+import project11_6 from "../../assets/projects/project11/image copy 6.png";
+import project11_7 from "../../assets/projects/project11/image copy 7.png";
+
 export const PROJECT_ASSETS = {
   project1: {
     cover: project1Cover,
@@ -275,6 +305,45 @@ export const PROJECT_ASSETS = {
       project8_11,
       project8_12,
       project8_13,
+    ],
+  },
+  project9: {
+    cover: project9Cover,
+    gallery: [
+      project9_1,
+      project9_2,
+      project9_3,
+      project9_4,
+      project9_5,
+      project9_6,
+      project9_7,
+      project9_8,
+    ],
+  },
+  project10: {
+    cover: project10Cover,
+    gallery: [
+      project10_1,
+      project10_2,
+      project10_3,
+      project10_4,
+      project10_5,
+      project10_6,
+      project10_7,
+      project10_8,
+      project10_9,
+    ],
+  },
+  project11: {
+    cover: project11Cover,
+    gallery: [
+      project11_1,
+      project11_2,
+      project11_3,
+      project11_4,
+      project11_5,
+      project11_6,
+      project11_7,
     ],
   },
 } as const;

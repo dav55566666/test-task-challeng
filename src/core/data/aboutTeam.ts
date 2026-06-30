@@ -1,4 +1,6 @@
 import teamMemberVideo from "../../assets/team-member.mp4";
+import teamMemberVideo2 from "../../assets/team-member2.mp4";
+import teamMemberVideo3 from "../../assets/team-member3.mp4";
 
 
 export type TeamMember = {
@@ -24,7 +26,7 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
     name: "Тамара Модебадзе",
     role: "Руководитель PMO-комьюнити",
     bio: "Управляю креативными комьюнити и отдельными креаторами. Выстраиваю четкие процессы для стабильного результата, помогая авторам раскрыть максимум творческого потенциала. Создаю комфортную и интересную атмосферу для клиентов.",
-    videoSrc: teamMemberVideo,
+    videoSrc: teamMemberVideo2,
     imageAlt: "Тамара Модебадзе",
   },
   {
@@ -32,7 +34,7 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
     name: "Антон Михайлов",
     role: "CAIO",
     bio: "Разрабатываю и совершенствую ИИ-продукты, которые персонализируют предложения брендов для потребителей и приближают их к покупке. Автоматизирую операционные процессы с помощью ИИ-инфраструктуры, освобождая ресурс команд для чистого творчества.",
-    videoSrc: teamMemberVideo,
+    videoSrc: teamMemberVideo3,
     imageAlt: "Антон Михайлов",
   },
 ];

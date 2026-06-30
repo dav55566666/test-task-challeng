@@ -1,4 +1,13 @@
-import { MOBILE_DOCK_ARC } from "./constants";
+import {
+  MOBILE_DOCK_ARC,
+  MOBILE_DOCK_ARC_CHORD_INSET_PX,
+  MOBILE_DOCK_ARC_TOP_PX,
+  MOBILE_DOCK_BTN_ARC_DIAMETER_PX,
+  MOBILE_DOCK_BTN_DROP_PX,
+  MOBILE_DOCK_LINE_ARC_DIAMETER_PX,
+  MOBILE_DOCK_LINE_ARC_TOP_PX,
+  MOBILE_DOCK_LINE_EDGE_OVERSHOOT_PX,
+} from "./constants";
 
 export type ArcCircle = {
   cx: number;
@@ -6,64 +15,141 @@ export type ArcCircle = {
   R: number;
 };
 
-type BezierPt = { x: number; y: number };
+type ArcParams = {
+  diameterPx: number;
+  topPx: number;
+};
 
-function cubicBezier(t: number, p0: BezierPt, p1: BezierPt, p2: BezierPt, p3: BezierPt): BezierPt {
-  const u = 1 - t;
-  return {
-    x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
-    y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y,
-  };
+function mobileDockCircleArcAtXWithParams(
+  xPx: number,
+  shellWidthPx: number,
+  { diameterPx, topPx }: ArcParams,
+): { y: number; tangentDeg: number } {
+  const R = diameterPx / 2;
+  const cx = shellWidthPx / 2;
+  const cy = topPx + R;
+  const dx = xPx - cx;
+  const clampedDx = Math.max(-R, Math.min(R, dx));
+  const denom = Math.sqrt(R * R - clampedDx * clampedDx);
+  const y = cy - denom;
+  const tangentDeg = (Math.atan2(clampedDx, denom) * 180) / Math.PI;
+  return { y, tangentDeg };
 }
 
-function cubicBezierDeriv(
-  t: number,
-  p0: BezierPt,
-  p1: BezierPt,
-  p2: BezierPt,
-  p3: BezierPt,
-): BezierPt {
-  const u = 1 - t;
-  return {
-    x: 3 * u * u * (p1.x - p0.x) + 6 * u * t * (p2.x - p1.x) + 3 * t * t * (p3.x - p2.x),
-    y: 3 * u * u * (p1.y - p0.y) + 6 * u * t * (p2.y - p1.y) + 3 * t * t * (p3.y - p2.y),
-  };
+/** Точка на дуге кнопок. */
+export function mobileDockCircleArcAtX(
+  xPx: number,
+  shellWidthPx: number,
+): { y: number; tangentDeg: number } {
+  return mobileDockCircleArcAtXWithParams(xPx, shellWidthPx, {
+    diameterPx: MOBILE_DOCK_BTN_ARC_DIAMETER_PX,
+    topPx: MOBILE_DOCK_ARC_TOP_PX,
+  });
 }
 
-/** t ∈ [0,1] такой, что X(t) ≈ xTarget (кривая монотонна по X у `MOBILE_DOCK_ARC`). */
-function bezierTAtX(
-  xTarget: number,
-  p0: BezierPt,
-  p1: BezierPt,
-  p2: BezierPt,
-  p3: BezierPt,
-): number {
-  let lo = 0;
-  let hi = 1;
-  for (let i = 0; i < 28; i++) {
-    const t = (lo + hi) / 2;
-    const pt = cubicBezier(t, p0, p1, p2, p3);
-    if (pt.x < xTarget) lo = t;
-    else hi = t;
-  }
-  return (lo + hi) / 2;
+function lineArcTopPx(): number {
+  return MOBILE_DOCK_LINE_ARC_TOP_PX + MOBILE_DOCK_BTN_DROP_PX;
+}
+
+/** Точка на дуге линии/стрелки (ниже кнопок). */
+export function mobileDockLineCircleArcAtX(
+  xPx: number,
+  shellWidthPx: number,
+): { y: number; tangentDeg: number } {
+  return mobileDockCircleArcAtXWithParams(xPx, shellWidthPx, {
+    diameterPx: MOBILE_DOCK_LINE_ARC_DIAMETER_PX,
+    topPx: lineArcTopPx(),
+  });
+}
+
+/** SVG-path дуги линии (по центру меню, с выходом концов за края). */
+export function mobileDockLineArcPath(shellWidthPx: number): {
+  d: string;
+  viewBox: string;
+} {
+  const R = MOBILE_DOCK_LINE_ARC_DIAMETER_PX / 2;
+  const svgW = Math.max(1, shellWidthPx + MOBILE_DOCK_LINE_EDGE_OVERSHOOT_PX * 2);
+  const cx = svgW / 2;
+  const cy = lineArcTopPx() + R;
+  const chordHalf = shellWidthPx / 2 + MOBILE_DOCK_LINE_EDGE_OVERSHOOT_PX;
+  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
+
+  const x0 = cx + R * Math.sin(-thetaMax);
+  const y0 = cy - R * Math.cos(-thetaMax);
+  const x1 = cx + R * Math.sin(thetaMax);
+  const y1 = cy - R * Math.cos(thetaMax);
+
+  return {
+    d: `M ${x0} ${y0} A ${R} ${R} 0 0 1 ${x1} ${y1}`,
+    viewBox: `0 0 ${svgW} ${Math.ceil(y1 + 16)}`,
+  };
 }
 
 /**
- * Точка на мобильной дуге и угол касательной (deg) в координатах viewBox SVG.
+ * Точка на мобильной дуге и угол касательной (deg).
  * `xViewBox` — по горизонтали 0…viewBoxW (как в path).
  */
 export function mobileDockArcPointAndTangentAtViewBoxX(xViewBox: number): {
   y: number;
   tangentDeg: number;
 } {
-  const { p0, p1, p2, p3, viewBoxW } = MOBILE_DOCK_ARC;
-  const x = Math.min(viewBoxW, Math.max(0, xViewBox));
-  const t = bezierTAtX(x, p0, p1, p2, p3);
-  const pt = cubicBezier(t, p0, p1, p2, p3);
-  const d = cubicBezierDeriv(t, p0, p1, p2, p3);
-  const tangentDeg = (Math.atan2(d.y, d.x) * 180) / Math.PI;
-  return { y: pt.y, tangentDeg };
+  const { viewBoxW } = MOBILE_DOCK_ARC;
+  const xPx = (xViewBox / viewBoxW) * MOBILE_DOCK_BTN_ARC_DIAMETER_PX;
+  const shellWidthPx = MOBILE_DOCK_BTN_ARC_DIAMETER_PX;
+  return mobileDockCircleArcAtX(xPx, shellWidthPx);
+}
+
+/** Горизонтальная позиция пункта на дуге кнопок (px от левого края shell). */
+export function mobileDockButtonArcXAtIndex(
+  index: number,
+  itemCount: number,
+  shellWidthPx: number,
+): number {
+  const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
+  const cx = shellWidthPx / 2;
+  const cy = MOBILE_DOCK_ARC_TOP_PX + R;
+  const last = itemCount - 1;
+  const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
+  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
+  const theta = -thetaMax + (2 * thetaMax * index) / last;
+  return cx + R * Math.sin(theta);
+}
+
+/** Стрелка на дуге линии под активной кнопкой. */
+export function mobileDockLineArrowAtIndex(
+  index: number,
+  itemCount: number,
+  shellWidthPx: number,
+): { leftPx: number; topPx: number; rotationDeg: number } {
+  const leftPx = mobileDockButtonArcXAtIndex(index, itemCount, shellWidthPx);
+  const { y, tangentDeg } = mobileDockLineCircleArcAtX(leftPx, shellWidthPx);
+  return { leftPx, topPx: y, rotationDeg: tangentDeg };
+}
+
+/** Позиция и поворот пункта дока на дуге (равные угловые шаги, y — вниз от центра). */
+export function mobileDockItemTransformAtIndex(
+  index: number,
+  itemCount: number,
+  shellWidthPx: number,
+): { x: number; y: number; rotate: number } {
+  const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
+  const cx = shellWidthPx / 2;
+  const cy = MOBILE_DOCK_ARC_TOP_PX + R;
+  const last = itemCount - 1;
+
+  const xArc = mobileDockButtonArcXAtIndex(index, itemCount, shellWidthPx);
+  const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
+  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
+  const theta = -thetaMax + (2 * thetaMax * index) / last;
+  const yArc = cy - R * Math.cos(theta);
+  const centerY = cy - R;
+  const slotCenterX = ((index + 0.5) / itemCount) * shellWidthPx;
+
+  return {
+    x: xArc - slotCenterX,
+    y: yArc - centerY,
+    rotate: (theta * 180) / Math.PI,
+  };
 }
 
 /** Левый «колпачок» `.app-menu__desktop-arc`: центр окружности и радиус дуги. */

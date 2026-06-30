@@ -21,9 +21,9 @@ export const SHIFT_MID_REM = 0.625;
  * Положительное — точка для расчёта угла ниже на экране (стрелка опускается по дуге).
  */
 export const DESKTOP_ORBIT_Y_BIAS_PX_BY_ID = {
-  services: 28,
+  services: 32,
   cases: 18,
-  home: 10,
+  home: 0,
   about: -14,
   contacts: -32,
 } as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;
@@ -50,22 +50,61 @@ export const ROW_LAYOUT: readonly DesktopRowLayout[] = [
 ];
 
 /**
- * Мобильный док: дуга (Услуги → Контакты).
- * Крайние пункты ниже по `y`, центральные три без изменений; rotate симметрично.
+ * Единая дуга мобильного дока (линия, стекло, кнопки, стрелка).
+ * Кубическая аппроксимация круговой дуги R≈314 в viewBox 400×80.
  */
-export const MOBILE_DOCK_ITEM_TRANSFORMS = [
-  { x: 0, y: 28, rotate: -24 },
-  { x: 0, y: 7, rotate: -12 },
-  { x: 0, y: 0, rotate: 0 },
-  { x: 0, y: 7, rotate: 12 },
-  { x: 0, y: 28, rotate: 24 },
-] as const;
-
-/** Виртуальная кубическая дуга (стрелка поворачивается по её касательной; без SVG на экране). */
 export const MOBILE_DOCK_ARC = {
   viewBoxW: 400,
-  p0: { x: 0, y: 58 },
-  p1: { x: 100, y: 10 },
-  p2: { x: 300, y: 10 },
-  p3: { x: 400, y: 58 },
+  p0: { x: 0, y: 72 },
+  p1: { x: 108, y: 0 },
+  p2: { x: 292, y: 0 },
+  p3: { x: 400, y: 72 },
 } as const;
+
+/** Диаметр дуги кнопок (меньше = круче дуга). */
+export const MOBILE_DOCK_BTN_ARC_DIAMETER_PX = 630;
+
+/** Диаметр дуги линии/стрелки (параллельна дуге кнопок). */
+export const MOBILE_DOCK_LINE_ARC_DIAMETER_PX = MOBILE_DOCK_BTN_ARC_DIAMETER_PX;
+
+/** Диаметр круговой дуги кнопок в px (совпадает с `--mobile-dock-arc-d` в SCSS). */
+export const MOBILE_DOCK_ARC_DIAMETER_PX = MOBILE_DOCK_BTN_ARC_DIAMETER_PX;
+
+/** Подъём кнопок и линии дуги вверх от базовой позиции (px). */
+export const MOBILE_DOCK_LIFT_PX = 80;
+
+/** Доп. сдвиг списка кнопок вверх, чтобы низ кнопок лёг на дугу (px). */
+export const MOBILE_DOCK_LIST_ALIGN_PX = 27;
+
+/** Опускание кнопок вниз — зазор между верхом кнопок и стеклом (px). */
+export const MOBILE_DOCK_BTN_DROP_PX = 32;
+
+/** Зазор между верхом кнопок и верхом стеклянной подложки (px). */
+export const MOBILE_DOCK_GLASS_GAP_PX = 20;
+
+/** Высота кнопки дока для расчёта стекла (px, ≈ `.app-menu__mobile-dock__btn`). */
+export const MOBILE_DOCK_BTN_HEIGHT_PX = 54;
+
+/** Зазор между низом кнопок и дугой линии/стрелки (px). */
+export const MOBILE_DOCK_LINE_GAP_PX = 16;
+
+/** Горизонтальный отступ дуги кнопок от краёв shell (px, ≈ половина кнопки). */
+export const MOBILE_DOCK_ARC_CHORD_INSET_PX = 20;
+
+/** Насколько дуга линии выходит за края экрана (px с каждой стороны). */
+export const MOBILE_DOCK_LINE_EDGE_OVERSHOOT_PX = 56;
+
+/** Верх круга дуги кнопок от верха `.app-menu__mobile-dock__inner`. */
+export const MOBILE_DOCK_ARC_TOP_PX = 10;
+
+/**
+ * Верх круга дуги линии: параллельная дуга ниже низа кнопок на `LINE_GAP`.
+ */
+export const MOBILE_DOCK_LINE_ARC_TOP_PX =
+  MOBILE_DOCK_ARC_TOP_PX +
+  MOBILE_DOCK_BTN_HEIGHT_PX +
+  MOBILE_DOCK_LINE_GAP_PX;
+
+/** Смещение верха стекла вверх от дуги кнопок: высота кнопки + зазор. */
+export const MOBILE_DOCK_GLASS_CLEARANCE_PX =
+  MOBILE_DOCK_BTN_HEIGHT_PX + MOBILE_DOCK_GLASS_GAP_PX;

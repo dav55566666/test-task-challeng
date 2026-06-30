@@ -215,26 +215,23 @@ export const Sidebar = () => {
   const stripTarget = stripTargetBeforeClose || !showMainNav;
   const deferActive = deferMenuActive && showMainNav;
 
-  const scheduleOrbitLayout = useCallback((next: OrbitLayout | null) => {
-    queueMicrotask(() => setOrbitLayout(next));
-  }, []);
-
   useLayoutEffect(() => {
     void layoutTick;
     if (!showMainNav) {
       prevOrbitRotationDisplayRef.current = null;
+      setOrbitLayout(null);
       return;
     }
     const shell = shellRef.current;
     const arc = arcRef.current;
     const row = rowRefs.current[targetId];
     if (!shell || !arc || !row) {
-      scheduleOrbitLayout(null);
+      setOrbitLayout(null);
       return;
     }
     const ac = getArcCircle(arc.getBoundingClientRect());
     if (!ac) {
-      scheduleOrbitLayout(null);
+      setOrbitLayout(null);
       return;
     }
     const sr = shell.getBoundingClientRect();
@@ -261,13 +258,13 @@ export const Sidebar = () => {
         ? canonical
         : unwrapOrbitRotationDeg(prev, canonical);
     prevOrbitRotationDisplayRef.current = rotationDeg;
-    scheduleOrbitLayout({
+    setOrbitLayout({
       leftPx: ac.cx - ac.R - sr.left,
       topPx: ac.cy - ac.R - sr.top,
       diameterPx: 2 * ac.R,
       rotationDeg,
     });
-  }, [targetId, layoutTick, showMainNav, scheduleOrbitLayout]);
+  }, [targetId, layoutTick, showMainNav]);
 
   /** Синхронно снимаем active/glow (flushSync), затем 2×rAF — и только потом анимация закрытия. */
   const queueMenuCloseChoreography = useCallback((close: () => void) => {

@@ -15,8 +15,8 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   {
     id: "telegram",
     label: "Телеграм",
-    value: "helloT@Fabula @fabula_creativecommunity ",
-    href: "https://t.me/fabula",
+    value: "Fabula creative community ",
+    href: "t.me/fabula_creativecommunity",
   },
   {
     id: "phone",
@@ -27,19 +27,18 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   {
     id: "address",
     label: "Адрес",
-    value: "Москва, ул. Ладо Кецховели 22а, офис 801",
-    href: "https://yandex.ru/maps/?text=Москва%2C%20ул.%20Ладо%20Кецховели%2022а",
+    value: "г. Москва, ул. Кузнецкий Мост 4/3 стр.1",
   },
   {
     id: "max",
     label: "МАКС",
-    value: "@fabula",
+    value: "Fabula",
     href: "https://max.ru/join/2XhSuW9rfm9sYjvSLilehiVnC8PGwGaSdD9pFE_2lMQ",
   },
   {
     id: "telegram-2",
     label: "Телеграм",
-    value: "@fabula",
+    value: "Fabula community",
     href: "https://t.me/fabulacommunity",
   },
   {
