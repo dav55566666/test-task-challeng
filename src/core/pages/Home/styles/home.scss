@@ -1,9 +1,11 @@
 .home-page {
+  position: relative;
   min-height: 100%;
 }
 
 .home-page__hero {
   position: relative;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,6 +16,11 @@
   @supports not (height: 100dvh) {
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
+}
+
+.home-page > :not(.home-page__hero) {
+  position: relative;
+  z-index: 3;
 }
 
 .home-page__prompt {

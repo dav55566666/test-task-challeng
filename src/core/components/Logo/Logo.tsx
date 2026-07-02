@@ -81,7 +81,8 @@ export const Logo = () => {
       <div
         className={
           "logo-animation" +
-          (isPreviewMediaReady ? " logo-animation--media-ready" : "")
+          (isPreviewMediaReady ? " logo-animation--media-ready" : "") +
+          (isPlayerOpen ? " logo-animation--modal-open" : "")
         }
       >
         <div className="logo-animation__scale">

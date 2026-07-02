@@ -3,10 +3,10 @@ import { GradientTitle, TextTag } from "../../uikit";
 import { Logo } from "../Logo";
 import './styles/main.scss';
 
-/** Чуть ниже геометрического центра hero. */
-const MAIN_LOGO_NUDGE_DOWN_PX = 28;
-/** Минимальный зазор между низом текста и верхом F при горизонтальном пересечении. */
-const MAIN_LOGO_TEXT_GAP_PX = 16;
+/** Поднимаем F выше геометрического центра hero. */
+const MAIN_LOGO_NUDGE_DOWN_PX = -38;
+/** При пересечении по X верх F выравниваем с нижней границей текста. */
+const MAIN_LOGO_TEXT_GAP_PX = 0;
 /** Совпадает с mobile-колонкой в `main.scss`. */
 const MOBILE_HERO_LAYOUT_MAX_WIDTH_PX = 480;
 
@@ -21,6 +21,8 @@ export const Main = () => {
         const text = textRef.current;
         const logo = logoRef.current;
         if (!root || !text || !logo) return;
+        let rafId: number | null = null;
+        let timeoutId: number | null = null;
 
         const update = () => {
             if (window.innerWidth <= MOBILE_HERO_LAYOUT_MAX_WIDTH_PX) {
@@ -49,23 +51,33 @@ export const Main = () => {
                 textLeftInMain < logoRightWhenCentered;
 
             const nextTop = overlapsHorizontally
-                ? Math.max(nudgedLogoTopInMain, clearanceLogoTopInMain)
+                ? clearanceLogoTopInMain + MAIN_LOGO_NUDGE_DOWN_PX
                 : nudgedLogoTopInMain;
 
             setLogoTopPx(nextTop);
         };
 
         update();
+        rafId = window.requestAnimationFrame(update);
+        timeoutId = window.setTimeout(update, 0);
 
         const ro = new ResizeObserver(update);
         ro.observe(root);
         ro.observe(text);
         ro.observe(logo);
         window.addEventListener("resize", update);
+        window.addEventListener("load", update);
 
         return () => {
+            if (rafId !== null) {
+                window.cancelAnimationFrame(rafId);
+            }
+            if (timeoutId !== null) {
+                window.clearTimeout(timeoutId);
+            }
             ro.disconnect();
             window.removeEventListener("resize", update);
+            window.removeEventListener("load", update);
         };
     }, []);
 

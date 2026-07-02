@@ -20,6 +20,8 @@ type ArcParams = {
   topPx: number;
 };
 
+const MOBILE_DOCK_LINE_ARROW_TOP_BIAS_PX = 3;
+
 function mobileDockCircleArcAtXWithParams(
   xPx: number,
   shellWidthPx: number,
@@ -122,7 +124,11 @@ export function mobileDockLineArrowAtIndex(
 ): { leftPx: number; topPx: number; rotationDeg: number } {
   const leftPx = mobileDockButtonArcXAtIndex(index, itemCount, shellWidthPx);
   const { y, tangentDeg } = mobileDockLineCircleArcAtX(leftPx, shellWidthPx);
-  return { leftPx, topPx: y, rotationDeg: tangentDeg };
+  return {
+    leftPx,
+    topPx: y + MOBILE_DOCK_LINE_ARROW_TOP_BIAS_PX,
+    rotationDeg: tangentDeg,
+  };
 }
 
 /** Позиция и поворот пункта дока на дуге (равные угловые шаги, y — вниз от центра). */
@@ -143,10 +149,12 @@ export function mobileDockItemTransformAtIndex(
   const yArc = cy - R * Math.cos(theta);
   const centerY = cy - R;
   const slotCenterX = ((index + 0.5) / itemCount) * shellWidthPx;
+  const contactsIndex = itemCount - 1;
+  const yBias = index === contactsIndex ? 6 : 0;
 
   return {
     x: xArc - slotCenterX,
-    y: yArc - centerY,
+    y: yArc - centerY + yBias,
     rotate: (theta * 180) / Math.PI,
   };
 }

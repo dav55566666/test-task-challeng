@@ -333,6 +333,7 @@ export const Sidebar = () => {
     showMainNav && (!isHomeRoute || compactFab);
   /** Закрытие по клику вне: мобильный шит или FAB-меню ≥768. */
   const showFabDismissBackdrop =
+    (compactNavViewport && menuInCompactStyle && menuExpandedFromFab) ||
     menuOverDarkBackdrop ||
     (menuInCompactStyle &&
       menuExpandedFromFab &&

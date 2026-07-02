@@ -609,7 +609,7 @@
   position: absolute;
   z-index: 3;
   left: calc(var(--mobile-dock-line-overhang, 56px) * -1);
-  top: 0;
+  top: -10px;
   width: calc(100% + var(--mobile-dock-line-overhang, 56px) * 2);
   height: auto;
   overflow: visible;
@@ -772,7 +772,9 @@
     box-shadow 0.22s ease,
     backdrop-filter 0.22s ease;
   position: relative;
+  z-index: 0;
   isolation: isolate;
+  overflow: visible;
 
   &::after {
     content: none;
@@ -804,8 +806,36 @@
     0 2px 14px rgba(72, 120, 200, 0.18),
     0 6px 24px rgba(88, 130, 200, 0.12);
 
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -7px -8px -8px;
+    border-radius: 28px;
+    background:
+      radial-gradient(55% 68% at 18% 28%, rgba(224, 195, 252, 0.56) 0%, transparent 72%),
+      radial-gradient(62% 78% at 84% 30%, rgba(147, 197, 253, 0.62) 0%, transparent 70%),
+      radial-gradient(75% 92% at 50% 86%, rgba(167, 243, 208, 0.48) 0%, transparent 76%),
+      linear-gradient(
+        120deg,
+        rgba(224, 195, 252, 0.62) 0%,
+        rgba(147, 197, 253, 0.56) 35%,
+        rgba(186, 230, 253, 0.62) 67%,
+        rgba(167, 243, 208, 0.52) 100%
+      );
+    background-size: 160% 160%, 150% 150%, 155% 155%, 280% 280%;
+    filter: blur(13px) saturate(1.14);
+    opacity: 0.82;
+    pointer-events: none;
+    animation: app-menu-mobile-active-gradient-flow 4.2s ease-in-out infinite alternate;
+  }
+
   &::after {
-    content: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
   }
 }
 
@@ -1080,6 +1110,36 @@
   }
 }
 
+@keyframes app-menu-mobile-active-gradient-flow {
+  0% {
+    background-position:
+      12% 26%,
+      88% 20%,
+      52% 94%,
+      0% 50%;
+    opacity: 0.72;
+    filter: blur(12px) saturate(1.06);
+  }
+  50% {
+    background-position:
+      22% 42%,
+      74% 36%,
+      44% 78%,
+      100% 50%;
+    opacity: 0.92;
+    filter: blur(14px) saturate(1.22);
+  }
+  100% {
+    background-position:
+      34% 18%,
+      64% 28%,
+      58% 86%,
+      0% 50%;
+    opacity: 0.78;
+    filter: blur(12px) saturate(1.1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .app-menu__nav-shell,
   .app-menu__nav-shell--hidden,
@@ -1105,6 +1165,11 @@
       animation: none;
       opacity: 0.5;
     }
+  }
+
+  .app-menu__mobile-dock__btn--active::before {
+    animation: none !important;
+    opacity: 0.7;
   }
 
   .app-menu__desktop-arc,

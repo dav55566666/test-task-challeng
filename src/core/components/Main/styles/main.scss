@@ -74,14 +74,14 @@
 /* На брейкпоинтах меняем только размер, без вертикального сдвига. */
 @media (max-width: 1024px) and (min-width: 769px) {
   .main__logo {
-    width: min(100%, clamp(240px, 82vmin, 524px));
+    width: min(100%, clamp(212px, 62vmin, 420px));
   }
 }
 
 /* Крупный телефон / узкий планшет ≤768px (не колонка ≤480px) */
 @media (max-width: 768px) and (min-width: 481px) {
   .main__logo {
-    width: min(100%, clamp(228px, 77vmin, 500px));
+    width: min(100%, clamp(208px, 66vmin, 392px));
   }
 }
 
@@ -130,6 +130,11 @@
 
   .main__logo {
     flex: 0 0 auto;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,7 +148,8 @@
 
     .logo-animation {
       width: 100%;
-      max-width: none;
+      max-width: 288px;
+      margin-inline: auto;
     }
   }
 }

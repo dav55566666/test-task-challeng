@@ -5,6 +5,9 @@
   aspect-ratio: 1 / 1;
   height: auto;
   overflow: hidden;
+  background: transparent;
+  isolation: isolate;
+  contain: paint;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
@@ -12,6 +15,11 @@
   &--media-ready {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  &--modal-open {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* Слот 780×780 в потоке не меняется; масштаб только визуальный — центр на месте относительно соседних блоков */
@@ -25,6 +33,7 @@
     transform-origin: center center;
     pointer-events: auto;
     will-change: transform;
+    background: transparent;
   }
 
   .logo-animation__mask {
@@ -33,6 +42,7 @@
     z-index: 3;
     pointer-events: none;
     overflow: hidden;
+    background: transparent;
   }
 
   .logo-animation__mask-video {
@@ -43,6 +53,7 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    background: transparent;
   }
 
   /* На всю площадь слота под маской — иначе под лопастями блоба проступает фон страницы */
@@ -55,6 +66,8 @@
     padding: 0;
     margin: 0;
     background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
     display: block;
     width: 70%;
     height: 70%;
