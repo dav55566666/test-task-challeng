@@ -148,7 +148,7 @@ export function VideoPlayerModal({
   return createPortal(
     <div
       className={
-        "video-player-modal fixed inset-0 z-50 flex items-center justify-center px-5" +
+        "video-player-modal fixed inset-0 z-20 flex items-center justify-center px-5" +
         (isPlayerFullscreen ? " video-player-modal--player-fullscreen" : "")
       }
       onClick={onClose}

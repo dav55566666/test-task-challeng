@@ -4,7 +4,7 @@ import { Logo } from "../Logo";
 import './styles/main.scss';
 
 /** Поднимаем F выше геометрического центра hero. */
-const MAIN_LOGO_NUDGE_DOWN_PX = -38;
+const MAIN_LOGO_NUDGE_DOWN_PX = -18;
 /** При пересечении по X верх F выравниваем с нижней границей текста. */
 const MAIN_LOGO_TEXT_GAP_PX = 0;
 /** Совпадает с mobile-колонкой в `main.scss`. */

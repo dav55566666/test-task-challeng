@@ -142,7 +142,7 @@
     max-width: none;
     height: auto;
     min-height: 0;
-    margin: clamp(20px, 5vh, 36px) auto 0;
+    margin: clamp(40px, calc(5vh + 20px), 56px) auto 0;
     padding: 0;
     place-self: auto;
 
