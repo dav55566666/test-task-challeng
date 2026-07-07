@@ -84,11 +84,13 @@ export const Sidebar = () => {
   const [deferMenuActive, setDeferMenuActive] = useState(false);
   const menuWasHiddenForTransitionRef = useRef(false);
   const [pathnameSnapshot, setPathnameSnapshot] = useState(location.pathname);
+  const [pendingActiveId, setPendingActiveId] = useState<string | null>(null);
 
   if (location.pathname !== pathnameSnapshot) {
     setPathnameSnapshot(location.pathname);
     setMenuExpandedFromFab(false);
     setCompactFab(shouldUseCompactFab());
+    setPendingActiveId(null);
   }
 
   const navRef = useRef<HTMLElement>(null);
@@ -155,7 +157,7 @@ export const Sidebar = () => {
         Boolean(link.path) &&
         menuPathMatches(link.path, location.pathname)
     )?.id ?? null;
-  const targetId = hoveredId ?? routeActiveId ?? activeId;
+  const targetId = hoveredId ?? pendingActiveId ?? routeActiveId ?? activeId;
 
   const bumpLayout = () => setLayoutTick((n) => n + 1);
 
@@ -338,20 +340,42 @@ export const Sidebar = () => {
     (menuInCompactStyle &&
       menuExpandedFromFab &&
       !compactNavViewport);
+  const COMPACT_MENU_NAVIGATE_DELAY_MS = 1000;
+  const navigateDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearNavigateDelayTimer = useCallback(() => {
+    if (navigateDelayTimerRef.current !== null) {
+      clearTimeout(navigateDelayTimerRef.current);
+      navigateDelayTimerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => clearNavigateDelayTimer, [clearNavigateDelayTimer]);
 
   const navigateToMenuItem = useCallback(
     (item: MenuLink) => {
+      setActiveId(item.id);
+      setPendingActiveId(item.id);
+      if (menuInCompactStyle) {
+        clearNavigateDelayTimer();
+        navigateDelayTimerRef.current = window.setTimeout(() => {
+          navigateDelayTimerRef.current = null;
+          queueMenuCloseChoreography(() => {
+            setMenuExpandedFromFab(false);
+            if ("path" in item && item.path) {
+              navigate(item.path);
+            }
+          });
+        }, COMPACT_MENU_NAVIGATE_DELAY_MS);
+        return;
+      }
       if ("path" in item && item.path) {
         navigate(item.path);
       }
-      setActiveId(item.id);
-      if (menuInCompactStyle) {
-        queueMenuCloseChoreography(() => {
-          setMenuExpandedFromFab(false);
-        });
-      }
+      setPendingActiveId(null);
     },
     [
+      clearNavigateDelayTimer,
       menuInCompactStyle,
       navigate,
       queueMenuCloseChoreography,
