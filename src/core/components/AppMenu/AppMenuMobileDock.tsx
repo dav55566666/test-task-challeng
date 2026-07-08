@@ -27,6 +27,13 @@ type AppMenuMobileDockProps = {
   onDimmedBackdrop?: boolean;
 };
 
+const MOBILE_ARROW_STYLE_BY_ID = {
+  services: { leftPx: 61, topPx: 147.084, rotationDeg: -33.749 },
+  cases: { leftPx: 124.563, topPx: 124.563, rotationDeg: -16.8745 },
+  about: { leftPx: 266.437, topPx: 123.563, rotationDeg: 16.8745 },
+  contacts: { leftPx: 338, topPx: 153.084, rotationDeg: 33.749 },
+} as const;
+
 export const AppMenuMobileDock = ({
   visible,
   targetId,
@@ -58,8 +65,13 @@ export const AppMenuMobileDock = ({
     MENU_LINKS.length,
     shellWidth,
   );
+  const fixedArrow = MOBILE_ARROW_STYLE_BY_ID[
+    targetId as keyof typeof MOBILE_ARROW_STYLE_BY_ID
+  ];
+  const arrowLeftPx = fixedArrow?.leftPx ?? arcArrow.leftPx;
+  const arrowTopPx = fixedArrow?.topPx ?? arcArrow.topPx;
+  const arrowRotationDeg = fixedArrow?.rotationDeg ?? arcArrow.rotationDeg;
 
-  const showArcDecor = visible && !onDimmedBackdrop;
   const lineArc = mobileDockLineArcPath(shellWidth);
 
   return (
@@ -136,13 +148,13 @@ export const AppMenuMobileDock = ({
             );
           })}
         </ul>
-        {showArcDecor ? (
+        {visible ? (
           <div
             className="app-menu__mobile-dock__line-arc-marker"
             style={{
-              left: `${arcArrow.leftPx}px`,
-              top: `${arcArrow.topPx}px`,
-              transform: `translate(-50%, 0) rotate(${arcArrow.rotationDeg}deg)`,
+              left: `${arrowLeftPx}px`,
+              top: `${arrowTopPx}px`,
+              transform: `translate(-50%, 0) rotate(${arrowRotationDeg}deg)`,
             }}
             aria-hidden
           >

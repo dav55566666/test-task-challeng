@@ -1,4 +1,10 @@
 /* Hero-контент: минимум высота первого экрана; может вырасти, чтобы логотип не обрезался снизу. */
+.main__logo {
+  position: absolute;
+  /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
+  top: 130px;
+  transform: none;
+}
 .main {
   position: relative;
   display: grid;
@@ -17,7 +23,13 @@
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
   @media (max-width: 768px) {
-    min-height: calc(100svh - var(--site-header-sticky-height, 3.75rem));
+    min-height: 100vh;
+    .main__logo {
+      position: absolute;
+      /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
+      top: max(224px, 28%);
+      transform: none;
+    }
   }
   &__text {
     grid-area: hero;
@@ -42,7 +54,7 @@
   /* F-логотип: по центру hero; на ≤480 — колонка в потоке. */
   &__logo {
     grid-area: hero;
-    place-self: center;
+    place-self: start center;
     z-index: 1;
     width: min(100%, clamp(228px, 70vmin, 672px));
     max-width: calc(100vw - 40px);
@@ -52,10 +64,6 @@
     pointer-events: none;
     overflow: visible;
 
-    &--positioned {
-      place-self: start center;
-    }
-
     .logo-animation {
       width: 100%;
       max-width: 780px;
@@ -63,12 +71,6 @@
       pointer-events: auto;
     }
   }
-}
-
-.main__logo {
-  position: absolute;
-  top: 55%;
-  transform: translateY(-50%);
 }
 
 /* На брейкпоинтах меняем только размер, без вертикального сдвига. */
