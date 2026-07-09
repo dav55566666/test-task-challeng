@@ -68,7 +68,7 @@ export const HomeWrapper = () => {
   }, [useWanderingGlow]);
 
   return (
-    <div className="app-shell flex min-h-svh w-full flex-1 flex-col">
+    <div className="wrapper">
       <div
         aria-hidden
         className={`app-shell__cursor-glow ${useWanderingGlow ? "app-shell__cursor-glow--wander" : ""} ${
@@ -84,9 +84,9 @@ export const HomeWrapper = () => {
       />
       <Header />
       <AppMenu />
-      <div className="flex min-h-0 w-full flex-1 flex-col">
+      <main className="page">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };
