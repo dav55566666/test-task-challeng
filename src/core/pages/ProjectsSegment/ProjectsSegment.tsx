@@ -1,6 +1,6 @@
 import { Navigate, useParams } from "react-router-dom";
 
-import { OurProjects, SiteFooter } from "../../components";
+import { OurProjects } from "../../components";
 import {
   DEFAULT_PROJECT_CATEGORY,
   isProjectCategory,
