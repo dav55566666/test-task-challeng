@@ -15,15 +15,15 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   {
     id: "telegram",
     label: "Телеграм",
-    value: "Fabula creative community ",
+    value: "helloT@Fabula",
     href: "t.me/fabula_creativecommunity",
   },
-  {
-    id: "phone",
-    label: "Телефон",
-    value: "+7 (598) 532-95-45",
-    href: "tel:+75985329545",
-  },
+  // {
+  //   id: "phone",
+  //   label: "Телефон",
+  //   value: "+7 (598) 532-95-45",
+  //   href: "tel:+75985329545",
+  // },
   {
     id: "address",
     label: "Адрес",
@@ -32,13 +32,13 @@ export const CONTACT_ROWS: readonly ContactRow[] = [
   {
     id: "max",
     label: "МАКС",
-    value: "Fabula",
+    value: "Fabula МАКС",
     href: "https://max.ru/join/2XhSuW9rfm9sYjvSLilehiVnC8PGwGaSdD9pFE_2lMQ",
   },
   {
     id: "telegram-2",
     label: "Телеграм",
-    value: "Fabula community",
+    value: "Fabula Телеграм",
     href: "https://t.me/fabulacommunity",
   },
   {
