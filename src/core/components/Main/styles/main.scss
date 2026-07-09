@@ -23,7 +23,7 @@
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
   @media (max-width: 768px) {
-    min-height: 100vh;
+    min-height: 120vh;
     .main__logo {
       position: absolute;
       /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
@@ -134,8 +134,8 @@
     flex: 0 0 auto;
     position: relative;
     top: auto;
-    left: auto;
-    right: auto;
+    left: -4px;
+    right: unset;
     transform: none;
     display: flex;
     align-items: center;

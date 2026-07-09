@@ -5,6 +5,8 @@ import '../styles/global.scss';
 
 export const App = () => {
   return (
-    <AppRouter />
+    <div className="wrapper">
+      <AppRouter />
+    </div>
   )
 }
