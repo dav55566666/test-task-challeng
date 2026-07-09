@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { AppMenu, Header } from "../../components";
+import { AppMenu, Header, SiteFooter } from "../../components";
 import "./styles/style.scss";
 
 /** Matches Tailwind `md:` — narrow viewports use autonomous glow instead of cursor tracking. */
@@ -87,6 +87,7 @@ export const HomeWrapper = () => {
       <main className="page">
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   );
 };

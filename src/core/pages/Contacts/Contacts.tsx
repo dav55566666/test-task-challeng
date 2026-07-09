@@ -1,5 +1,5 @@
 import { CONTACT_ROWS } from "../../data";
-import { ProjectSplitLayout, SiteFooter } from "../../components";
+import { ProjectSplitLayout } from "../../components";
 import { GradientTitle, TextTag } from "../../uikit";
 
 const linkClass =
@@ -63,7 +63,6 @@ export const Contacts = () => {
           </dl>
         </ProjectSplitLayout>
       </main>
-      <SiteFooter />
     </div>
   );
 };

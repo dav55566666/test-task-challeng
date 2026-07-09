@@ -5,7 +5,6 @@ import {
   OurProjects,
   Partners,
   PromptInput,
-  SiteFooter,
 } from "../../components";
 import "./styles/home.scss";
 
@@ -25,7 +24,6 @@ export const Home = () => {
       <MainDirections />
       <Partners />
       <HomeLogosAbout />
-      <SiteFooter />
     </div>
   );
 };

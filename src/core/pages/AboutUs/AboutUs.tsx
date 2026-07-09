@@ -4,7 +4,6 @@ import {
   Partners,
   ProjectSplitLayout,
   PromptInput,
-  SiteFooter,
 } from "../../components";
 
 import "./styles/about-us.scss";
@@ -85,7 +84,6 @@ export const AboutUs = () => {
         </ProjectSplitLayout>
       </main>
       <Partners />
-      <SiteFooter />
     </>
   );
 };

@@ -22,7 +22,6 @@ export const ProjectsSegment = () => {
     return (
       <>
         <OurProjects category={projectSlug} />
-        <SiteFooter />
       </>
     );
   }

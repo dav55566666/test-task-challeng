@@ -28,20 +28,39 @@ export const Main = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    return (
-        <section className="main" style={{ minHeight }}>
-            <div className="main__text">
-                <GradientTitle 
-                    value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" 
-                    currentSize={32} 
-                    mobileSize={28} 
-                    tag={TextTag.H1} 
-                />
-                <p>поддерживаемых ИИ-системой операционных процессов</p>
-            </div>
-            <div className="main__logo">
-                <Logo />
-            </div>
-        </section>
-    );
+    if(window.innerWidth < 767) {
+        return (
+            <section className="main" style={{ minHeight }}>
+                <div className="main__text">
+                    <GradientTitle 
+                        value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" 
+                        currentSize={32} 
+                        mobileSize={28} 
+                        tag={TextTag.H1} 
+                    />
+                    <p>поддерживаемых ИИ-системой операционных процессов</p>
+                </div>
+                <div className="main__logo">
+                    <Logo />
+                </div>
+            </section>
+        );
+    }else {
+        return (
+            <section className="main">
+                <div className="main__text">
+                    <GradientTitle 
+                        value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" 
+                        currentSize={32} 
+                        mobileSize={28} 
+                        tag={TextTag.H1} 
+                    />
+                    <p>поддерживаемых ИИ-системой операционных процессов</p>
+                </div>
+                <div className="main__logo">
+                    <Logo />
+                </div>
+            </section>
+        );
+    }
 };

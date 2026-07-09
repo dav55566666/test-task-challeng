@@ -4,7 +4,6 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   ProjectSplitLayout,
   ProjectSplitPrompt,
-  SiteFooter,
   caseStudyBodyCopyClass,
 } from "../../components";
 import { Tabs } from "../../components/Tabs";
@@ -76,7 +75,6 @@ export const ProjectDetail = () => {
           title={project.title}
         />
       </ProjectSplitLayout>
-      <SiteFooter />
     </>
   );
 };
