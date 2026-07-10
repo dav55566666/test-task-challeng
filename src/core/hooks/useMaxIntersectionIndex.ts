@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function useMaxIntersectionIndex(itemCount: number) {
   const itemsRef = useRef<(HTMLElement | null)[]>([]);
   const ratiosRef = useRef<number[]>([]);
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const registerItemRef = useCallback((index: number, el: HTMLElement | null) => {
     itemsRef.current[index] = el;
@@ -32,7 +32,8 @@ export function useMaxIntersectionIndex(itemCount: number) {
             best = i;
           }
         }
-        setActiveIndex(bestRatio > 0 ? best : null);
+        // Никогда не оставляем все кадры с маской: если ничего не в viewport — держим 0.
+        setActiveIndex(best);
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1] }
     );

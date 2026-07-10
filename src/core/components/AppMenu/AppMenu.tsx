@@ -51,6 +51,7 @@ function menuPathMatches(menuPath: string, pathname: string): boolean {
 }
 
 function shouldUseCompactFab(): boolean {
+  if (typeof window === "undefined") return true;
   const vh = window.innerHeight;
   const thresholdPx = vh * SCROLL_THRESHOLD_VIEWPORT_RATIO;
   return window.scrollY >= thresholdPx;
@@ -64,6 +65,16 @@ function isCompactNavViewport(): boolean {
   return window.matchMedia(COMPACT_NAV_MAX_WIDTH_MEDIA).matches;
 }
 
+/**
+ * Меню авто-открыто только на desktop/tablet + главная + первый блок.
+ * Иначе compact (FAB / закрыто). Мобилка всегда compact.
+ */
+function shouldUseCompactMenu(pathname: string, compactNavViewport: boolean): boolean {
+  if (compactNavViewport) return true;
+  if (pathname !== "/") return true;
+  return shouldUseCompactFab();
+}
+
 export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,7 +83,13 @@ export const Sidebar = () => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [orbitLayout, setOrbitLayout] = useState<OrbitLayout | null>(null);
   const [layoutTick, setLayoutTick] = useState(0);
-  const [compactFab, setCompactFab] = useState(false);
+  /** По умолчанию: измеряем сразу (home+top → открыто, иначе закрыто). */
+  const [compactFab, setCompactFab] = useState(() =>
+    shouldUseCompactMenu(
+      typeof window !== "undefined" ? window.location.pathname : "/",
+      isCompactNavViewport(),
+    ),
+  );
   const [compactNavViewport, setCompactNavViewport] = useState(isCompactNavViewport);
   const [menuExpandedFromFab, setMenuExpandedFromFab] = useState(false);
   /** Ступенчатое «последний градиент» / отмена задержек после первого кадра открытия меню. */
@@ -86,11 +103,17 @@ export const Sidebar = () => {
   const [pathnameSnapshot, setPathnameSnapshot] = useState(location.pathname);
   const [pendingActiveId, setPendingActiveId] = useState<string | null>(null);
 
+  /** Актуальный compact на этот рендер (не ждём setState после смены роута). */
+  let compactFabForRender = compactFab;
   if (location.pathname !== pathnameSnapshot) {
     setPathnameSnapshot(location.pathname);
     setMenuExpandedFromFab(false);
-    setCompactFab(shouldUseCompactFab());
     setPendingActiveId(null);
+    setStripTargetBeforeClose(false);
+    setStaggerEntrance(false);
+    // Сначала всегда закрыто; до paint useLayoutEffect откроет, если home + 1-й блок.
+    compactFabForRender = true;
+    setCompactFab(true);
   }
 
   const navRef = useRef<HTMLElement>(null);
@@ -100,7 +123,9 @@ export const Sidebar = () => {
   const prevOrbitRotationDisplayRef = useRef<number | null>(null);
   const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const scrollRaf = useRef<number | null>(null);
-  const compactFabRef = useRef(false);
+  const compactFabRef = useRef(compactFabForRender);
+  // Держим ref в синхроне с значением этого рендера (в т.ч. после смены роута).
+  compactFabRef.current = compactFabForRender;
   const hoverAfterLeaveNavTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
@@ -146,9 +171,8 @@ export const Sidebar = () => {
    * на остальных страницах и после скролла на главной — FAB, открытие по кнопке.
    */
   const isHomeRoute = location.pathname === "/";
-  const menuInCompactStyle = compactNavViewport
-    ? true
-    : !isHomeRoute || compactFab;
+  const menuInCompactStyle =
+    compactNavViewport || !isHomeRoute || compactFabForRender;
 
   const routeActiveId =
     MENU_LINKS.find(
@@ -189,6 +213,18 @@ export const Sidebar = () => {
     });
   }, []);
 
+  /** До paint: сразу выставить compact по роуту/скроллу, без кадра «открыто». */
+  const syncCompactImmediate = useCallback(() => {
+    const next = shouldUseCompactMenu(location.pathname, compactNavViewport);
+    const prev = compactFabRef.current;
+    if (prev === next) return;
+    if (prev && !next) {
+      setMenuExpandedFromFab(false);
+    }
+    compactFabRef.current = next;
+    setCompactFab(next);
+  }, [compactNavViewport, location.pathname]);
+
   useScrollSubscribe(syncCompactFromScroll);
 
   useLayoutEffect(() => {
@@ -196,10 +232,10 @@ export const Sidebar = () => {
   }, [compactFab]);
 
   useLayoutEffect(() => {
-    syncCompactFromScroll();
+    syncCompactImmediate();
     window.addEventListener("resize", syncCompactFromScroll);
     return () => window.removeEventListener("resize", syncCompactFromScroll);
-  }, [syncCompactFromScroll]);
+  }, [syncCompactFromScroll, syncCompactImmediate]);
 
   useLayoutEffect(() => {
     const nav = navRef.current;

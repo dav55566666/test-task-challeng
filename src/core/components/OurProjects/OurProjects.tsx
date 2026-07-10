@@ -42,11 +42,10 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
 
   const count = projects.length;
   const { activeIndex, registerItemRef } = useMaxIntersectionIndex(count);
-  const projectIndex = activeIndex ?? 0;
-  const project =
-    projects.length > 0
-      ? (projects[projectIndex] ?? projects[0])
-      : undefined;
+  /** Пока observer молчит / ratio=0 — всё равно снимаем маску хотя бы с одного кадра. */
+  const clearIndex =
+    count === 0 ? 0 : Math.min(Math.max(activeIndex ?? 0, 0), count - 1);
+  const project = projects.length > 0 ? projects[clearIndex] : undefined;
 
   const handleTabChange = useCallback(
     (value: string) => {
@@ -95,7 +94,7 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
             >
               {project ? (
                 <div
-                  key={`${project.slug}-${projectIndex}`}
+                  key={`${project.slug}-${clearIndex}`}
                   className="our-projects__active-copy-content"
                 >
                   <h3 className="m-0 mb-5 text-4xl text-[#33333366]">
@@ -142,7 +141,7 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
                 className="block h-auto w-full border-0 outline-none"
               />
               <div
-                className={`our-projects__figure-wash pointer-events-none absolute inset-0 z-1 hidden rounded-xl md:block md:rounded-[1.25rem]${activeIndex === i ? " is-clear" : ""}`}
+                className={`our-projects__figure-wash pointer-events-none absolute inset-0 z-1 hidden rounded-xl md:block md:rounded-[1.25rem]${clearIndex === i ? " is-clear" : ""}`}
                 aria-hidden
               />
             </figure>
