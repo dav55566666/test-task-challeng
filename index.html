@@ -4,9 +4,48 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="preconnect"
+      href="https://10befd79-7587-47ec-bda6-0c34e969aa67.selstorage.ru"
+      crossorigin
+    />
+    <link
+      rel="dns-prefetch"
+      href="https://10befd79-7587-47ec-bda6-0c34e969aa67.selstorage.ru"
+    />
+    <!-- Hero blob: качаем первые чанки mp4 ещё до React -->
+    <link
+      rel="preload"
+      as="video"
+      href="https://10befd79-7587-47ec-bda6-0c34e969aa67.selstorage.ru/assets/logo-animation.mp4"
+      type="video/mp4"
+      fetchpriority="high"
+    />
     <title>fabula</title>
   </head>
   <body>
+    <!-- Ранний range-fetch первого кадра; тот же URL потом подхватит <Logo /> из кэша -->
+    <video
+      id="fabula-logo-anim-boot"
+      src="https://10befd79-7587-47ec-bda6-0c34e969aa67.selstorage.ru/assets/logo-animation.mp4"
+      preload="auto"
+      muted
+      playsinline
+      aria-hidden="true"
+      tabindex="-1"
+      style="
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        opacity: 0;
+        pointer-events: none;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      "
+    ></video>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

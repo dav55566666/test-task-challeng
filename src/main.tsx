@@ -4,6 +4,12 @@ import { App, AppProviders } from "./app";
 import "./core/design/fonts/vela-sans.scss";
 import "./styles/index.css";
 
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker.register("/media-cache-sw.js");
+  });
+}
+
 createRoot(document.getElementById('root')!).render(
   <AppProviders>
     <App />

@@ -1,4 +1,5 @@
 import { IMAGES } from "../../design";
+import { ProjectMedia } from "../ProjectMedia";
 
 export type MenuArcArrowOrbitProps = {
   /** Левый верх квадрата 2R×2R в координатах `app-menu__nav-shell`. */
@@ -42,10 +43,10 @@ export function MenuArcArrowOrbit({
           transform: "translate(-50%, -50%)",
         }}
       >
-        <img
+        <ProjectMedia
           src={IMAGES.arrow}
           alt=""
-          aria-hidden
+          loading="lazy"
           className="h-2.5 w-6 shrink-0 object-contain"
         />
       </div>

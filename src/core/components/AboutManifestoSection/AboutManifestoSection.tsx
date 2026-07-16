@@ -5,6 +5,7 @@ import {
 } from "../../data";
 import { IMAGES } from "../../design";
 import { GradientTitle, TextTag } from "../../uikit";
+import { ProjectMedia } from "../ProjectMedia";
 
 export const AboutManifestoSection = () => {
   return (
@@ -45,11 +46,12 @@ export const AboutManifestoSection = () => {
             className="flex gap-3 font-light leading-normal text-[#666666] text-lg md:leading-relaxed"
           >
             <span className="mt-2.5 shrink-0" aria-hidden>
-              <img
+              <ProjectMedia
                 src={IMAGES.arrowRight}
                 alt=""
                 width={14}
                 height={14}
+                loading="lazy"
                 className="block opacity-60"
               />
             </span>

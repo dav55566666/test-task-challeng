@@ -138,6 +138,7 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
                 width={1200}
                 height={675}
                 loading={i < 2 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "auto"}
                 className="block h-auto w-full border-0 outline-none"
               />
               <div
@@ -149,13 +150,13 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
               <span className="min-w-0 flex-1 truncate text-lg leading-tight text-[#333333]">
                 {item.title}
               </span>
-              <img
+              <ProjectMedia
                 src={IMAGES.arrowRightTop}
                 alt=""
                 width={16}
                 height={16}
+                loading="lazy"
                 className="shrink-0"
-                aria-hidden
               />
             </div>
           </Link>

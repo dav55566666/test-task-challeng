@@ -1,5 +1,6 @@
 import { BASE_MEDIA_URL } from "../design";
 import { packGalleryLayout } from "./packGalleryLayout";
+import { PROJECT_MEDIA_FILES } from "./projectMediaManifest";
 import type { ProjectGalleryLayout } from "./projectGalleryTypes";
 
 export type OurProjectCase = {
@@ -70,8 +71,6 @@ const CYRILLIC_TO_LATIN: Record<string, string> = {
   я: "ya",
 };
 
-const mediaModules = `${BASE_MEDIA_URL}/projects/*/*/*.{png,jpg,jpeg,webp,mp4,mov,MP4,JPG,JPEG,PNG,WEBP,MOV}`
-
 const structureModules = import.meta.glob<{ default: ProjectStructure }>(
   "../../assets/projects/*/project*/structure.js",
   { eager: true }
@@ -108,24 +107,18 @@ type MediaIndex = {
   byBase: Map<string, string>;
 };
 
+function projectMediaUrl(projectKey: string, file: string): string {
+  return `${BASE_MEDIA_URL}/projects/${projectKey}/${file}`;
+}
+
 function buildMediaIndex(projectKey: string): MediaIndex {
-  const prefix = `/assets/projects/${projectKey}/`;
   const byId = new Map<number, string>();
   const byBase = new Map<string, string>();
 
-  for (const [path, url] of Object.entries(mediaModules)) {
-    const normalized = path.replace(/\\/g, "/");
-    if (!normalized.includes(prefix) && !normalized.includes(`/${projectKey}/`)) {
-      continue;
-    }
-    const file = normalized.split("/").pop();
-    if (!file) continue;
-    const base = basenameNoExt(file);
-    byBase.set(base, url);
-    const match = base.match(/^project\d+-(\d+)$/i);
-    if (match) {
-      byId.set(Number(match[1]), url);
-    }
+  for (const entry of PROJECT_MEDIA_FILES[projectKey] ?? []) {
+    const url = projectMediaUrl(projectKey, entry.file);
+    byId.set(entry.id, url);
+    byBase.set(basenameNoExt(entry.file), url);
   }
 
   return { byId, byBase };
@@ -161,14 +154,15 @@ function buildProjects(): OurProjectCase[] {
     const tabValue = CATEGORY_TO_TAB[parsed.category];
     if (!tabValue) continue;
 
-    const media = buildMediaIndex(`${parsed.category}/${parsed.folder}`);
+    const projectKey = `${parsed.category}/${parsed.folder}`;
+    const media = buildMediaIndex(projectKey);
     const galleryItems: { src: string; width: number; height: number }[] = [];
 
     for (const image of structure.images) {
       const src = media.byId.get(image.id);
       if (!src) {
         console.warn(
-          `[projects] Missing media for ${parsed.category}/${parsed.folder} id=${image.id}`
+          `[projects] Missing media for ${projectKey} id=${image.id}`
         );
         continue;
       }

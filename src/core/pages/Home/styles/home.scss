@@ -16,6 +16,10 @@
   @supports not (height: 100dvh) {
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
+  @media (max-width: 768px) {
+    min-height: unset;
+    padding-bottom: 100px;
+  }
 }
 
 .home-page > :not(.home-page__hero) {

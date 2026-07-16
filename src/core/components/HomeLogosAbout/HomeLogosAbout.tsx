@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { IMAGES } from "../../design";
+import { ProjectMedia } from "../ProjectMedia";
 import "./styles/home-logos-about.scss";
 import { GradientTitle, TextTag } from "../../uikit";
 
@@ -47,7 +48,13 @@ export const HomeLogosAbout = () => {
           />
           <Link to="/about" className="home-logos-about__more">
             Команда
-            <img src={IMAGES.arrowRightTop} alt="" aria-hidden />
+            <ProjectMedia
+              src={IMAGES.arrowRightTop}
+              alt=""
+              width={16}
+              height={16}
+              loading="lazy"
+            />
           </Link>
         </div>
 

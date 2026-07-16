@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { VideoPlayerModal } from "../VideoPlayerModal";
-import { IMAGES } from '../../design';
-import './styles/logo.scss';
+import { IMAGES } from "../../design";
+import "./styles/logo.scss";
 
 export const Logo = () => {
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
-  const [isPreviewMediaReady, setIsPreviewMediaReady] = useState(false);
-  const [previewMediaSession, setPreviewMediaSession] = useState(0);
+  /** Блок показываем сразу через poster, чтобы не было пустоты. */
+  const [isPreviewMediaReady] = useState(true);
+  const [isInView, setIsInView] = useState(true);
   const maskVideoRef = useRef<HTMLVideoElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const openPlayer = () => {
     maskVideoRef.current?.pause();
@@ -18,33 +20,18 @@ export const Logo = () => {
     setIsPlayerOpen(false);
   };
 
-  /** Hero: не показываем блок пока анимация логотипа не готова к проигрыванию. */
+  /** Пауза hero-видео, когда ушли с первого экрана — не крутим S3 впустую. */
   useEffect(() => {
-    const v = maskVideoRef.current;
-    if (!v) return;
+    const el = rootRef.current;
+    if (!el) return;
 
-    let settled = false;
-    const onReady = () => {
-      if (settled) return;
-      settled = true;
-      setIsPreviewMediaReady(true);
-    };
-
-    if (v.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
-      onReady();
-      return;
-    }
-
-    v.addEventListener("canplaythrough", onReady, { once: true });
-    v.addEventListener("loadeddata", onReady, { once: true });
-    v.addEventListener("error", onReady, { once: true });
-
-    return () => {
-      v.removeEventListener("canplaythrough", onReady);
-      v.removeEventListener("loadeddata", onReady);
-      v.removeEventListener("error", onReady);
-    };
-  }, [previewMediaSession]);
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: "120px 0px", threshold: 0.05 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   /** Возврат из bfcache: Safari иногда сбрасывает размеры видео до «квадрата». */
   useEffect(() => {
@@ -53,32 +40,30 @@ export const Logo = () => {
 
     const onPageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return;
-      setIsPreviewMediaReady(false);
-      setPreviewMediaSession((n) => n + 1);
       maskV.load();
-      void maskV.play().catch(() => { });
+      if (!isPlayerOpen && isInView) void maskV.play().catch(() => {});
     };
 
     window.addEventListener("pageshow", onPageShow);
     return () => window.removeEventListener("pageshow", onPageShow);
-  }, []);
+  }, [isInView, isPlayerOpen]);
 
-  /** Пока модалка открыта — анимация в логотипе на паузе; после закрытия снова играет. */
+  /** Модалка / вне viewport — пауза; иначе play. */
   useEffect(() => {
     const maskVideo = maskVideoRef.current;
     if (!maskVideo) return;
 
-    if (isPlayerOpen) {
+    if (isPlayerOpen || !isInView) {
       maskVideo.pause();
       return;
     }
-
-    void maskVideo.play().catch(() => { });
-  }, [isPlayerOpen]);
+    void maskVideo.play().catch(() => {});
+  }, [isPlayerOpen, isInView]);
 
   return (
     <>
       <div
+        ref={rootRef}
         className={
           "logo-animation" +
           (isPreviewMediaReady ? " logo-animation--media-ready" : "") +
@@ -88,6 +73,7 @@ export const Logo = () => {
         <div className="logo-animation__scale">
           <div className="logo-animation__mask">
             <video
+              poster={IMAGES.logoMask}
               ref={maskVideoRef}
               className="logo-animation__mask-video"
               src={IMAGES.logoAnimation}
@@ -111,12 +97,14 @@ export const Logo = () => {
         </div>
       </div>
 
-      <VideoPlayerModal
-        isOpen={isPlayerOpen}
-        onClose={closePlayer}
-        src={IMAGES.logoVideo}
-        ariaLabel="Видео логотипа"
-      />
+      {isPlayerOpen ? (
+        <VideoPlayerModal
+          isOpen
+          onClose={closePlayer}
+          src={IMAGES.logoVideo}
+          ariaLabel="Видео логотипа"
+        />
+      ) : null}
     </>
   );
 };

@@ -11,3 +11,4 @@ export * from "./HomeLogosAbout";
 export * from "./Main";
 export * from "./MainDirections";
 export * from "./Partners";
+export * from "./ProjectMedia";

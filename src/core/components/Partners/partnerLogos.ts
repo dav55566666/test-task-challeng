@@ -1,15 +1,9 @@
-/** Все PNG из `src/assets/partners/partner{N}.png`, по возрастанию N. */
+import { BASE_MEDIA_URL } from "../../design";
 
-const modules = import.meta.glob<{ default: string }>(
-  "../../../assets/partners/partner*.png",
-  { eager: true }
+/** Все PNG из `assets/partners/partner{N}.png` на S3, по возрастанию N. */
+const PARTNER_LOGO_COUNT = 58;
+
+export const PARTNER_LOGO_SRCS = Array.from(
+  { length: PARTNER_LOGO_COUNT },
+  (_, index) => `${BASE_MEDIA_URL}/partners/partner${index + 1}.png`,
 );
-
-function partnerNum(path: string): number {
-  const m = /partner(\d+)\.png$/i.exec(path);
-  return m ? Number(m[1]) : 0;
-}
-
-export const PARTNER_LOGO_SRCS = Object.entries(modules)
-  .sort(([pathA], [pathB]) => partnerNum(pathA) - partnerNum(pathB))
-  .map(([, mod]) => mod.default);

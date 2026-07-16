@@ -104,19 +104,20 @@ export function ProjectGallery({
                     }
                     style={{ ...figureStyle, ...styleVars }}
                   >
-                    <ProjectMedia
-                      src={src}
-                      alt={
-                        altIndex === 0
-                          ? primaryAlt
-                          : `${title} — изображение ${altIndex + 1}`
-                      }
-                      width={item.width}
-                      height={item.height}
-                      loading={altIndex < 2 ? "eager" : "lazy"}
-                      className={MEDIA_CLASS}
-                      onVideoClick={handleVideoClick}
-                    />
+                  <ProjectMedia
+                    src={src}
+                    alt={
+                      altIndex === 0
+                        ? primaryAlt
+                        : `${title} — изображение ${altIndex + 1}`
+                    }
+                    width={item.width}
+                    height={item.height}
+                    loading={altIndex < 2 ? "eager" : "lazy"}
+                    fetchPriority={altIndex === 0 ? "high" : "auto"}
+                    className={MEDIA_CLASS}
+                    onVideoClick={handleVideoClick}
+                  />
                   </figure>
                 );
               })}
@@ -124,12 +125,14 @@ export function ProjectGallery({
           );
         })}
       </div>
+    {activeVideo ? (
       <VideoPlayerModal
-        isOpen={activeVideo !== null}
+        isOpen
         onClose={handleCloseVideo}
-        src={activeVideo?.src ?? ""}
-        ariaLabel={activeVideo?.alt ?? "Видео проекта"}
+        src={activeVideo.src}
+        ariaLabel={activeVideo.alt}
       />
+    ) : null}
     </>
   );
 }

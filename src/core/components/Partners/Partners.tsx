@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { IMAGES } from "../../design";
 import { TextTag, GradientTitle } from "../../uikit";
+import { ProjectMedia } from "../ProjectMedia";
 import { PARTNER_LOGO_SRCS } from "./partnerLogos";
 import "./styles/partner.scss";
 
@@ -19,7 +20,13 @@ export const Partners = () => {
           />
           <Link to="/about" className="partners__more">
             Все кейсы
-            <img src={IMAGES.arrowRightTop} alt="" aria-hidden />
+            <ProjectMedia
+              src={IMAGES.arrowRightTop}
+              alt=""
+              width={16}
+              height={16}
+              loading="lazy"
+            />
           </Link>
         </div>
 
@@ -30,11 +37,11 @@ export const Partners = () => {
         >
           {PARTNER_LOGO_SRCS.map((src, index) => (
             <div key={`${src}-${index}`} className="partners__logo-cell" role="listitem">
-              <img
+              <ProjectMedia
                 src={src}
                 alt=""
-                loading="lazy"
-                decoding="async"
+                loading={index < 6 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
               />
             </div>
           ))}

@@ -2,6 +2,7 @@ import { ABOUT_HERO_HEADLINE, TEAM_MEMBERS } from "../../data";
 import {
   AboutManifestoSection,
   Partners,
+  ProjectMedia,
   ProjectSplitLayout,
   PromptInput,
 } from "../../components";
@@ -54,14 +55,10 @@ export const AboutUs = () => {
                 className="flex min-w-0 flex-col gap-4"
               >
                 <div className="about-us__card-image overflow-hidden rounded-2xl bg-[#f4f4f5] shadow-[0_8px_32px_rgba(15,23,42,0.06)]">
-                  <video
+                  <ProjectMedia
                     src={member.videoSrc}
-                    aria-label={member.imageAlt}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
+                    alt={member.imageAlt}
+                    loading="lazy"
                     className="h-full w-full object-cover"
                   />
                 </div>

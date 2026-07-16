@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 import {
+  ProjectMedia,
   ProjectSplitLayout,
   ProjectSplitPrompt,
   caseStudyBodyCopyClass,
@@ -37,13 +38,13 @@ export const DirectionDetail = () => {
             to="/"
             className="product-detail__back mb-5 inline-flex items-center gap-2 text-[15px] font-medium text-[#333333] no-underline md:mb-6"
           >
-            <img
+            <ProjectMedia
               src={IMAGES.arrow}
               alt=""
               width={18}
               height={18}
+              loading="eager"
               className="rotate-180 opacity-70"
-              aria-hidden
             />
             Назад
           </Link>
