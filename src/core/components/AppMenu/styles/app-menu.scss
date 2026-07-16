@@ -616,19 +616,18 @@
   pointer-events: none;
 }
 
-/** Стрелка-указатель на дуге линии (двигается к активной кнопке). */
+/** Орбита стрелки на дуге линии: только rotate, как на десктопе. */
+.app-menu__mobile-dock__line-arc-orbit {
+  transition: transform 0.6s cubic-bezier(0.2, 0.74, 0.24, 1);
+}
+
+/** Стрелка-указатель, закреплённая на верхней точке орбиты. */
 .app-menu__mobile-dock__line-arc-marker {
   position: absolute;
   z-index: 10;
-  left: 0;
-  top: 0;
   width: 0;
   height: 0;
-  transform-origin: center bottom;
-  transition:
-    left 0.58s cubic-bezier(0.2, 0.74, 0.24, 1),
-    top 0.58s cubic-bezier(0.2, 0.74, 0.24, 1),
-    transform 0.58s cubic-bezier(0.2, 0.74, 0.24, 1);
+  transform: translate(-50%, 0);
   pointer-events: none;
 }
 
@@ -1189,6 +1188,10 @@
   .app-menu__arc-arrow-orbit {
     animation: none !important;
     opacity: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .app-menu__mobile-dock__line-arc-orbit {
     transition-duration: 0.01ms !important;
   }
 

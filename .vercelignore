@@ -1,0 +1,5 @@
+# Keep local oversized originals out of Vercel uploads
+.local-media-backup
+.git
+*.log
+.DS_Store

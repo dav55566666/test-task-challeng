@@ -1,6 +1,7 @@
-import teamMemberVideo from "../../assets/team-member.mp4";
-import teamMemberVideo2 from "../../assets/team-member2.mp4";
-import teamMemberVideo3 from "../../assets/team-member3.mp4";
+import { BASE_MEDIA_URL } from "../design";
+const teamMemberVideo = `${BASE_MEDIA_URL}/team-member.mp4`;
+const teamMemberVideo2 = `${BASE_MEDIA_URL}/team-member2.mp4`;
+const teamMemberVideo3 = `${BASE_MEDIA_URL}/team-member3.mp4`;
 
 
 export type TeamMember = {

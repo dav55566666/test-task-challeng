@@ -1,8 +1,6 @@
-import { PROJECT_ASSETS } from "../design/projectAssets";
+import { BASE_MEDIA_URL } from "../design";
+import { packGalleryLayout } from "./packGalleryLayout";
 import type { ProjectGalleryLayout } from "./projectGalleryTypes";
-
-const CASE_DESCRIPTION =
-  "Соединили правила двух миров: перевели фарм-код на язык лайфстайл. в супер заклаттеренной категории и превратили брендбилдинг из стратегии в реальность: от дизайна упаковки - к громкому ивенту, стримам и экспертным контентом, кулинарным шоу.";
 
 export type OurProjectCase = {
   slug: string;
@@ -15,451 +13,202 @@ export type OurProjectCase = {
   galleryLayout: ProjectGalleryLayout;
 };
 
-const goldnApothekaLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 1, width: 698, height: 392 },
-      { index: 2, width: 698, height: 392 },
-    ],
-  },
-  {
-    images: [
-      { index: 3, width: 698, height: 1046 },
-      { index: 4, width: 698, height: 1046 },
-    ],
-  },
-  { images: [{ index: 5, width: 1398, height: 2072 }] },
-  { images: [{ index: 6, width: 1398, height: 696 }] },
-  {
-    images: [
-      { index: 7, width: 698, height: 1030 },
-      { index: 8, width: 698, height: 1030 },
-    ],
-  },
-  { images: [{ index: 9, width: 1398, height: 2092 }] },
-  {
-    images: [
-      { index: 10, width: 698, height: 1052 },
-      { index: 11, width: 698, height: 1052 },
-    ],
-  },
-];
+type ProjectStructureImage = {
+  id: number;
+  width: number;
+  height: number;
+};
 
-const finishGreenLayout: ProjectGalleryLayout = [
-  {
-    images: [
-      { index: 0, width: 463, height: 696 },
-      { index: 1, width: 463, height: 696 },
-      { index: 2, width: 463, height: 696 },
-    ],
-  },
-  { images: [{ index: 3, width: 1398, height: 786 }] },
-  { images: [{ index: 4, width: 1398, height: 786 }] },
-  { images: [{ index: 5, width: 1398, height: 786 }] },
-  { images: [{ index: 6, width: 698, height: 1030 }] },
-  { images: [{ index: 7, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 8, width: 698, height: 1030 },
-      { index: 9, width: 698, height: 1030 },
-    ],
-  },
-];
+type ProjectStructure = {
+  title: string;
+  description: string;
+  mainImage: string;
+  images: readonly ProjectStructureImage[];
+};
 
-const vanishMultiactionLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 1, width: 463, height: 696 },
-      { index: 2, width: 463, height: 696 },
-      { index: 3, width: 463, height: 696 },
-    ],
-  },
-  { images: [{ index: 4, width: 1398, height: 700 }] },
-  {
-    images: [
-      { index: 5, width: 698, height: 392 },
-      { index: 6, width: 698, height: 392 },
-    ],
-  },
-  {
-    images: [
-      { index: 7, width: 463, height: 464 },
-      { index: 8, width: 463, height: 464 },
-      { index: 9, width: 463, height: 464 },
-    ],
-  },
-  { images: [{ index: 10, width: 1398, height: 800 }] },
-  {
-    images: [
-      { index: 11, width: 698, height: 644 },
-      { index: 12, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 13, width: 698, height: 644 },
-      { index: 14, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 15, width: 1034, height: 566 },
-      { index: 16, width: 360, height: 566 },
-    ],
-  },
-  {
-    images: [
-      { index: 17, width: 698, height: 392 },
-      { index: 18, width: 698, height: 392 },
-    ],
-  },
-];
+const CATEGORY_TO_TAB: Record<string, string> = {
+  company: "campaigns",
+  soc: "social",
+  video: "video",
+  ai: "ecommerce",
+  brending: "branding",
+};
 
-const voltaflexLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 1, width: 463, height: 696 },
-      { index: 2, width: 463, height: 696 },
-      { index: 3, width: 463, height: 696 },
-    ],
-  },
-  {
-    images: [
-      { index: 4, width: 464, height: 616 },
-      { index: 5, width: 930, height: 616 },
-    ],
-  },
-  {
-    images: [
-      { index: 6, width: 463, height: 620 },
-      { index: 7, width: 463, height: 620 },
-      { index: 8, width: 463, height: 620 },
-    ],
-  },
-  { images: [{ index: 9, width: 1398, height: 800 }] },
-  { images: [{ index: 10, width: 698, height: 644 }] },
-];
+const CYRILLIC_TO_LATIN: Record<string, string> = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  е: "e",
+  ё: "e",
+  ж: "zh",
+  з: "z",
+  и: "i",
+  й: "y",
+  к: "k",
+  л: "l",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "ts",
+  ч: "ch",
+  ш: "sh",
+  щ: "sch",
+  ъ: "",
+  ы: "y",
+  ь: "",
+  э: "e",
+  ю: "yu",
+  я: "ya",
+};
 
-const wooltieLayout: ProjectGalleryLayout = [
-  {
-    images: [
-      { index: 0, width: 698, height: 786 },
-      { index: 1, width: 698, height: 786 },
-    ],
-  },
-  { images: [{ index: 2, width: 1398, height: 800 }] },
-  {
-    images: [
-      { index: 3, width: 463, height: 620 },
-      { index: 4, width: 463, height: 620 },
-      { index: 5, width: 463, height: 620 },
-    ],
-  },
-  {
-    images: [
-      { index: 6, width: 698, height: 644 },
-      { index: 7, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 8, width: 698, height: 644 },
-      { index: 9, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 10, width: 698, height: 644 },
-      { index: 11, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 12, width: 698, height: 644 },
-      { index: 13, width: 698, height: 644 },
-    ],
-  },
-  { images: [{ index: 14, width: 1398, height: 898 }] },
-  {
-    images: [
-      { index: 15, width: 698, height: 644 },
-      { index: 16, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 17, width: 698, height: 644 },
-      { index: 18, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 19, width: 463, height: 764 },
-      { index: 20, width: 463, height: 764 },
-      { index: 21, width: 463, height: 764 },
-    ],
-  },
-];
+const mediaModules = `${BASE_MEDIA_URL}/projects/*/*/*.{png,jpg,jpeg,webp,mp4,mov,MP4,JPG,JPEG,PNG,WEBP,MOV}`
 
-const heinzLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  { images: [{ index: 1, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 2, width: 698, height: 476 },
-      { index: 3, width: 698, height: 476 },
-    ],
-  },
-  { images: [{ index: 4, width: 1398, height: 908 }] },
-  { images: [{ index: 5, width: 1398, height: 908 }] },
-];
+const structureModules = import.meta.glob<{ default: ProjectStructure }>(
+  "../../assets/projects/*/project*/structure.js",
+  { eager: true }
+);
 
-const aliexpressLayout: ProjectGalleryLayout = [
-  {
-    images: [
-      { index: 0, width: 463, height: 786 },
-      { index: 1, width: 463, height: 786 },
-      { index: 2, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 3, width: 463, height: 786 },
-      { index: 4, width: 463, height: 786 },
-      { index: 5, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 6, width: 463, height: 786 },
-      { index: 7, width: 463, height: 786 },
-      { index: 8, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 9, width: 463, height: 786 },
-      { index: 10, width: 463, height: 786 },
-      { index: 11, width: 463, height: 786 },
-    ],
-  },
-  { images: [{ index: 12, width: 1398, height: 1000 }] },
-  {
-    images: [
-      { index: 13, width: 698, height: 644 },
-      { index: 14, width: 698, height: 644 },
-    ],
-  },
-  {
-    images: [
-      { index: 15, width: 463, height: 786 },
-      { index: 16, width: 463, height: 786 },
-      { index: 17, width: 463, height: 786 },
-    ],
-  },
-];
+function basenameNoExt(filename: string): string {
+  return filename.replace(/\.[^.]+$/, "").toLowerCase();
+}
 
-const axeAnarchyLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  { images: [{ index: 1, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 2, width: 698, height: 476 },
-      { index: 3, width: 698, height: 476 },
-    ],
-  },
-  {
-    images: [
-      { index: 4, width: 698, height: 476 },
-      { index: 5, width: 698, height: 476 },
-    ],
-  },
-  { images: [{ index: 6, width: 1398, height: 908 }] },
-  { images: [{ index: 7, width: 1398, height: 908 }] },
-];
+function slugifyTitle(title: string): string {
+  const lowered = title.trim().toLowerCase();
+  let out = "";
+  for (const char of lowered) {
+    if (CYRILLIC_TO_LATIN[char] != null) {
+      out += CYRILLIC_TO_LATIN[char];
+      continue;
+    }
+    if (/[a-z0-9]/.test(char)) {
+      out += char;
+      continue;
+    }
+    if (/[\s_.'’"`]+/.test(char) || char === "—" || char === "-" || char === ":") {
+      out += "-";
+    }
+  }
+  return out
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 64) || "project";
+}
 
-const latteriaSanMarinoLayout: ProjectGalleryLayout = [
-  {
-    images: [
-      { index: 0, width: 463, height: 786 },
-      { index: 1, width: 463, height: 786 },
-      { index: 2, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 3, width: 463, height: 786 },
-      { index: 4, width: 463, height: 786 },
-      { index: 5, width: 463, height: 786 },
-    ],
-  },
-  { images: [{ index: 6, width: 1398, height: 1000 }] },
-  { images: [{ index: 7, width: 1398, height: 804 }] },
-  { images: [{ index: 8, width: 1398, height: 804 }] },
-];
+type MediaIndex = {
+  byId: Map<number, string>;
+  byBase: Map<string, string>;
+};
 
-const goldnApothekaLineLayout: ProjectGalleryLayout = [
-  { images: [{ index: 0, width: 1398, height: 786 }] },
-  { images: [{ index: 1, width: 1398, height: 786 }] },
-  {
-    images: [
-      { index: 2, width: 698, height: 476 },
-      { index: 3, width: 698, height: 476 },
-    ],
-  },
-  {
-    images: [
-      { index: 4, width: 698, height: 476 },
-      { index: 5, width: 698, height: 476 },
-    ],
-  },
-  { images: [{ index: 6, width: 1398, height: 908 }] },
-];
+function buildMediaIndex(projectKey: string): MediaIndex {
+  const prefix = `/assets/projects/${projectKey}/`;
+  const byId = new Map<number, string>();
+  const byBase = new Map<string, string>();
 
-const unileverAxeLayout: ProjectGalleryLayout = [
-  {
-    images: [
-      { index: 0, width: 463, height: 786 },
-      { index: 1, width: 463, height: 786 },
-      { index: 2, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 3, width: 463, height: 786 },
-      { index: 4, width: 463, height: 786 },
-      { index: 5, width: 463, height: 786 },
-    ],
-  },
-  {
-    images: [
-      { index: 6, width: 463, height: 786 },
-      { index: 7, width: 463, height: 786 },
-      { index: 8, width: 463, height: 786 },
-    ],
-  },
-  { images: [{ index: 9, width: 1398, height: 1000 }] },
-  { images: [{ index: 10, width: 1398, height: 804 }] },
-  {
-    images: [
-      { index: 11, width: 698, height: 644 },
-      { index: 12, width: 698, height: 644 },
-    ],
-  },
-];
+  for (const [path, url] of Object.entries(mediaModules)) {
+    const normalized = path.replace(/\\/g, "/");
+    if (!normalized.includes(prefix) && !normalized.includes(`/${projectKey}/`)) {
+      continue;
+    }
+    const file = normalized.split("/").pop();
+    if (!file) continue;
+    const base = basenameNoExt(file);
+    byBase.set(base, url);
+    const match = base.match(/^project\d+-(\d+)$/i);
+    if (match) {
+      byId.set(Number(match[1]), url);
+    }
+  }
 
-export const OUR_PROJECTS: readonly OurProjectCase[] = [
-  {
-    slug: "goldn-apotheka",
-    title: "Gold'n Apotheka",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Gold'n Apotheka",
-    image: PROJECT_ASSETS.project1.cover,
-    tabValue: "campaigns",
-    galleryImages: PROJECT_ASSETS.project1.gallery,
-    galleryLayout: goldnApothekaLayout,
-  },
-  {
-    slug: "finish-green",
-    title: "Finish Green",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Finish Green",
-    image: PROJECT_ASSETS.project2.cover,
-    tabValue: "social",
-    galleryImages: PROJECT_ASSETS.project2.gallery,
-    galleryLayout: finishGreenLayout,
-  },
-  {
-    slug: "vanish-multiaction",
-    title: "Vanish Multiaction",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Vanish Multiaction",
-    image: PROJECT_ASSETS.project3.cover,
-    tabValue: "branding",
-    galleryImages: PROJECT_ASSETS.project3.gallery,
-    galleryLayout: vanishMultiactionLayout,
-  },
-  {
-    slug: "voltaflex",
-    title: "Вольтафлекс",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Вольтафлекс",
-    image: PROJECT_ASSETS.project4.cover,
-    tabValue: "video",
-    galleryImages: PROJECT_ASSETS.project4.gallery,
-    galleryLayout: voltaflexLayout,
-  },
-  {
-    slug: "wooltie",
-    title: "Wooltie",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Wooltie",
-    image: PROJECT_ASSETS.project5.cover,
-    tabValue: "ecommerce",
-    galleryImages: PROJECT_ASSETS.project5.gallery,
-    galleryLayout: wooltieLayout,
-  },
-  {
-    slug: "heinz",
-    title: "Heinz",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Heinz",
-    image: PROJECT_ASSETS.project6.cover,
-    tabValue: "campaigns",
-    galleryImages: PROJECT_ASSETS.project6.gallery,
-    galleryLayout: heinzLayout,
-  },
-  {
-    slug: "aliexpress",
-    title: "Aliexpress",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Aliexpress",
-    image: PROJECT_ASSETS.project7.cover,
-    tabValue: "social",
-    galleryImages: PROJECT_ASSETS.project7.gallery,
-    galleryLayout: aliexpressLayout,
-  },
-  {
-    slug: "unilever-axe",
-    title: "Unilever: AXE",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Unilever: AXE",
-    image: PROJECT_ASSETS.project8.cover,
-    tabValue: "branding",
-    galleryImages: PROJECT_ASSETS.project8.gallery,
-    galleryLayout: unileverAxeLayout,
-  },
-  {
-    slug: "axe-anarchy",
-    title: "AXE Anarchy",
-    description: CASE_DESCRIPTION,
-    imageAlt: "AXE Anarchy",
-    image: PROJECT_ASSETS.project9.cover,
-    tabValue: "campaigns",
-    galleryImages: PROJECT_ASSETS.project9.gallery,
-    galleryLayout: axeAnarchyLayout,
-  },
-  {
-    slug: "latteria-san-marino",
-    title: "Latteria di San Marino",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Latteria di San Marino",
-    image: PROJECT_ASSETS.project10.cover,
-    tabValue: "social",
-    galleryImages: PROJECT_ASSETS.project10.gallery,
-    galleryLayout: latteriaSanMarinoLayout,
-  },
-  {
-    slug: "goldn-apotheka-line",
-    title: "Gold'n Apotheka: линейка",
-    description: CASE_DESCRIPTION,
-    imageAlt: "Gold'n Apotheka: линейка",
-    image: PROJECT_ASSETS.project11.cover,
-    tabValue: "branding",
-    galleryImages: PROJECT_ASSETS.project11.gallery,
-    galleryLayout: goldnApothekaLineLayout,
-  },
-];
+  return { byId, byBase };
+}
+
+function parseProjectKey(structurePath: string): {
+  category: string;
+  folder: string;
+} | null {
+  const normalized = structurePath.replace(/\\/g, "/");
+  const match = normalized.match(
+    /assets\/projects\/([^/]+)\/(project[^/]+)\/structure\.js$/
+  );
+  if (!match) return null;
+  return { category: match[1], folder: match[2] };
+}
+
+function buildProjects(): OurProjectCase[] {
+  const usedSlugs = new Set<string>();
+  const projects: OurProjectCase[] = [];
+
+  const entries = Object.entries(structureModules).sort(([a], [b]) =>
+    a.localeCompare(b, "en", { numeric: true })
+  );
+
+  for (const [structurePath, mod] of entries) {
+    const parsed = parseProjectKey(structurePath);
+    if (!parsed) continue;
+
+    const structure = mod.default;
+    if (!structure?.images?.length) continue;
+
+    const tabValue = CATEGORY_TO_TAB[parsed.category];
+    if (!tabValue) continue;
+
+    const media = buildMediaIndex(`${parsed.category}/${parsed.folder}`);
+    const galleryItems: { src: string; width: number; height: number }[] = [];
+
+    for (const image of structure.images) {
+      const src = media.byId.get(image.id);
+      if (!src) {
+        console.warn(
+          `[projects] Missing media for ${parsed.category}/${parsed.folder} id=${image.id}`
+        );
+        continue;
+      }
+      galleryItems.push({
+        src,
+        width: image.width,
+        height: image.height,
+      });
+    }
+
+    if (galleryItems.length === 0) continue;
+
+    const mainBase = basenameNoExt(structure.mainImage);
+    const cover =
+      media.byBase.get(mainBase) ??
+      media.byId.get(1) ??
+      galleryItems[0].src;
+
+    let slug = slugifyTitle(structure.title);
+    if (usedSlugs.has(slug)) {
+      slug = `${slug}-${parsed.folder.replace(/^project/i, "")}`;
+    }
+    if (usedSlugs.has(slug)) {
+      slug = `${slug}-${parsed.category}`;
+    }
+    usedSlugs.add(slug);
+
+    projects.push({
+      slug,
+      title: structure.title.trim(),
+      description: structure.description.trim(),
+      imageAlt: structure.title.trim(),
+      image: cover,
+      tabValue,
+      galleryImages: galleryItems.map((item) => item.src),
+      galleryLayout: packGalleryLayout(galleryItems),
+    });
+  }
+
+  return projects;
+}
+
+export const OUR_PROJECTS: readonly OurProjectCase[] = buildProjects();

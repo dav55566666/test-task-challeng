@@ -20,7 +20,21 @@ type ArcParams = {
   topPx: number;
 };
 
-const MOBILE_DOCK_LINE_ARROW_TOP_BIAS_PX = 3;
+export const MOBILE_DOCK_LINE_ARROW_TOP_BIAS_PX = 3;
+
+/** Угол θ на дуге кнопок: равномерные шаги по хорде. */
+export function mobileDockArcThetaAtIndex(
+  index: number,
+  itemCount: number,
+  shellWidthPx: number,
+): number {
+  const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
+  const cx = shellWidthPx / 2;
+  const last = itemCount - 1;
+  const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
+  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
+  return -thetaMax + (2 * thetaMax * index) / last;
+}
 
 function mobileDockCircleArcAtXWithParams(
   xPx: number,
@@ -109,11 +123,35 @@ export function mobileDockButtonArcXAtIndex(
 ): number {
   const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
   const cx = shellWidthPx / 2;
-  const last = itemCount - 1;
-  const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
-  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
-  const theta = -thetaMax + (2 * thetaMax * index) / last;
+  const theta = mobileDockArcThetaAtIndex(index, itemCount, shellWidthPx);
   return cx + R * Math.sin(theta);
+}
+
+/**
+ * Орбита стрелки на дуге линии: круг той же геометрии, что SVG-дуга;
+ * стрелка закреплена на «северной» точке, движение — только `rotate` контейнера.
+ */
+export function mobileDockLineOrbitLayoutAtIndex(
+  index: number,
+  itemCount: number,
+  shellWidthPx: number,
+): {
+  leftPx: number;
+  topPx: number;
+  diameterPx: number;
+  rotationDeg: number;
+} {
+  const diameterPx = MOBILE_DOCK_LINE_ARC_DIAMETER_PX;
+  const R = diameterPx / 2;
+  const cx = shellWidthPx / 2;
+  const topPx = lineArcTopPx();
+  const theta = mobileDockArcThetaAtIndex(index, itemCount, shellWidthPx);
+  return {
+    leftPx: cx - R,
+    topPx,
+    diameterPx,
+    rotationDeg: (theta * 180) / Math.PI,
+  };
 }
 
 /** Стрелка на дуге линии под активной кнопкой. */
@@ -138,14 +176,10 @@ export function mobileDockItemTransformAtIndex(
   shellWidthPx: number,
 ): { x: number; y: number; rotate: number } {
   const R = MOBILE_DOCK_BTN_ARC_DIAMETER_PX / 2;
-  const cx = shellWidthPx / 2;
   const cy = MOBILE_DOCK_ARC_TOP_PX + R;
-  const last = itemCount - 1;
 
   const xArc = mobileDockButtonArcXAtIndex(index, itemCount, shellWidthPx);
-  const chordHalf = Math.max(40, cx - MOBILE_DOCK_ARC_CHORD_INSET_PX);
-  const thetaMax = Math.asin(Math.min(1, chordHalf / R));
-  const theta = -thetaMax + (2 * thetaMax * index) / last;
+  const theta = mobileDockArcThetaAtIndex(index, itemCount, shellWidthPx);
   const yArc = cy - R * Math.cos(theta);
   const centerY = cy - R;
   const slotCenterX = ((index + 0.5) / itemCount) * shellWidthPx;

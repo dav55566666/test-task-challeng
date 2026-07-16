@@ -23,7 +23,7 @@
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
   @media (max-width: 768px) {
-    min-height: 100svh;
+    min-height: 580px;
     .main__logo {
       position: absolute;
       /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
@@ -73,15 +73,19 @@
   }
 }
 
-/* На брейкпоинтах меняем только размер, без вертикального сдвига. */
-@media (max-width: 1024px) and (min-width: 769px) {
+/* Планшет (боковое меню ≥768px): F-логотип −20% от прежнего tablet-размера. */
+@media (max-width: 1024px) and (min-width: 768px) {
   .main__logo {
-    width: min(100%, clamp(212px, 62vmin, 420px));
+    width: min(100%, clamp(170px, 50vmin, 336px));
+
+    .logo-animation {
+      max-width: 624px;
+    }
   }
 }
 
-/* Крупный телефон / узкий планшет ≤768px (не колонка ≤480px) */
-@media (max-width: 768px) and (min-width: 481px) {
+/* Крупный телефон ≤767px (не колонка ≤480px) */
+@media (max-width: 767px) and (min-width: 481px) {
   .main__logo {
     width: min(100%, clamp(208px, 66vmin, 392px));
   }
@@ -113,8 +117,6 @@
     flex-direction: column;
     align-items: stretch;
     padding: 20px 20px max(40px, calc(20px + env(safe-area-inset-bottom, 0px)));
-    min-height: calc(100svh - var(--site-header-sticky-height, 3.75rem));
-    min-height: calc(100dvh - var(--site-header-sticky-height, 3.75rem));
   }
 
   .main__text {

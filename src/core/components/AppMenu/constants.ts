@@ -28,6 +28,18 @@ export const DESKTOP_ORBIT_Y_BIAS_PX_BY_ID = {
   contacts: -32,
 } as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;
 
+/**
+ * Ручной rotate стрелки мобильного дока (deg) для каждой кнопки.
+ * Орбита та же; крутим только этот угол. Отрицательное — влево по дуге.
+ */
+export const MOBILE_DOCK_ARROW_ROTATION_DEG_BY_ID = {
+  services: -27,
+  cases: -14,
+  home: 0,
+  about: 14,
+  contacts: 28,
+} as const satisfies Record<(typeof MENU_LINKS)[number]["id"], number>;
+
 /** Замени на реальные ссылки проекта. */
 export const SOCIAL_LINKS = {
   telegram: "https://t.me/fabulacommunity",

@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "remux:logo-video": "bash scripts/remux-logo-video-faststart.sh"
+    "remux:logo-video": "bash scripts/remux-logo-video-faststart.sh",
+    "deploy": "bash scripts/deploy-vercel.sh --prod --yes",
+    "deploy:preview": "bash scripts/deploy-vercel.sh --yes"
   },
   "dependencies": {
     "animate.css": "^4.1.1",
@@ -38,6 +40,7 @@
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
+    "vercel": "^56.2.0",
     "vite": "^8.0.4"
   }
 }

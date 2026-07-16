@@ -18,12 +18,14 @@ export type TabsProps = {
 };
 
 function useIsMobileViewport() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(`(max-width: ${MD_MIN_PX - 1}px)`).matches;
+  });
 
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${MD_MIN_PX - 1}px)`);
     const sync = () => setIsMobile(mq.matches);
-    sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
@@ -41,6 +43,7 @@ export function Tabs({
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabsRootRef = useRef<HTMLDivElement>(null);
   const prevIndicatorYRef = useRef<number | null>(null);
+  const hasInitialMobileRevealRef = useRef(false);
   const revealClearTimerRef = useRef<number | null>(null);
   const [resizeTick, setResizeTick] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({
@@ -50,7 +53,7 @@ export function Tabs({
     visible: false,
   });
   const [mobileReveal, setMobileReveal] = useState<
-    null | "from-bottom" | "from-top"
+    null | "from-bottom" | "from-top" | "from-left"
   >(null);
   const isMobile = useIsMobileViewport();
 
@@ -70,62 +73,71 @@ export function Tabs({
 
   useLayoutEffect(() => {
     const INDICATOR_HEIGHT_PX = 2;
+    const targetEl = tabRefs.current[activeValue];
+    const root = tabsRootRef.current;
 
-    const frame = window.requestAnimationFrame(() => {
-      const targetEl = tabRefs.current[activeValue];
-      const root = tabsRootRef.current;
-      if (!targetEl || !root) {
-        setIndicatorStyle((prev) =>
-          prev.visible ? { ...prev, visible: false } : prev
-        );
+    if (!targetEl || !root) {
+      setIndicatorStyle((prev) =>
+        prev.visible ? { ...prev, visible: false } : prev
+      );
+      setMobileReveal(null);
+      return;
+    }
+
+    const tabRect = targetEl.getBoundingClientRect();
+    const rootRect = root.getBoundingClientRect();
+    const x = tabRect.left - rootRect.left + root.scrollLeft;
+    const y =
+      tabRect.bottom - rootRect.top + root.scrollTop - INDICATOR_HEIGHT_PX;
+    const next = {
+      x,
+      y,
+      width: tabRect.width,
+      visible: true as const,
+    };
+
+    const prefersReduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const prevY = prevIndicatorYRef.current;
+    const rowJump =
+      isMobile &&
+      !prefersReduced &&
+      prevY != null &&
+      Math.abs(y - prevY) >= MOBILE_ROW_JUMP_MIN_PX;
+    const initialMobileReveal =
+      isMobile &&
+      !prefersReduced &&
+      !hasInitialMobileRevealRef.current;
+
+    prevIndicatorYRef.current = y;
+
+    if (revealClearTimerRef.current != null) {
+      window.clearTimeout(revealClearTimerRef.current);
+      revealClearTimerRef.current = null;
+    }
+
+    if (initialMobileReveal) {
+      hasInitialMobileRevealRef.current = true;
+      setIndicatorStyle(next);
+      setMobileReveal("from-left");
+      revealClearTimerRef.current = window.setTimeout(() => {
         setMobileReveal(null);
-        return;
-      }
-      const tabRect = targetEl.getBoundingClientRect();
-      const rootRect = root.getBoundingClientRect();
-      const x = tabRect.left - rootRect.left + root.scrollLeft;
-      const y =
-        tabRect.bottom - rootRect.top + root.scrollTop - INDICATOR_HEIGHT_PX;
-      const next = {
-        x,
-        y,
-        width: tabRect.width,
-        visible: true as const,
-      };
-
-      const prefersReduced =
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      const prevY = prevIndicatorYRef.current;
-      const rowJump =
-        isMobile &&
-        !prefersReduced &&
-        prevY != null &&
-        Math.abs(y - prevY) >= MOBILE_ROW_JUMP_MIN_PX;
-
-      prevIndicatorYRef.current = y;
-
-      if (revealClearTimerRef.current != null) {
-        window.clearTimeout(revealClearTimerRef.current);
         revealClearTimerRef.current = null;
-      }
-
-      if (rowJump) {
-        const down = y > prevY;
-        setIndicatorStyle(next);
-        setMobileReveal(down ? "from-bottom" : "from-top");
-        revealClearTimerRef.current = window.setTimeout(() => {
-          setMobileReveal(null);
-          revealClearTimerRef.current = null;
-        }, 420);
-      } else {
+      }, 420);
+    } else if (rowJump) {
+      const down = y > prevY;
+      setIndicatorStyle(next);
+      setMobileReveal(down ? "from-bottom" : "from-top");
+      revealClearTimerRef.current = window.setTimeout(() => {
         setMobileReveal(null);
-        setIndicatorStyle(next);
-      }
-    });
-
-    return () => window.cancelAnimationFrame(frame);
+        revealClearTimerRef.current = null;
+      }, 420);
+    } else {
+      setMobileReveal(null);
+      setIndicatorStyle(next);
+    }
   }, [activeValue, isMobile, items, resizeTick]);
 
   return (
@@ -177,6 +189,9 @@ export function Tabs({
             : "") +
           (mobileReveal === "from-top"
             ? "tabs__indicator--reveal-from-top "
+            : "") +
+          (mobileReveal === "from-left"
+            ? "tabs__indicator--reveal-from-left "
             : "")
         }
         style={{

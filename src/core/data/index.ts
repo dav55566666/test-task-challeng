@@ -1,4 +1,5 @@
 export * from "./projectGalleryTypes";
+export * from "./packGalleryLayout";
 export * from "./aboutManifesto";
 export * from "./contacts";
 export * from "./aboutTeam";
