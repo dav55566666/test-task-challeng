@@ -89,11 +89,7 @@ export const Logo = () => {
             className="logo-animation__video"
             onClick={openPlayer}
             aria-label="Открыть видео логотипа"
-          >
-            <span className="logo-animation__cta" aria-hidden>
-              ↗
-            </span>
-          </button>
+          />
         </div>
       </div>
 
