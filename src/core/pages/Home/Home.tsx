@@ -13,7 +13,7 @@ export const Home = () => {
       <div className="home-page__hero">
         <Main />
       </div>
-      <OurProjects limit={3} />
+      <OurProjects featured />
       <MainDirections />
       <Partners />
       <HomeLogosAbout />

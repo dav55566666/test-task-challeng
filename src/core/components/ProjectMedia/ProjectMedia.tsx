@@ -16,6 +16,8 @@ export type ProjectMediaProps = {
   loading?: "eager" | "lazy";
   fetchPriority?: "high" | "low" | "auto";
   onVideoClick?: (payload: ProjectVideoClickPayload) => void;
+  /** Скрыть медиа (например, пока открыта модалка с этим же видео). */
+  visuallyHidden?: boolean;
 };
 
 /**
@@ -62,6 +64,7 @@ export function ProjectMedia({
   loading = "lazy",
   fetchPriority,
   onVideoClick,
+  visuallyHidden = false,
 }: ProjectMediaProps) {
   const lazy = loading === "lazy";
   const isVideo = isVideoMedia(src);
@@ -73,12 +76,16 @@ export function ProjectMedia({
     const video = videoRef.current;
     if (!video || !activated) return;
 
-    if (inView) {
-      void video.play().catch(() => {});
-    } else {
+    if (visuallyHidden || !inView) {
       video.pause();
+      return;
     }
-  }, [activated, inView, isVideo, src]);
+    void video.play().catch(() => {});
+  }, [activated, inView, isVideo, src, visuallyHidden]);
+
+  const hiddenClass = visuallyHidden
+    ? " opacity-0 pointer-events-none"
+    : "";
 
   if (isVideo) {
     const video = (
@@ -90,18 +97,18 @@ export function ProjectMedia({
           }
         }}
         src={activated ? src : undefined}
-        className={className}
+        className={`${className ?? ""}${hiddenClass}`}
         width={width}
         height={height}
-        autoPlay={activated && inView}
+        autoPlay={activated && inView && !visuallyHidden}
         loop
         muted
         playsInline
         disablePictureInPicture
         controls={false}
         preload={activated ? (lazy ? "metadata" : "auto") : "none"}
-        aria-hidden={onVideoClick ? true : undefined}
-        aria-label={onVideoClick ? undefined : alt}
+        aria-hidden={onVideoClick || visuallyHidden ? true : undefined}
+        aria-label={onVideoClick || visuallyHidden ? undefined : alt}
       />
     );
 
@@ -115,19 +122,26 @@ export function ProjectMedia({
         ref={(node) => {
           rootRef.current = node;
         }}
-        className="group relative block h-full w-full cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2"
+        className={
+          "group relative block h-full w-full cursor-pointer border-0 bg-transparent p-0 outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2" +
+          (visuallyHidden ? " pointer-events-none" : "")
+        }
         onClick={() => onVideoClick({ src, alt })}
         aria-label={`Воспроизвести видео: ${alt}`}
+        aria-hidden={visuallyHidden || undefined}
+        tabIndex={visuallyHidden ? -1 : undefined}
       >
         {video}
-        <span
-          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
-          aria-hidden
-        >
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-2xl text-[#111111] shadow-lg">
-            ▶
+        {!visuallyHidden ? (
+          <span
+            className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+            aria-hidden
+          >
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-2xl text-[#111111] shadow-lg">
+              ▶
+            </span>
           </span>
-        </span>
+        ) : null}
       </button>
     );
   }
@@ -138,13 +152,14 @@ export function ProjectMedia({
         rootRef.current = node;
       }}
       src={activated ? src : undefined}
-      alt={alt}
+      alt={visuallyHidden ? "" : alt}
       width={width}
       height={height}
       loading={loading}
       fetchPriority={fetchPriority}
       decoding="async"
-      className={className}
+      className={`${className ?? ""}${hiddenClass}`}
+      aria-hidden={visuallyHidden || undefined}
     />
   );
 }

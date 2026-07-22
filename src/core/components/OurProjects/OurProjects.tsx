@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { OUR_PROJECTS, PROJECT_TABS, projectCategoryPath } from "../../data";
+import { OUR_PROJECTS, PROJECT_TABS, getHomeFeaturedProjects, projectCategoryPath } from "../../data";
 import { IMAGES } from "../../design";
 import {
   ProjectSplitLayout,
@@ -19,16 +19,21 @@ const MOBILE_TABS_STICKY_CLASS =
 
 export type OurProjectsProps = {
   limit?: number;
+  /** На главной: фиксированный набор кейсов вместо первых N. */
+  featured?: boolean;
   category?: string;
 };
 
-export const OurProjects = ({ limit, category }: OurProjectsProps) => {
+export const OurProjects = ({ limit, featured, category }: OurProjectsProps) => {
   const navigate = useNavigate();
-  const showTabs = typeof limit !== "number";
+  const showTabs = typeof limit !== "number" && !featured;
   const figureRefs = useRef<(HTMLElement | null)[]>([]);
   const activeCategory = category ?? PROJECT_TABS[0].value;
 
   const projects = useMemo(() => {
+    if (featured) {
+      return getHomeFeaturedProjects();
+    }
     const base =
       typeof limit === "number"
         ? OUR_PROJECTS.slice(0, limit)
@@ -37,7 +42,7 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
       return base;
     }
     return base.filter((p) => p.tabValue === activeCategory);
-  }, [activeCategory, limit, showTabs]);
+  }, [activeCategory, featured, limit, showTabs]);
 
   const count = projects.length;
   const { activeIndex, registerItemRef } = useMaxIntersectionIndex(count);

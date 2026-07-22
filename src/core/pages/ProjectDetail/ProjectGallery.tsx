@@ -117,6 +117,7 @@ export function ProjectGallery({
                     fetchPriority={altIndex === 0 ? "high" : "auto"}
                     className={MEDIA_CLASS}
                     onVideoClick={handleVideoClick}
+                    visuallyHidden={activeVideo?.src === src}
                   />
                   </figure>
                 );

@@ -5,6 +5,8 @@ import type { ProjectGalleryLayout } from "./projectGalleryTypes";
 
 export type OurProjectCase = {
   slug: string;
+  /** Ключ папки ассетов, напр. `company/project2`. */
+  projectKey: string;
   title: string;
   description: string;
   imageAlt: string;
@@ -192,6 +194,7 @@ function buildProjects(): OurProjectCase[] {
 
     projects.push({
       slug,
+      projectKey,
       title: structure.title.trim(),
       description: structure.description.trim(),
       imageAlt: structure.title.trim(),
@@ -206,3 +209,17 @@ function buildProjects(): OurProjectCase[] {
 }
 
 export const OUR_PROJECTS: readonly OurProjectCase[] = buildProjects();
+
+/** Кейсы на главной: Вольтафлекс, AI-шоурил, Gold'n Apotheka (кампании). */
+export const HOME_FEATURED_PROJECT_KEYS = [
+  "company/project1",
+  "ai/project24",
+  "company/project2",
+] as const;
+
+export function getHomeFeaturedProjects(): OurProjectCase[] {
+  const byKey = new Map(OUR_PROJECTS.map((p) => [p.projectKey, p]));
+  return HOME_FEATURED_PROJECT_KEYS.map((key) => byKey.get(key)).filter(
+    (p): p is OurProjectCase => Boolean(p)
+  );
+}
