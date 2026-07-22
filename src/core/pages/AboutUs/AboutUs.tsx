@@ -4,7 +4,6 @@ import {
   Partners,
   ProjectMedia,
   ProjectSplitLayout,
-  PromptInput,
 } from "../../components";
 
 import "./styles/about-us.scss";
@@ -38,11 +37,6 @@ export const AboutUs = () => {
                 currentSize={36}
                 mobileSize={30}
                 tag={TextTag.H2}
-              />
-              <PromptInput
-                className="w-full absolute top-50 left-0"
-                placeholder="Что вы хотите узнать?"
-                aria-label="Что вы хотите узнать?"
               />
             </>
           )}

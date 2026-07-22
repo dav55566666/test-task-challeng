@@ -3,7 +3,6 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import {
   ProjectSplitLayout,
-  ProjectSplitPrompt,
   caseStudyBodyCopyClass,
 } from "../../components";
 import { Tabs } from "../../components/Tabs";
@@ -63,8 +62,6 @@ export const ProjectDetail = () => {
               <GradientTitle value={project.title} currentSize={36} mobileSize={24} tag={TextTag.H1} />
               <p className={caseStudyBodyCopyClass}>{project.description}</p>
             </div>
-
-            <ProjectSplitPrompt className="mt-6 md:mt-0" />
           </>
         )}
       >

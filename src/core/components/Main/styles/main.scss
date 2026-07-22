@@ -1,10 +1,4 @@
-/* Hero-контент: минимум высота первого экрана; может вырасти, чтобы логотип не обрезался снизу. */
-.main__logo {
-  position: absolute;
-  /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
-  top: 130px;
-  transform: none;
-}
+/* Hero: текст сверху слева, F-blob по центру (desktop/tablet overlay). */
 .main {
   position: relative;
   display: grid;
@@ -15,22 +9,14 @@
   min-height: calc(100svh - var(--site-header-sticky-height, 4.5rem));
   min-height: calc(100dvh - var(--site-header-sticky-height, 4.5rem));
   height: auto;
-  padding: 24px 20px 80px;
+  padding: 24px 20px 48px;
   box-sizing: border-box;
   overflow: visible;
 
   @supports not (height: 100dvh) {
     min-height: calc(100vh - var(--site-header-sticky-height, 4.5rem));
   }
-  @media (max-width: 768px) {
-    min-height: 620px;
-    .main__logo {
-      position: absolute;
-      /* Не поднимаем выше текста: минимум 224px, иначе около центра hero. */
-      top: max(224px, 28%);
-      transform: none;
-    }
-  }
+
   &__text {
     grid-area: hero;
     position: relative;
@@ -39,7 +25,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 450px;
+    max-width: 520px;
+
     p {
       font-family: "Vela Sans", ui-sans-serif, system-ui, sans-serif;
       font-style: normal;
@@ -51,16 +38,19 @@
     }
   }
 
-  /* F-логотип: по центру hero; на ≤480 — колонка в потоке. */
+  /* F-логотип: центр hero (Figma desktop/tablet). */
   &__logo {
     grid-area: hero;
-    place-self: start center;
+    position: absolute;
+    left: 50%;
+    top: 54%;
     z-index: 1;
-    width: min(100%, clamp(228px, 70vmin, 672px));
+    width: min(100%, clamp(280px, 58vmin, 720px));
     max-width: calc(100vw - 40px);
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: translate(-50%, -50%);
     pointer-events: none;
     overflow: visible;
 
@@ -73,55 +63,51 @@
   }
 }
 
-/* Планшет (боковое меню ≥768px): F-логотип −20% от прежнего tablet-размера. */
+/* Планшет с боковым меню (768–1024): F чуть компактнее, всё ещё по центру. */
 @media (max-width: 1024px) and (min-width: 768px) {
-  .main__logo {
-    width: min(100%, clamp(170px, 50vmin, 336px));
-
-    .logo-animation {
-      max-width: 624px;
-    }
-  }
-}
-
-/* Крупный телефон ≤767px (не колонка ≤480px) */
-@media (max-width: 767px) and (min-width: 481px) {
-  .main__logo {
-    width: min(100%, clamp(208px, 66vmin, 392px));
-  }
-}
-
-/* Компактная навигация: только поля, без смены ширины текста/логотипа (иначе скачок на 1280px). */
-@media (max-width: 1279px) {
   .main {
-    padding: 18px max(20px, env(safe-area-inset-right, 0px))
-      max(52px, calc(12px + env(safe-area-inset-bottom, 0px)))
-      max(20px, env(safe-area-inset-left, 0px));
+    padding: 20px 24px 80px;
   }
 
   .main__text {
-    gap: 12px;
+    max-width: 460px;
+  }
 
-    p {
-      font-size: 15px;
-      line-height: 118%;
-      letter-spacing: 0.02em;
+  .main__logo {
+    top: 56%;
+    width: min(100%, clamp(240px, 52vmin, 420px));
+
+    .logo-animation {
+      max-width: 640px;
     }
   }
 }
 
-/* Телефон ≤480px: колонка, логотип в потоке (без grid-overlay и без JS-сдвига). */
-@media (max-width: 480px) {
+/* Компактная навигация: поля без скачка ширины текста. */
+@media (max-width: 1279px) {
+  .main {
+    padding-left: max(20px, env(safe-area-inset-left, 0px));
+    padding-right: max(20px, env(safe-area-inset-right, 0px));
+    padding-bottom: max(40px, calc(24px + env(safe-area-inset-bottom, 0px)));
+  }
+}
+
+/**
+ * Мобилка ≤767 (Figma mobile): колонка — текст → F в потоке.
+ * Overlay absolute отключается.
+ */
+@media (max-width: 767px) {
   .main {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 20px 20px max(40px, calc(20px + env(safe-area-inset-bottom, 0px)));
+    min-height: unset;
+    padding: 12px 20px max(40px, calc(24px + env(safe-area-inset-bottom, 0px)));
   }
 
   .main__text {
     flex: 0 0 auto;
-    gap: 10px;
+    gap: 12px;
     max-width: none;
     width: 100%;
 
@@ -135,9 +121,8 @@
   .main__logo {
     flex: 0 0 auto;
     position: relative;
+    left: auto;
     top: auto;
-    left: -4px;
-    right: unset;
     transform: none;
     display: flex;
     align-items: center;
@@ -146,13 +131,13 @@
     max-width: none;
     height: auto;
     min-height: 0;
-    margin: clamp(40px, calc(5vh + 20px), 56px) auto 0;
+    margin: 28px auto 0;
     padding: 0;
     place-self: auto;
 
     .logo-animation {
       width: 100%;
-      max-width: 288px;
+      max-width: min(350px, calc(100vw - 40px));
       margin-inline: auto;
     }
   }

@@ -54,29 +54,30 @@
   }
 }
 
-/* Mobile: row change — reveal in place (no diagonal “flight”), edge by direction */
-@media (max-width: 767px) {
-  .tabs__indicator--mobile-row-reveal {
-    transition: none !important;
-  }
+/* Reveal in place (no diagonal flight from 0,0) */
+.tabs__indicator--row-reveal {
+  transition: none !important;
+}
 
+.tabs__indicator--reveal-from-left {
+  animation: tabs-indicator-reveal-from-left 0.4s
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Mobile: row change — edge by vertical direction */
+@media (max-width: 767px) {
   .tabs__indicator--reveal-from-bottom {
-    animation: tabs-indicator-mobile-reveal-from-bottom 0.4s
+    animation: tabs-indicator-reveal-from-bottom 0.4s
       cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
   .tabs__indicator--reveal-from-top {
-    animation: tabs-indicator-mobile-reveal-from-top 0.4s
-      cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  .tabs__indicator--reveal-from-left {
-    animation: tabs-indicator-mobile-reveal-from-left 0.4s
+    animation: tabs-indicator-reveal-from-top 0.4s
       cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 }
 
-@keyframes tabs-indicator-mobile-reveal-from-bottom {
+@keyframes tabs-indicator-reveal-from-bottom {
   from {
     clip-path: inset(100% 0 0 0);
   }
@@ -86,7 +87,7 @@
   }
 }
 
-@keyframes tabs-indicator-mobile-reveal-from-top {
+@keyframes tabs-indicator-reveal-from-top {
   from {
     clip-path: inset(0 0 100% 0);
   }
@@ -96,7 +97,7 @@
   }
 }
 
-@keyframes tabs-indicator-mobile-reveal-from-left {
+@keyframes tabs-indicator-reveal-from-left {
   from {
     clip-path: inset(0 100% 0 0);
   }

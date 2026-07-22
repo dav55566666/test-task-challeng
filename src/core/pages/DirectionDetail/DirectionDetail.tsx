@@ -4,7 +4,6 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import {
   ProjectMedia,
   ProjectSplitLayout,
-  ProjectSplitPrompt,
   caseStudyBodyCopyClass,
 } from "../../components";
 import { IMAGES } from "../../design";
@@ -62,8 +61,6 @@ export const DirectionDetail = () => {
               </p>
             ))}
           </div>
-
-          <ProjectSplitPrompt className="mt-6 md:mt-0" />
         </>
       )}
     >

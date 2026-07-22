@@ -5,7 +5,6 @@ import { OUR_PROJECTS, PROJECT_TABS, projectCategoryPath } from "../../data";
 import { IMAGES } from "../../design";
 import {
   ProjectSplitLayout,
-  ProjectSplitPrompt,
   caseStudyBodyCopyClass,
 } from "../ProjectSplitLayout";
 import { Tabs } from "../Tabs";
@@ -105,7 +104,6 @@ export const OurProjects = ({ limit, category }: OurProjectsProps) => {
               ) : null}
             </div>
           </div>
-          <ProjectSplitPrompt className="hidden md:mt-0" />
         </>
       )}
       mainClassName='flex min-w-0 flex-col gap-4'

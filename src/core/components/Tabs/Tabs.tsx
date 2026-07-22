@@ -43,7 +43,7 @@ export function Tabs({
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const tabsRootRef = useRef<HTMLDivElement>(null);
   const prevIndicatorYRef = useRef<number | null>(null);
-  const hasInitialMobileRevealRef = useRef(false);
+  const hasInitialRevealRef = useRef(false);
   const revealClearTimerRef = useRef<number | null>(null);
   const [resizeTick, setResizeTick] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({
@@ -52,7 +52,7 @@ export function Tabs({
     width: 0,
     visible: false,
   });
-  const [mobileReveal, setMobileReveal] = useState<
+  const [reveal, setReveal] = useState<
     null | "from-bottom" | "from-top" | "from-left"
   >(null);
   const isMobile = useIsMobileViewport();
@@ -80,7 +80,7 @@ export function Tabs({
       setIndicatorStyle((prev) =>
         prev.visible ? { ...prev, visible: false } : prev
       );
-      setMobileReveal(null);
+      setReveal(null);
       return;
     }
 
@@ -106,10 +106,9 @@ export function Tabs({
       !prefersReduced &&
       prevY != null &&
       Math.abs(y - prevY) >= MOBILE_ROW_JUMP_MIN_PX;
-    const initialMobileReveal =
-      isMobile &&
-      !prefersReduced &&
-      !hasInitialMobileRevealRef.current;
+    /** Первый показ (в т.ч. переход с главной на /projects): слева → направо, без «полёта» из (0,0). */
+    const initialReveal =
+      !prefersReduced && !hasInitialRevealRef.current;
 
     prevIndicatorYRef.current = y;
 
@@ -118,24 +117,24 @@ export function Tabs({
       revealClearTimerRef.current = null;
     }
 
-    if (initialMobileReveal) {
-      hasInitialMobileRevealRef.current = true;
+    if (initialReveal) {
+      hasInitialRevealRef.current = true;
       setIndicatorStyle(next);
-      setMobileReveal("from-left");
+      setReveal("from-left");
       revealClearTimerRef.current = window.setTimeout(() => {
-        setMobileReveal(null);
+        setReveal(null);
         revealClearTimerRef.current = null;
       }, 420);
     } else if (rowJump) {
       const down = y > prevY;
       setIndicatorStyle(next);
-      setMobileReveal(down ? "from-bottom" : "from-top");
+      setReveal(down ? "from-bottom" : "from-top");
       revealClearTimerRef.current = window.setTimeout(() => {
-        setMobileReveal(null);
+        setReveal(null);
         revealClearTimerRef.current = null;
       }, 420);
     } else {
-      setMobileReveal(null);
+      setReveal(null);
       setIndicatorStyle(next);
     }
   }, [activeValue, isMobile, items, resizeTick]);
@@ -181,16 +180,16 @@ export function Tabs({
       <span
         className={
           "tabs__indicator pointer-events-none absolute left-0 top-0 h-0.5 rounded-full " +
-          (mobileReveal
-            ? "tabs__indicator--mobile-row-reveal "
+          (reveal
+            ? "tabs__indicator--row-reveal "
             : "transition-[transform,width,opacity] duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ") +
-          (mobileReveal === "from-bottom"
+          (reveal === "from-bottom"
             ? "tabs__indicator--reveal-from-bottom "
             : "") +
-          (mobileReveal === "from-top"
+          (reveal === "from-top"
             ? "tabs__indicator--reveal-from-top "
             : "") +
-          (mobileReveal === "from-left"
+          (reveal === "from-left"
             ? "tabs__indicator--reveal-from-left "
             : "")
         }

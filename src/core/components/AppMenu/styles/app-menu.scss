@@ -443,19 +443,23 @@
   animation-delay: 0.32s;
 }
 
-/* Позиция FAB на телефоне / планшете (<1280), стили кнопок — глобально (Figma). */
+/* Позиция FAB <1280: desktop-width — середина справа; мобилка — у blob. */
 @media (max-width: 1279px) {
   .app-menu__fab-stack {
     right: max(1.25rem, calc(1.25rem + env(safe-area-inset-right, 0px)));
-    bottom: max(5rem, calc(4.5rem + env(safe-area-inset-bottom, 0px)));
+    bottom: auto;
+    top: 52%;
+    transform: translateY(-50%);
     gap: 0.5rem;
   }
 }
 
-/* Герой на телефоне: FAB выше, на уровне нижней части blob. */
-@media (max-width: 480px) {
+/* Мобилка: FAB на уровне центра F-blob (Figma). */
+@media (max-width: 767px) {
   .app-menu__fab-stack {
-    bottom: max(7.75rem, calc(6.75rem + env(safe-area-inset-bottom, 0px)));
+    top: 58%;
+    bottom: auto;
+    transform: translateY(-50%);
   }
 }
 

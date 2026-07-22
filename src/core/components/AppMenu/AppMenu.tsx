@@ -483,7 +483,7 @@ export const Sidebar = () => {
         </button>
       </div>
 
-      <aside className="app-menu__desktop-aside-slot pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center pr-6 md:flex">
+      <aside className="app-menu__desktop-aside-slot pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center pr-4 md:flex">
       <div
         ref={shellRef}
         className={
@@ -508,7 +508,7 @@ export const Sidebar = () => {
         />
         <nav
           ref={navRef}
-          className="app-menu__desktop-nav pointer-events-auto relative z-10 flex -translate-x-26 flex-col items-end gap-10 overflow-visible pr-8"
+          className="app-menu__desktop-nav pointer-events-auto relative z-10 flex -translate-x-24 flex-col items-end gap-10 overflow-visible pr-6"
           aria-label="Sidebar navigation"
           onMouseEnter={clearHoverAfterLeaveMenuTimer}
           onMouseLeave={scheduleResetHoverToRouteAfterLeavingNav}

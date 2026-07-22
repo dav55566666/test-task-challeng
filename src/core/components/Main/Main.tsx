@@ -8,7 +8,7 @@ export const Main = () => {
             <div className="main__text">
                 <GradientTitle 
                     value="Решаем задачи бизнеса с помощью творческой силы увлеченных профессионалов" 
-                    currentSize={32} 
+                    currentSize={36} 
                     mobileSize={28} 
                     tag={TextTag.H1} 
                 />

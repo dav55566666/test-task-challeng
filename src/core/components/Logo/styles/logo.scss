@@ -29,7 +29,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: scale(0.98);
+    transform: scale(1);
     transform-origin: center center;
     pointer-events: auto;
     will-change: transform;
@@ -83,36 +83,30 @@
   .logo-animation .logo-animation__scale {
     transform: scale(
       clamp(
-        0.62,
-        calc(0.98 - (100vw - 1500px) * 0.0002),
-        0.98
+        0.68,
+        calc(1 - (100vw - 1500px) * 0.00018),
+        1
       )
     );
   }
 }
 
-/* Планшет / узкий десктоп: держим F ближе к центру и не увеличиваем агрессивно. */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .logo-animation .logo-animation__scale {
-    transform: scale(1.02);
-  }
-}
-
-/* Узкие планшеты и крупные телефоны. */
-@media (max-width: 768px) and (min-width: 481px) {
+/* Планшет / узкий десктоп. */
+@media (max-width: 1024px) and (min-width: 768px) {
   .logo-animation .logo-animation__scale {
     transform: scale(1);
   }
 }
 
-@media (max-width: 480px) {
+/* Мобилка. */
+@media (max-width: 767px) {
   .logo-animation {
     width: 100%;
     max-width: none;
   }
 
   .logo-animation .logo-animation__scale {
-    transform: scale(1.04);
+    transform: scale(1);
   }
 }
 

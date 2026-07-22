@@ -54,7 +54,7 @@ export type DesktopRowLayout = {
 };
 
 export const ROW_LAYOUT: readonly DesktopRowLayout[] = [
-  { rotateDeg: 22, translateXPx: 41, translateYPx: 0 },
+  { rotateDeg: 22, translateXPx: 41, translateYPx: -10 },
   { rotateDeg: 10, translateXRem: SHIFT_MID_REM },
   { rotateDeg: 0, translateXRem: 0 },
   { rotateDeg: -10, translateXRem: SHIFT_MID_REM },

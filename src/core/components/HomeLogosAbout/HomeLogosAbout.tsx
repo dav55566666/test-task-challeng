@@ -29,8 +29,8 @@ const STATS: { value: string; label: string; underline?: boolean }[] = [
     label: "членов интегрированной команды",
   },
   {
-    value: "33+",
-    label: "успешных запусков и кампаний",
+    value: "1000+",
+    label: "студентов вклад в индустрию",
   },
 ];
 
