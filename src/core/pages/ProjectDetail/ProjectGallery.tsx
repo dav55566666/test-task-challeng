@@ -79,6 +79,7 @@ export function ProjectGallery({
 
                 const figureStyle: CSSProperties = {
                   aspectRatio: `${item.width} / ${item.height}`,
+                  borderRadius: 16
                 };
 
                 const styleVars: Record<string, string> = {};
